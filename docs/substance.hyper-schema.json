@@ -1,0 +1,3715 @@
+{
+  "$schema": "http://json-schema.org/draft-07/hyper-schema#",
+  "$id": "https://gsrs.ncats.nih.gov/schema/substance.hyper-schema.json",
+  "title": "Substance",
+  "description": "Detailed GSRS description of a substance beyond routine prescribing use.",
+  "$defs": {
+    "AgentModification": {
+      "additionalProperties": false,
+      "description": "Agent Modification model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "agentModificationProcess": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Process",
+          "element_property": true,
+          "title": "Process"
+        },
+        "agentModificationRole": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Role",
+          "element_property": true,
+          "title": "Role"
+        },
+        "agentModificationType": {
+          "description": "Type",
+          "element_property": true,
+          "title": "Type",
+          "type": "string"
+        },
+        "agentSubstance": {
+          "$ref": "#/$defs/SubstanceReference",
+          "description": "Substance",
+          "element_property": true,
+          "title": "Substance"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        },
+        "modificationGroup": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modification Group",
+          "element_property": true,
+          "title": "Modification Group"
+        }
+      },
+      "required": [
+        "agentModificationType",
+        "agentSubstance"
+      ],
+      "title": "AgentModification",
+      "type": "object"
+    },
+    "Amount": {
+      "additionalProperties": false,
+      "description": "Amount model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount Type",
+          "element_property": true,
+          "title": "Amount Type"
+        },
+        "average": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Average",
+          "element_property": true,
+          "title": "Average"
+        },
+        "highLimit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "High Limit",
+          "element_property": true,
+          "title": "High Limit"
+        },
+        "high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "High",
+          "element_property": true,
+          "title": "High"
+        },
+        "lowLimit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Low Limit",
+          "element_property": true,
+          "title": "Low Limit"
+        },
+        "low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Low",
+          "element_property": true,
+          "title": "Low"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Units",
+          "element_property": true,
+          "title": "Units"
+        },
+        "nonNumericValue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Non-numeric Value",
+          "element_property": true,
+          "title": "Non-numeric Value"
+        }
+      },
+      "title": "Amount",
+      "type": "object"
+    },
+    "Code": {
+      "additionalProperties": false,
+      "description": "Code model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "codeText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Code Text",
+          "element_property": true,
+          "title": "Code Text"
+        },
+        "codeSystem": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Code system",
+          "element_property": true,
+          "title": "Code system"
+        },
+        "code": {
+          "description": "Code",
+          "element_property": true,
+          "title": "Code",
+          "type": "string"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Code Comments",
+          "element_property": true,
+          "title": "Code Comments"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Code Type",
+          "element_property": true,
+          "title": "Code Type"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Code URL",
+          "element_property": true,
+          "title": "Code URL"
+        },
+        "_isClassification": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "System flag indicating whether the code is treated as a classification.",
+          "element_property": true,
+          "title": "Classification Flag"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "Code",
+      "type": "object"
+    },
+    "Extent": {
+      "description": "Extent model.",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "Unspecified"
+      ],
+      "title": "Extent",
+      "type": "string"
+    },
+    "Modifications": {
+      "additionalProperties": false,
+      "description": "Modifications model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "agentModifications": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/AgentModification"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Agent Modifications",
+          "element_property": true,
+          "title": "Agent Modifications"
+        },
+        "physicalModifications": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PhysicalModification"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Physical Modifications",
+          "element_property": true,
+          "title": "Physical Modifications"
+        },
+        "structuralModifications": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/StructuralModification"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Structural Modifications",
+          "element_property": true,
+          "title": "Structural Modifications"
+        }
+      },
+      "title": "Modifications",
+      "type": "object"
+    },
+    "Name": {
+      "additionalProperties": false,
+      "description": "Name model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "name": {
+          "description": "Name",
+          "element_property": true,
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "description": "Name Type",
+          "element_property": true,
+          "title": "Name Type",
+          "type": "string"
+        },
+        "domains": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Domains",
+          "element_property": true,
+          "title": "Domains"
+        },
+        "stdName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Std Name",
+          "element_property": true,
+          "title": "Std Name"
+        },
+        "languages": {
+          "description": "Languages",
+          "element_property": true,
+          "items": {
+            "type": "string"
+          },
+          "title": "Languages",
+          "type": "array"
+        },
+        "nameJurisdiction": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Naming Jurisdictions",
+          "element_property": true,
+          "title": "Naming Jurisdictions"
+        },
+        "nameOrgs": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/NameOrg"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Naming Organizations",
+          "element_property": true,
+          "title": "Naming Organizations"
+        },
+        "preferred": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Preferred Term",
+          "element_property": true,
+          "title": "Preferred Term"
+        },
+        "displayName": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display Name",
+          "element_property": true,
+          "title": "Display Name"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "languages"
+      ],
+      "title": "Name",
+      "type": "object"
+    },
+    "NameOrg": {
+      "additionalProperties": false,
+      "description": "Naming Org model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "nameOrg": {
+          "description": "Naming Organization",
+          "element_property": true,
+          "title": "Naming Organization",
+          "type": "string"
+        },
+        "deprecatedDate": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated Date",
+          "element_property": true,
+          "title": "Deprecated Date"
+        }
+      },
+      "required": [
+        "nameOrg"
+      ],
+      "title": "NameOrg",
+      "type": "object"
+    },
+    "Note": {
+      "additionalProperties": false,
+      "description": "Note model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Note",
+          "element_property": true,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "note"
+      ],
+      "title": "Note",
+      "type": "object"
+    },
+    "Parameter": {
+      "additionalProperties": false,
+      "description": "Parameter model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "name": {
+          "description": "Parameter Name",
+          "element_property": true,
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parameter Type",
+          "element_property": true,
+          "title": "Parameter Type"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Parameter",
+      "type": "object"
+    },
+    "PhysicalModification": {
+      "additionalProperties": false,
+      "description": "Physical Modification model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "physicalModificationRole": {
+          "description": "Role of Modification",
+          "element_property": true,
+          "title": "Role of Modification",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "Physical Parameters",
+          "element_property": true,
+          "items": {
+            "$ref": "#/$defs/PhysicalParameter"
+          },
+          "minItems": 1,
+          "title": "Physical Parameters",
+          "type": "array"
+        },
+        "modificationGroup": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modification Group",
+          "element_property": true,
+          "title": "Modification Group"
+        }
+      },
+      "required": [
+        "physicalModificationRole",
+        "parameters"
+      ],
+      "title": "PhysicalModification",
+      "type": "object"
+    },
+    "PhysicalParameter": {
+      "additionalProperties": false,
+      "description": "Physical Parameter model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "parameterName": {
+          "description": "Parameter Name",
+          "element_property": true,
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        }
+      },
+      "required": [
+        "parameterName"
+      ],
+      "title": "PhysicalParameter",
+      "type": "object"
+    },
+    "Property": {
+      "additionalProperties": false,
+      "description": "Property model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "name": {
+          "description": "Property Name",
+          "element_property": true,
+          "title": "Property Name",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Value Type",
+          "element_property": true,
+          "title": "Value Type"
+        },
+        "propertyType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Property Type",
+          "element_property": true,
+          "title": "Property Type"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        },
+        "referencedSubstance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SubstanceReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Referenced Substance",
+          "element_property": true,
+          "title": "Referenced Substance"
+        },
+        "defining": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Defining",
+          "element_property": true,
+          "title": "Defining"
+        },
+        "parameters": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Parameter"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parameters",
+          "element_property": true,
+          "title": "Parameters"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Property",
+      "type": "object"
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "description": "Reference model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Citation Text",
+          "element_property": true,
+          "title": "Citation Text"
+        },
+        "docType": {
+          "description": "Reference Type",
+          "element_property": true,
+          "title": "Reference Type",
+          "type": "string"
+        },
+        "documentDate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Date Accessed",
+          "element_property": true,
+          "title": "Date Accessed"
+        },
+        "publicDomain": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Public Domain Reference",
+          "element_property": true,
+          "title": "Public Domain Reference"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags",
+          "element_property": true,
+          "title": "Tags"
+        },
+        "uploadedFile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Uploaded Document",
+          "element_property": true,
+          "title": "Uploaded Document"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Ref_ID",
+          "element_property": true,
+          "title": "Ref_ID"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reference URL",
+          "element_property": true,
+          "title": "Reference URL"
+        }
+      },
+      "required": [
+        "docType"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "Relationship": {
+      "additionalProperties": false,
+      "description": "Relationship model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        },
+        "comments": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Comments",
+          "element_property": true,
+          "title": "Comments"
+        },
+        "interactionType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Interaction Type",
+          "element_property": true,
+          "title": "Interaction Type"
+        },
+        "originatorUuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Originator UUID",
+          "element_property": true,
+          "title": "Originator UUID"
+        },
+        "qualification": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Qualification",
+          "element_property": true,
+          "title": "Qualification"
+        },
+        "relatedSubstance": {
+          "$ref": "#/$defs/SubstanceReference",
+          "default": null,
+          "description": "Related Substance",
+          "element_property": true,
+          "title": "Related Substance"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Relationship Type",
+          "element_property": true,
+          "title": "Relationship Type"
+        },
+        "mediatorSubstance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SubstanceReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mediator Substance",
+          "element_property": true,
+          "title": "Mediator Substance"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "Relationship",
+      "type": "object"
+    },
+    "Site": {
+      "additionalProperties": false,
+      "description": "Site model.",
+      "properties": {
+        "subunitIndex": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Subunit Index",
+          "element_property": true,
+          "title": "Subunit Index"
+        },
+        "residueIndex": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Residue Index",
+          "element_property": true,
+          "title": "Residue Index"
+        }
+      },
+      "title": "Site",
+      "type": "object"
+    },
+    "StructuralModification": {
+      "additionalProperties": false,
+      "description": "Structural Modification model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "structuralModificationType": {
+          "description": "Modification Type",
+          "element_property": true,
+          "title": "Modification Type",
+          "type": "string"
+        },
+        "locationType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modification Location Type",
+          "element_property": true,
+          "title": "Modification Location Type"
+        },
+        "residueModified": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Residue Modified",
+          "element_property": true,
+          "title": "Residue Modified"
+        },
+        "sites": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Site"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modified Sites",
+          "element_property": true,
+          "title": "Modified Sites"
+        },
+        "extent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Extent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Extent",
+          "element_property": true,
+          "title": "Extent"
+        },
+        "extentAmount": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Amount",
+          "element_property": true,
+          "title": "Amount"
+        },
+        "molecularFragment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SubstanceReference"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Molecular Fragment",
+          "element_property": true,
+          "title": "Molecular Fragment"
+        },
+        "molecularFragmentRole": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Molecular Fragment Role",
+          "element_property": true,
+          "title": "Molecular Fragment Role"
+        },
+        "modificationGroup": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modification Group",
+          "element_property": true,
+          "title": "Modification Group"
+        }
+      },
+      "required": [
+        "structuralModificationType"
+      ],
+      "title": "StructuralModification",
+      "type": "object"
+    },
+    "SubstanceReference": {
+      "additionalProperties": false,
+      "description": "Hybrid Species Paternal Organism model.",
+      "properties": {
+        "uuid": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uuid",
+          "element_property": true,
+          "title": "Uuid"
+        },
+        "access": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Access",
+          "element_property": true,
+          "title": "Access"
+        },
+        "deprecated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Deprecated",
+          "element_property": true,
+          "title": "Deprecated"
+        },
+        "lastEdited": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified Date",
+          "element_property": true,
+          "title": "Last Modified Date"
+        },
+        "lastEditedBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Last Modified By",
+          "element_property": true,
+          "title": "Last Modified By"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation Date",
+          "element_property": true,
+          "title": "Creation Date"
+        },
+        "createdBy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Created By",
+          "element_property": true,
+          "title": "Created By"
+        },
+        "references": {
+          "anyOf": [
+            {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "References",
+          "element_property": true,
+          "title": "References"
+        },
+        "sitesShorthand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Compact system-generated shorthand for the referenced sites.",
+          "element_property": true,
+          "title": "Sites Shorthand"
+        },
+        "refPname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Referenced Substance Name",
+          "element_property": true,
+          "title": "Referenced Substance Name"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name",
+          "element_property": true,
+          "title": "Name"
+        },
+        "linkingID": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Linking ID",
+          "element_property": true,
+          "title": "Linking ID"
+        },
+        "refuuid": {
+          "default": null,
+          "description": "Refuuid",
+          "element_property": true,
+          "title": "Refuuid",
+          "type": "string"
+        },
+        "substanceClass": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gsrs__model__substance_reference__SubstanceClass"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Substance Class",
+          "element_property": true,
+          "title": "Substance Class"
+        },
+        "approvalID": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Approval ID",
+          "element_property": true,
+          "title": "Approval ID"
+        }
+      },
+      "title": "SubstanceReference",
+      "type": "object"
+    },
+    "gsrs__model__substance__SubstanceClass": {
+      "description": "Enumeration of GSRS substance classes.",
+      "enum": [
+        "chemical",
+        "protein",
+        "nucleicAcid",
+        "mixture",
+        "polymer",
+        "structurallyDiverse",
+        "specifiedSubstance",
+        "specifiedSubstanceG1",
+        "specifiedSubstanceG2",
+        "specifiedSubstanceG3",
+        "specifiedSubstanceG4",
+        "concept"
+      ],
+      "title": "SubstanceClass",
+      "type": "string"
+    },
+    "gsrs__model__substance_reference__SubstanceClass": {
+      "description": "Enumeration of GSRS substance classes.",
+      "enum": [
+        "reference"
+      ],
+      "title": "SubstanceClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "uuid": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Uuid",
+      "element_property": true,
+      "title": "Uuid"
+    },
+    "access": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Access",
+      "element_property": true,
+      "title": "Access"
+    },
+    "deprecated": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Deprecated",
+      "element_property": true,
+      "title": "Deprecated"
+    },
+    "lastEdited": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Last Modified Date",
+      "element_property": true,
+      "title": "Last Modified Date"
+    },
+    "lastEditedBy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Last Modified By",
+      "element_property": true,
+      "title": "Last Modified By"
+    },
+    "created": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Creation Date",
+      "element_property": true,
+      "title": "Creation Date"
+    },
+    "createdBy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Created By",
+      "element_property": true,
+      "title": "Created By"
+    },
+    "substanceClass": {
+      "$ref": "#/$defs/gsrs__model__substance__SubstanceClass",
+      "default": "chemical",
+      "description": "High-level categorization of the substance, such as polymer, nucleic acid, protein, or chemical.",
+      "element_property": true,
+      "title": "Substance Type"
+    },
+    "definitionType": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Definition Type",
+      "element_property": true,
+      "title": "Definition Type"
+    },
+    "definitionLevel": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Definition Level",
+      "element_property": true,
+      "title": "Definition Level"
+    },
+    "names": {
+      "description": "Names",
+      "element_property": true,
+      "items": {
+        "$ref": "#/$defs/Name"
+      },
+      "minItems": 1,
+      "title": "Names",
+      "type": "array"
+    },
+    "codes": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Code"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Codes",
+      "element_property": true,
+      "title": "Codes"
+    },
+    "modifications": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Modifications"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Modifications",
+      "element_property": true,
+      "title": "Modifications"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Note"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Notes",
+      "element_property": true,
+      "title": "Notes"
+    },
+    "properties": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Property"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Properties",
+      "description": "Properties",
+      "element_property": true
+    },
+    "relationships": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Relationship"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Relationships",
+      "element_property": true,
+      "title": "Relationships"
+    },
+    "references": {
+      "description": "References",
+      "element_property": true,
+      "items": {
+        "$ref": "#/$defs/Reference"
+      },
+      "minItems": 1,
+      "title": "References",
+      "type": "array"
+    },
+    "approvalID": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Approval ID",
+      "element_property": true,
+      "title": "Approval ID"
+    },
+    "version": {
+      "description": "Substance Version",
+      "element_property": true,
+      "title": "Substance Version",
+      "type": "string"
+    },
+    "tags": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Tags",
+      "element_property": true,
+      "title": "Tags"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Lifecycle status of the substance record in the catalogue or registry.",
+      "element_property": true,
+      "title": "Status"
+    },
+    "approved": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Approval Date",
+      "element_property": true,
+      "title": "Approval Date"
+    },
+    "approvedBy": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Approved By",
+      "element_property": true,
+      "title": "Approved By"
+    },
+    "schemaVersion": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Schema Version",
+      "element_property": true,
+      "title": "Schema Version"
+    },
+    "_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "System-generated preferred display name for the substance record.",
+      "element_property": true,
+      "title": "System Name"
+    },
+    "_approvalIDDisplay": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "System-generated approval identifier formatted for display.",
+      "element_property": true,
+      "title": "Approval ID Display"
+    },
+    "_self": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Canonical API URL for the full substance record.",
+      "element_property": true,
+      "title": "Self Link"
+    }
+  },
+  "required": [
+    "names",
+    "references",
+    "version"
+  ],
+  "type": "object",
+  "links": [
+    {
+      "rel": "self",
+      "href": "/substances/{uuid}",
+      "templateRequired": [
+        "uuid"
+      ]
+    },
+    {
+      "rel": "instances",
+      "href": "/substances"
+    },
+    {
+      "rel": "create",
+      "href": "/substances",
+      "method": "POST",
+      "encType": "application/json",
+      "schema": {
+        "$ref": "#"
+      }
+    },
+    {
+      "rel": "update",
+      "href": "/substances/{uuid}",
+      "method": "PUT",
+      "encType": "application/json",
+      "templateRequired": [
+        "uuid"
+      ],
+      "schema": {
+        "$ref": "#"
+      }
+    },
+    {
+      "rel": "delete",
+      "href": "/substances/{uuid}",
+      "method": "DELETE",
+      "templateRequired": [
+        "uuid"
+      ]
+    }
+  ]
+}
