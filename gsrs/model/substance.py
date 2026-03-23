@@ -185,6 +185,13 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         element_property=True,
     )
 
+    changeReason: Union[str, None] = Field(
+        None,
+        alias='changeReason',
+        title='Change Reason',
+        description='Reason for the change',
+        element_property=True,
+    )
 
     systemName: Union[str, None] = Field(
         None,

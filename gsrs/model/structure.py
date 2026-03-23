@@ -3,6 +3,9 @@ from typing import List, Union
 from uuid import UUID
 from enum import Enum
 
+from .value import Value
+from .xref import XRef
+
 class OpticalActivity(Enum):
     """Enumeration of optical activity values."""
 
@@ -185,6 +188,21 @@ class Structure(BaseModel):
         element_property=True,
     )
 
+    properties: Union[List[Value], None] = Field(
+        None,
+        alias='properties',
+        title='Properties',
+        description='Properties',
+        element_property=True,
+    )
+
+    links: Union[List[XRef], None] = Field(
+        None,
+        alias='links',
+        title='Links',
+        description='Links',
+        element_property=True,
+    )
 
     inchiKey: Union[str, None] = Field(
         None,
