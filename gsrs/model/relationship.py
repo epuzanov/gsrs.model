@@ -41,7 +41,7 @@ class Relationship(GinasCommonSubData):
         description='Qualification',
     )
     relatedSubstance: SubstanceReference = Field(
-        default=None,
+        default=...,
         alias='relatedSubstance',
         title='Related Substance',
         description='Related Substance',

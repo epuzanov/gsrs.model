@@ -1,8 +1,24 @@
-from pydantic import Field, constr, ConfigDict
-from typing import Any, Dict, List, Union
+from __future__ import annotations
+
+from pydantic import Field, ConfigDict
+from typing import Any, Dict, List, Union, Annotated
+from typing_extensions import Annotated as TeAnnotated
+import re
 
 from .amount import Amount
 from .ginas_common_sub_data import GinasCommonSubData
+
+
+# Type aliases for attachment map keys and values
+_RPattern = re.compile(r'^R[0-9][0-9]*$')
+_UnderscorePattern = re.compile(r'^_.*$')
+
+AttachmentMapValue = Union[
+    Dict[str, Any],
+    Dict[str, List[str]],
+    None
+]
+
 
 class Unit(GinasCommonSubData):
     """Unit model."""
@@ -30,14 +46,7 @@ class Unit(GinasCommonSubData):
         description='Attachment Count',
     )
 
-    attachmentMap: Union[
-        dict[constr(pattern=r'^[_].*'), Any],
-        dict[
-            constr(pattern=r'^R[0-9][0-9]*$'),
-            list[constr(pattern=r'^R[0-9][0-9]*$')]
-        ],
-        None
-    ] = Field(
+    attachmentMap: Union[AttachmentMapValue, None] = Field(
         default=None,
         alias='attachmentMap',
         title='Attachment Map',

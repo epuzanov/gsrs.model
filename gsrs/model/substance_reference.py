@@ -37,7 +37,7 @@ class SubstanceReference(GinasCommonSubData):
     )
 
     refuuid: str = Field(
-        default=None,
+        default=...,
         alias='refuuid',
         title='Refuuid',
         description='Refuuid',

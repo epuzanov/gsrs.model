@@ -14,6 +14,6 @@ class DisulfideLink(GinasCommonSubData):
         alias='sites',
         title='Disulfide Sites',
         description='Disulfide Sites',
-        max_items=2,
+        max_length=2,
         min_length=2,
     )

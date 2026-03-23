@@ -21,7 +21,7 @@ class SubstanceMetaclass(ModelMetaclass):
 
     def __call__(cls, *args, **kwargs):
         if cls.__name__ == 'Substance' and cls.__module__ == __name__:
-            target_cls = cls._resolve_subclass_from_input(args, kwargs)
+            target_cls = cls._resolve_subclass_from_input(args, kwargs)  # type: ignore[attr-defined]
             if target_cls is not cls:
                 return target_cls(*args, **kwargs)
         return super().__call__(*args, **kwargs)
