@@ -1,4 +1,4 @@
-from pydantic import Field, ConfigDict
+from pydantic import ConfigDict, Field, PrivateAttr
 from typing import List, Union
 from uuid import UUID
 
@@ -8,6 +8,7 @@ class GinasCommonSubData(GinasCommonData):
     """Base model for common GSRS sub-data fields."""
 
     model_config = ConfigDict(extra='forbid')
+    _parentUuid: UUID | None = PrivateAttr(default=None)
 
     references: Union[List[UUID], None] = Field(
         None,
@@ -25,3 +26,6 @@ class GinasCommonSubData(GinasCommonData):
         description='Compact system-generated shorthand for the referenced sites.',
         element_property=True,
     )
+
+    def _set_parent_uuid(self, value: UUID | None) -> None:
+        self._parentUuid = value

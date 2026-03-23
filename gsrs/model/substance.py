@@ -1,4 +1,4 @@
-from pydantic import ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any, ClassVar, List, Union
 from importlib import import_module
@@ -6,6 +6,7 @@ from enum import Enum
 
 from .code import Code
 from .ginas_common_data import GinasCommonData
+from .ginas_common_sub_data import GinasCommonSubData
 from .modifications import Modifications
 from .name import Name
 from .note import Note
@@ -260,3 +261,23 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
             if target_cls is not cls:
                 return target_cls.model_validate(obj, *args, **kwargs)
         return super().model_validate(obj, *args, **kwargs)
+
+    def model_post_init(self, __context: Any) -> None:
+        super_post_init = getattr(super(), 'model_post_init', None)
+        if callable(super_post_init):
+            super_post_init(__context)
+        self._assign_parent_uuid(self, self.uuid)
+
+    @classmethod
+    def _assign_parent_uuid(cls, value: Any, parent_uuid) -> None:
+        if isinstance(value, GinasCommonSubData):
+            value._set_parent_uuid(parent_uuid)
+
+        if isinstance(value, BaseModel):
+            for field_name in value.__class__.model_fields:
+                cls._assign_parent_uuid(getattr(value, field_name), parent_uuid)
+            return
+
+        if isinstance(value, (list, tuple, set)):
+            for item in value:
+                cls._assign_parent_uuid(item, parent_uuid)
