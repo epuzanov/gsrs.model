@@ -23,3 +23,28 @@ class OtherLink(GinasCommonSubData):
         title='Linkage type',
         description='Linkage type',
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        linkage_type = self._clean_text(self.linkageType)
+        sites_shorthand = self._clean_text(self.sitesShorthand)
+        if not linkage_type and not sites_shorthand:
+            return []
+
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        return [
+            {
+                'chunk_id': f'root_other_links_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'other_links',
+                'content': f"{subject} linkage type {linkage_type or 'unspecified'} at {sites_shorthand or 'unspecified sites'}.".strip(),
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'other_links'),
+                    'linkage_type': linkage_type or None,
+                    'sites': sites_shorthand or None,
+                },
+            }
+        ]

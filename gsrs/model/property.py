@@ -56,17 +56,17 @@ class Property(GinasCommonSubData):
 
     def _render_property_value(self) -> str:
         parts: list[str] = []
-        value_text = self._render_amount(self.value)
+        value_text = self.value.as_string() if self.value else ''
         if value_text:
             parts.append(value_text)
-        ref_name = self._pick_substance_ref_name(self.referencedSubstance)
+        ref_name = self.referencedSubstance.get_refPname() if self.referencedSubstance else ''
         if ref_name:
             parts.append(f'referenced substance {ref_name}')
         param_bits = []
         for parameter in self.parameters or []:
             pname = self._clean_text(parameter.name)
             ptype = self._clean_text(parameter.type)
-            pvalue = self._render_amount(parameter.value)
+            pvalue = parameter.value.as_string() if parameter.value else ''
             bit = pname
             if ptype:
                 bit = f'{bit} ({ptype})' if bit else ptype

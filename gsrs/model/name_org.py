@@ -22,3 +22,31 @@ class NameOrg(GinasCommonSubData):
         title='Deprecated Date',
         description='Deprecated Date',
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        org_name = self._clean_text(self.nameOrg)
+        if not org_name:
+            return []
+
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        content = f"{subject} naming organization: {org_name}."
+        if self.deprecatedDate:
+            content += f" Deprecated {self.deprecatedDate}."
+
+        return [
+            {
+                'chunk_id': f'root_name_orgs_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'name_orgs',
+                'content': content,
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'name_orgs'),
+                    'organization': org_name or None,
+                    'deprecated_date': str(self.deprecatedDate) if self.deprecatedDate else None,
+                },
+            }
+        ]

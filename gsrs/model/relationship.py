@@ -61,7 +61,7 @@ class Relationship(GinasCommonSubData):
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         rel_type = self._clean_text(self.type)
-        related_name = self._pick_substance_ref_name(self.relatedSubstance)
+        related_name = self.relatedSubstance.get_refPname()
         if not rel_type and not related_name:
             return []
 
@@ -80,7 +80,7 @@ class Relationship(GinasCommonSubData):
                     **self._hierarchy_metadata('root', 'relationships'),
                     'relationship_type': rel_type or None,
                     'related_name': related_name or None,
-                    'related_id': self._pick_substance_ref_id(self.relatedSubstance) or None,
+                    'related_id': self.relatedSubstance.get_refuuid() or None,
                 },
             }
         ]

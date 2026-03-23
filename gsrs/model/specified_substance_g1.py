@@ -15,3 +15,11 @@ class SpecifiedSubstanceG1(GinasCommonSubData):
         title='constituents',
         description='constituents',
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        rows: list[dict[str, object]] = []
+
+        for item in self.constituents or []:
+            rows.extend(item.to_embedding_chunks())
+
+        return rows

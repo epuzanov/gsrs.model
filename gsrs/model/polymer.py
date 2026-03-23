@@ -46,3 +46,15 @@ class Polymer(GinasCommonSubData):
         title='Structural Units',
         description='Structural repeat units that define the polymer and their configuration.',
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        rows: list[dict[str, object]] = []
+
+        if self.classification:
+            rows.extend(self.classification.to_embedding_chunks())
+        for item in self.monomers or []:
+            rows.extend(item.to_embedding_chunks())
+        for item in self.structuralUnits or []:
+            rows.extend(item.to_embedding_chunks())
+
+        return rows

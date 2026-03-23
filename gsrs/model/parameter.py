@@ -29,3 +29,29 @@ class Parameter(GinasCommonSubData):
         title='Amount',
         description='Amount',
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        param_name = self._clean_text(self.name)
+        param_type = self._clean_text(self.type)
+        value_text = self.value.as_string() if self.value else ''
+        if not param_name and not value_text:
+            return []
+
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        return [
+            {
+                'chunk_id': f'root_parameters_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'parameters',
+                'content': f"{subject} parameter {param_name}{f' ({param_type})' if param_type else ''}: {value_text}.".strip(),
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'parameters'),
+                    'parameter_name': param_name or None,
+                    'parameter_type': param_type or None,
+                },
+            }
+        ]

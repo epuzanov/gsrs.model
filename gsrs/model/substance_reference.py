@@ -56,3 +56,43 @@ class SubstanceReference(GinasCommonSubData):
         title='Approval ID',
         description='Approval ID',
     )
+
+    def get_refPname(self) -> str:
+        """Get the referenced substance name."""
+        return self._clean_text(self.refPname or self.name or self.approvalID or self.refuuid or self.linkingID)
+
+    def get_refuuid(self) -> str:
+        """Get the referenced substance ID."""
+        return self._clean_text(self.approvalID or self.refuuid or self.linkingID or self.uuid)
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        ref_name = self.get_refPname()
+        approval_id = self._clean_text(self.approvalID)
+        if not ref_name and not approval_id:
+            return []
+
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        content_parts = [f"{subject} references substance"]
+        if ref_name:
+            content_parts.append(ref_name)
+        if approval_id:
+            content_parts.append(f"approval ID {approval_id}")
+
+        return [
+            {
+                'chunk_id': f'root_substance_references_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'substance_references',
+                'content': '. '.join(content_parts) + '.',
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'substance_references'),
+                    'referenced_name': ref_name or None,
+                    'referenced_id': self.get_refuuid() or None,
+                    'approval_id': approval_id or None,
+                },
+            }
+        ]

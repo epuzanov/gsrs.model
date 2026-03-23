@@ -103,66 +103,6 @@ class GinasCommonData(BaseModel):
     def _embedding_source_name(self) -> str | None:
         return self._clean_text(self._source_name) or None
 
-    @classmethod
-    def _pick_substance_ref_name(cls, obj: Any) -> str:
-        if obj is None:
-            return ''
-        if isinstance(obj, str):
-            return cls._clean_text(obj)
-        if isinstance(obj, BaseModel):
-            obj = obj.model_dump(by_alias=True, exclude_none=True)
-        if isinstance(obj, dict):
-            for key in ('refPname', 'name', 'approvalID', 'refuuid', 'linkingID'):
-                if obj.get(key):
-                    return cls._clean_text(obj[key])
-        return cls._clean_text(obj)
-
-    @classmethod
-    def _pick_substance_ref_id(cls, obj: Any) -> str:
-        if isinstance(obj, BaseModel):
-            obj = obj.model_dump(by_alias=True, exclude_none=True)
-        if not isinstance(obj, dict):
-            return ''
-        for key in ('approvalID', 'refuuid', 'linkingID', 'uuid'):
-            if obj.get(key):
-                return cls._clean_text(obj[key])
-        return ''
-
-    @classmethod
-    def _render_amount(cls, value: Any) -> str:
-        if value is None:
-            return ''
-        if isinstance(value, BaseModel):
-            value = value.model_dump(by_alias=True, exclude_none=True)
-        if isinstance(value, dict):
-            pieces: list[str] = []
-            non_numeric = cls._clean_text(value.get('nonNumericValue'))
-            avg = value.get('average')
-            low = value.get('low')
-            high = value.get('high')
-            low_limit = value.get('lowLimit')
-            high_limit = value.get('highLimit')
-            units = cls._clean_text(value.get('units'))
-            amount_type = cls._clean_text(value.get('type'))
-            if non_numeric:
-                pieces.append(non_numeric)
-            elif avg is not None:
-                pieces.append(str(avg))
-            elif low is not None and high is not None:
-                pieces.append(f'{low} to {high}')
-            elif low_limit is not None and high_limit is not None:
-                pieces.append(f'{low_limit} to {high_limit}')
-            elif low is not None:
-                pieces.append(str(low))
-            elif high is not None:
-                pieces.append(str(high))
-            if units:
-                pieces.append(units)
-            if amount_type:
-                pieces.append(f'(amount type {amount_type})')
-            return ' '.join(pieces).strip()
-        return cls._clean_text(value)
-
     def model_dump(self, *args, **kwargs):
         kwargs.setdefault('exclude_none', True)
         kwargs.setdefault('by_alias', True)

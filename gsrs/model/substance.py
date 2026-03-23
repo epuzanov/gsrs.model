@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field
 from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any, ClassVar, List, Union
 from importlib import import_module
@@ -189,7 +189,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         description='System-generated approval identifier formatted for display.',
     )
 
-    selfLink: Union[str, None] = Field(
+    selfLink: Union[AnyUrl, None] = Field(
         default=None,
         alias='_self',
         title='Self Link',
@@ -271,7 +271,6 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         return self._clean_text(self.substanceClass) or 'unknown'
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:
-        self._set_source_name(self.selfLink)
         document_id = self._clean_text(self.uuid)
         name = self._stable_name()
         substance_class = self._substance_class_value()
@@ -297,7 +296,6 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 },
             }
         ]
-        self._set_source_name(self.selfLink)
         self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
         rows.extend(self._class_summary_chunks())
 
@@ -335,6 +333,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         super_post_init = getattr(super(), 'model_post_init', None)
         if callable(super_post_init):
             super_post_init(__context)
+        self._set_source_name(self.selfLink.host if self.selfLink else None)
         self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
 
     @classmethod
