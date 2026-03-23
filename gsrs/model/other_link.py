@@ -37,9 +37,9 @@ class OtherLink(GinasCommonSubData):
             {
                 'chunk_id': f'root_other_links_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'other_links',
-                'content': f"{subject} linkage type {linkage_type or 'unspecified'} at {sites_shorthand or 'unspecified sites'}.".strip(),
+                'text': f"{subject} linkage type {linkage_type or 'unspecified'} at {sites_shorthand or 'unspecified sites'}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'other_links'),

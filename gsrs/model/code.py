@@ -63,9 +63,9 @@ class Code(GinasCommonSubData):
             {
                 'chunk_id': f'root_codes_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'codes',
-                'content': f"{subject} identifier in {code_system or 'unknown system'}: {code}.",
+                'text': f"{subject} identifier in {code_system or 'unknown system'}: {code}.",
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'codes'),
@@ -83,9 +83,9 @@ class Code(GinasCommonSubData):
                     {
                         'chunk_id': f'root_classifications_uuid:{document_id}',
                         'document_id': document_id,
-                        'source': self._embedding_source_name(),
+                        'source_url': self._embedding_source_name(),
                         'section': 'classifications',
-                        'content': (
+                        'text': (
                             f"{subject} classification in {code_system or 'unknown system'}: "
                             f"{' > '.join(class_parts)}."
                         ),

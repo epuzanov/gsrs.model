@@ -36,9 +36,9 @@ class Sugar(GinasCommonSubData):
             {
                 'chunk_id': f'root_sugars_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'sugars',
-                'content': f"{subject} nucleic acid sugar {sugar_name} at {sites_shorthand or 'unspecified sites'}.".strip(),
+                'text': f"{subject} nucleic acid sugar {sugar_name} at {sites_shorthand or 'unspecified sites'}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'sugars'),

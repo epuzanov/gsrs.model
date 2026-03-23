@@ -24,9 +24,9 @@ class ProteinSubstance(Substance):
             {
                 'chunk_id': f'root_protein_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'protein',
-                'content': f'{self._stable_name()} belongs to substance class protein. Protein has {count} subunits.',
+                'text': f'{self._stable_name()} belongs to substance class protein. Protein has {count} subunits.',
                 'metadata': {
                     **self._chunk_metadata(self),
                     **self._hierarchy_metadata('root', 'protein'),

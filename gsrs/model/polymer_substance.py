@@ -24,9 +24,9 @@ class PolymerSubstance(Substance):
             {
                 'chunk_id': f'root_polymer_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'polymer',
-                'content': f'{self._stable_name()} belongs to substance class polymer. Polymer has {count} monomers.',
+                'text': f'{self._stable_name()} belongs to substance class polymer. Polymer has {count} monomers.',
                 'metadata': {
                     **self._chunk_metadata(self),
                     **self._hierarchy_metadata('root', 'polymer'),

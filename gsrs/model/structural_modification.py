@@ -82,9 +82,9 @@ class StructuralModification(GinasCommonSubData):
             {
                 'chunk_id': f'root_modifications_structuralModifications_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'structuralModifications',
-                'content': f'{subject} structural modification type {self._clean_text(self.structuralModificationType)}.',
+                'text': f'{subject} structural modification type {self._clean_text(self.structuralModificationType)}.',
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'modifications', 'structuralModifications'),

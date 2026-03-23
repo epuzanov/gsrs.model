@@ -37,9 +37,9 @@ class PhysicalModification(GinasCommonSubData):
             {
                 'chunk_id': f'root_modifications_physicalModifications_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'physicalModifications',
-                'content': f'{subject} physical modification role {self._clean_text(self.physicalModificationRole)}.',
+                'text': f'{subject} physical modification role {self._clean_text(self.physicalModificationRole)}.',
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'modifications', 'physicalModifications'),

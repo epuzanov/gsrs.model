@@ -42,9 +42,9 @@ class Subunit(GinasCommonSubData):
             {
                 'chunk_id': f'root_subunits_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'subunits',
-                'content': f"{subject} subunit {int(self.subunitIndex) if self.subunitIndex else 'unspecified'}: sequence length {self.length or len(sequence)} residues.",
+                'text': f"{subject} subunit {int(self.subunitIndex) if self.subunitIndex else 'unspecified'}: sequence length {self.length or len(sequence)} residues.",
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'subunits'),

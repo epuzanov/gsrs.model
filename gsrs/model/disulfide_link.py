@@ -30,9 +30,9 @@ class DisulfideLink(GinasCommonSubData):
             {
                 'chunk_id': f'root_disulfide_links_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'disulfide_links',
-                'content': f"{subject} disulfide bond at {sites_shorthand}.",
+                'text': f"{subject} disulfide bond at {sites_shorthand}.",
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'disulfide_links'),

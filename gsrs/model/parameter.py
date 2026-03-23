@@ -44,9 +44,9 @@ class Parameter(GinasCommonSubData):
             {
                 'chunk_id': f'root_parameters_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'parameters',
-                'content': f"{subject} parameter {param_name}{f' ({param_type})' if param_type else ''}: {value_text}.".strip(),
+                'text': f"{subject} parameter {param_name}{f' ({param_type})' if param_type else ''}: {value_text}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'parameters'),

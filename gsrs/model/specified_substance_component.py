@@ -48,9 +48,9 @@ class SpecifiedSubstanceComponent(Component):
             {
                 'chunk_id': f'root_constituents_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'constituents',
-                'content': '. '.join(content_parts) + '.',
+                'text': '. '.join(content_parts) + '.',
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'constituents'),

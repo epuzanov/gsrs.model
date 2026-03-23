@@ -84,9 +84,9 @@ class Name(GinasCommonSubData):
             {
                 'chunk_id': f'root_names_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'names',
-                'content': ' '.join(parts),
+                'text': ' '.join(parts),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'names'),

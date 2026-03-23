@@ -39,9 +39,9 @@ class NameOrg(GinasCommonSubData):
             {
                 'chunk_id': f'root_name_orgs_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'name_orgs',
-                'content': content,
+                'text': content,
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'name_orgs'),

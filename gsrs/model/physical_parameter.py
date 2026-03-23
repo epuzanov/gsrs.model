@@ -36,9 +36,9 @@ class PhysicalParameter(GinasCommonSubData):
             {
                 'chunk_id': f'root_physical_parameters_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'physical_parameters',
-                'content': f"{subject} physical parameter {param_name}: {amount_text}.".strip(),
+                'text': f"{subject} physical parameter {param_name}: {amount_text}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'physical_parameters'),

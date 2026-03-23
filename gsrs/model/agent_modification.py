@@ -55,9 +55,9 @@ class AgentModification(GinasCommonSubData):
             {
                 'chunk_id': f'root_modifications_agentModifications_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'agentModifications',
-                'content': f'{subject} agent modification type {self._clean_text(self.agentModificationType)}.',
+                'text': f'{subject} agent modification type {self._clean_text(self.agentModificationType)}.',
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'modifications', 'agentModifications'),

@@ -72,9 +72,9 @@ class Relationship(GinasCommonSubData):
             {
                 'chunk_id': f'root_relationships_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'relationships',
-                'content': f"{subject} has relationship {rel_type} with {related_name}.".strip(),
+                'text': f"{subject} has relationship {rel_type} with {related_name}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'relationships'),

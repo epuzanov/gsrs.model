@@ -285,9 +285,9 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
             {
                 'chunk_id': f'root_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'root',
-                'content': ' '.join(parts),
+                'text': ' '.join(parts),
                 'metadata': {
                     **self._chunk_metadata(self),
                     **self._hierarchy_metadata('root'),
@@ -333,7 +333,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         super_post_init = getattr(super(), 'model_post_init', None)
         if callable(super_post_init):
             super_post_init(__context)
-        self._set_source_name(self.selfLink.host if self.selfLink else None)
+        self._set_source_name(str(self.selfLink) if self.selfLink else None)
         self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
 
     @classmethod

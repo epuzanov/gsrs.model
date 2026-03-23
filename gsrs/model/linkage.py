@@ -36,9 +36,9 @@ class Linkage(GinasCommonSubData):
             {
                 'chunk_id': f'root_linkages_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'linkages',
-                'content': f"{subject} nucleic acid linkage {linkage_type or 'unspecified'} at {sites_shorthand or 'unspecified sites'}.".strip(),
+                'text': f"{subject} nucleic acid linkage {linkage_type or 'unspecified'} at {sites_shorthand or 'unspecified sites'}.".strip(),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'linkages'),

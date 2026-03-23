@@ -28,9 +28,9 @@ class Note(GinasCommonSubData):
             {
                 'chunk_id': f'root_notes_uuid:{document_id}',
                 'document_id': document_id,
-                'source': self._embedding_source_name(),
+                'source_url': self._embedding_source_name(),
                 'section': 'notes',
-                'content': f'{subject} note: {note}',
+                'text': f'{subject} note: {note}',
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'notes'),
