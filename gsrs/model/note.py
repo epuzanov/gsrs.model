@@ -15,3 +15,26 @@ class Note(GinasCommonSubData):
         description='Note',
         element_property=True,
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        note = self._clean_text(self.note)
+        if not note:
+            return []
+
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+        
+
+        return [
+            {
+                'chunk_id': f'root_notes_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'notes',
+                'content': f'{subject} note: {note}',
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'notes'),
+                },
+            }
+        ]

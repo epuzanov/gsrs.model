@@ -269,22 +269,106 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 return target_cls.model_validate(obj, *args, **kwargs)
         return super().model_validate(obj, *args, **kwargs)
 
+    def _stable_name(self) -> str:
+        if self.systemName:
+            return self._clean_text(self.systemName)
+        for item in self.names:
+            if item.displayName and item.name:
+                return self._clean_text(item.name)
+        for item in self.names:
+            if item.preferred and item.name:
+                return self._clean_text(item.name)
+        for item in self.names:
+            if item.name:
+                return self._clean_text(item.name)
+        return self._clean_text(self.approvalID or self.uuid or 'Unknown substance')
+
+    def _class_summary_chunks(self) -> list[dict[str, object]]:
+        return []
+
+    def _substance_class_value(self) -> str:
+        if isinstance(self.substanceClass, SubstanceClass):
+            return self.substanceClass.value
+        return self._clean_text(self.substanceClass) or 'unknown'
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        self._set_source_name(self.selfLink)
+        document_id = self._clean_text(self.uuid)
+        name = self._stable_name()
+        substance_class = self._substance_class_value()
+        parts = [
+            f'{name} is a GSRS substance record.',
+            f'Substance class {substance_class}.',
+        ]
+        if self.status:
+            parts.append(f'Status {self._clean_text(self.status)}.')
+
+        rows = [
+            {
+                'chunk_id': f'root_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'root',
+                'content': ' '.join(parts),
+                'metadata': {
+                    **self._chunk_metadata(self),
+                    **self._hierarchy_metadata('root'),
+                    'canonical_name': name,
+                    'substance_class': substance_class,
+                },
+            }
+        ]
+        self._set_source_name(self.selfLink)
+        self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
+        rows.extend(self._class_summary_chunks())
+
+        seen_names = set()
+        for item in self.names or []:
+            key = (self._clean_text(item.name), self._clean_text(item.type))
+            if key in seen_names:
+                continue
+            seen_names.add(key)
+            rows.extend(item.to_embedding_chunks())
+
+        seen_codes = set()
+        for item in self.codes or []:
+            key = (self._clean_text(item.codeSystem), self._clean_text(item.code))
+            if key in seen_codes:
+                continue
+            seen_codes.add(key)
+            rows.extend(item.to_embedding_chunks())
+
+        for item in self.properties or []:
+            rows.extend(item.to_embedding_chunks())
+        for item in self.relationships or []:
+            rows.extend(item.to_embedding_chunks())
+        for item in self.notes or []:
+            rows.extend(item.to_embedding_chunks())
+        for item in self.references or []:
+            rows.extend(item.to_embedding_chunks())
+
+        if self.modifications is not None:
+            rows.extend(self.modifications.to_embedding_chunks())
+
+        return rows
+
     def model_post_init(self, __context: Any) -> None:
         super_post_init = getattr(super(), 'model_post_init', None)
         if callable(super_post_init):
             super_post_init(__context)
-        self._assign_parent_uuid(self, self.uuid)
+        self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
 
     @classmethod
-    def _assign_parent_uuid(cls, value: Any, parent_uuid) -> None:
+    def _assign_parent_context(cls, value: Any, parent_uuid, parent_name: str | None, source_name: str | None) -> None:
         if isinstance(value, GinasCommonSubData):
-            value._set_parent_uuid(parent_uuid)
-
+            value._set_parent_context(parent_uuid, parent_name, source_name)
+        elif isinstance(value, GinasCommonData):
+            value._set_source_name(source_name)
         if isinstance(value, BaseModel):
             for field_name in value.__class__.model_fields:
-                cls._assign_parent_uuid(getattr(value, field_name), parent_uuid)
+                cls._assign_parent_context(getattr(value, field_name), parent_uuid, parent_name, source_name)
             return
 
         if isinstance(value, (list, tuple, set)):
             for item in value:
-                cls._assign_parent_uuid(item, parent_uuid)
+                cls._assign_parent_context(item, parent_uuid, parent_name, source_name)

@@ -17,7 +17,6 @@ class AgentModification(GinasCommonSubData):
         description='Process',
         element_property=True,
     )
-
     agentModificationRole: Union[str, None] = Field(
         None,
         alias='agentModificationRole',
@@ -25,7 +24,6 @@ class AgentModification(GinasCommonSubData):
         description='Role',
         element_property=True,
     )
-
     agentModificationType: str = Field(
         ...,
         alias='agentModificationType',
@@ -33,7 +31,6 @@ class AgentModification(GinasCommonSubData):
         description='Type',
         element_property=True,
     )
-
     agentSubstance: SubstanceReference = Field(
         ...,
         alias='agentSubstance',
@@ -41,7 +38,6 @@ class AgentModification(GinasCommonSubData):
         description='Substance',
         element_property=True,
     )
-
     amount: Union[Amount, None] = Field(
         None,
         alias='amount',
@@ -49,7 +45,6 @@ class AgentModification(GinasCommonSubData):
         description='Amount',
         element_property=True,
     )
-
     modificationGroup: Union[str, None] = Field(
         None,
         alias='modificationGroup',
@@ -57,3 +52,22 @@ class AgentModification(GinasCommonSubData):
         description='Modification Group',
         element_property=True,
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        return [
+            {
+                'chunk_id': f'root_modifications_agentModifications_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'agentModifications',
+                'content': f'{subject} agent modification type {self._clean_text(self.agentModificationType)}.',
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'modifications', 'agentModifications'),
+                    'modification_kind': 'agent',
+                },
+            }
+        ]

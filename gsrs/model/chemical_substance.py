@@ -17,15 +17,13 @@ class ChemicalSubstance(Substance):
         description='Substance Type',
         element_property=True,
     )
-
     structure: GinasChemicalStructure = Field(
         ...,
         alias='structure',
         title='Chemical Structure',
-        description='Chemical Structure',
+        description='Chemical Structure definition for this substance.',
         element_property=True,
     )
-
     moieties: List[Moiety] = Field(
         ...,
         alias='moieties',
@@ -34,3 +32,24 @@ class ChemicalSubstance(Substance):
         element_property=True,
         min_length=1,
     )
+
+    def _class_summary_chunks(self) -> list[dict[str, object]]:
+        document_id = self._clean_text(self.uuid)
+        formula = self._clean_text(self.structure.formula if self.structure else None)
+
+        return [
+            {
+                'chunk_id': f'root_structure_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'structure',
+                'content': f'{self._stable_name()} belongs to substance class chemical. Formula {formula}.'.strip(),
+                'metadata': {
+                    **self._chunk_metadata(self),
+                    **self._hierarchy_metadata('root', 'structure'),
+                    'substance_class': 'chemical',
+                    'formula': formula or None,
+                    'molecular_weight': self.structure.mwt if self.structure else None,
+                },
+            }
+        ]

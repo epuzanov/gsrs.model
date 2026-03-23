@@ -16,7 +16,6 @@ class Name(GinasCommonSubData):
         description='Name',
         element_property=True,
     )
-
     type: str = Field(
         ...,
         alias='type',
@@ -24,7 +23,6 @@ class Name(GinasCommonSubData):
         description='Name Type',
         element_property=True,
     )
-
     domains: Union[List[str], None] = Field(
         None,
         alias='domains',
@@ -32,7 +30,6 @@ class Name(GinasCommonSubData):
         description='Domains',
         element_property=True,
     )
-
     stdName: Union[str, None] = Field(
         None,
         alias='stdName',
@@ -40,7 +37,6 @@ class Name(GinasCommonSubData):
         description='Std Name',
         element_property=True,
     )
-
     languages: List[str] = Field(
         ...,
         alias='languages',
@@ -48,7 +44,6 @@ class Name(GinasCommonSubData):
         description='Languages',
         element_property=True,
     )
-
     nameJurisdiction: Union[List[str], None] = Field(
         None,
         alias='nameJurisdiction',
@@ -56,7 +51,6 @@ class Name(GinasCommonSubData):
         description='Naming Jurisdictions',
         element_property=True,
     )
-
     nameOrgs: Union[List[NameOrg], None] = Field(
         None,
         alias='nameOrgs',
@@ -64,7 +58,6 @@ class Name(GinasCommonSubData):
         description='Naming Organizations',
         element_property=True,
     )
-
     preferred: Union[bool, None] = Field(
         None,
         alias='preferred',
@@ -72,7 +65,6 @@ class Name(GinasCommonSubData):
         description='Preferred Term',
         element_property=True,
     )
-
     displayName: Union[bool, None] = Field(
         None,
         alias='displayName',
@@ -80,3 +72,36 @@ class Name(GinasCommonSubData):
         description='Display Name',
         element_property=True,
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        raw_name = self._clean_text(self.name)
+        name_type = self._clean_text(self.type)
+        if not raw_name:
+            return []
+
+        subject = self._embedding_root_name()
+        parts = [f'{subject} name']
+        if name_type:
+            parts.append(f'type {name_type}')
+        parts.append(f': {raw_name}.')
+        if self.preferred:
+            parts.append('Preferred name.')
+
+        document_id = self._embedding_document_id()
+
+        return [
+            {
+                'chunk_id': f'root_names_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'names',
+                'content': ' '.join(parts),
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'names'),
+                    'name_value': raw_name,
+                    'name_type': name_type or None,
+                    'preferred': bool(self.preferred),
+                },
+            }
+        ]

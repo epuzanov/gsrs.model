@@ -26,7 +26,6 @@ class StructuralModification(GinasCommonSubData):
         description='Modification Type',
         element_property=True,
     )
-
     locationType: Union[str, None] = Field(
         None,
         alias='locationType',
@@ -34,7 +33,6 @@ class StructuralModification(GinasCommonSubData):
         description='Modification Location Type',
         element_property=True,
     )
-
     residueModified: Union[str, None] = Field(
         None,
         alias='residueModified',
@@ -42,7 +40,6 @@ class StructuralModification(GinasCommonSubData):
         description='Residue Modified',
         element_property=True,
     )
-
     sites: Union[List[Site], None] = Field(
         None,
         alias='sites',
@@ -50,7 +47,6 @@ class StructuralModification(GinasCommonSubData):
         description='Modified Sites',
         element_property=True,
     )
-
     extent: Union[Extent, None] = Field(
         None,
         alias='extent',
@@ -58,7 +54,6 @@ class StructuralModification(GinasCommonSubData):
         description='Extent',
         element_property=True,
     )
-
     extentAmount: Union[Amount, None] = Field(
         None,
         alias='extentAmount',
@@ -66,7 +61,6 @@ class StructuralModification(GinasCommonSubData):
         description='Amount',
         element_property=True,
     )
-
     molecularFragment: Union[SubstanceReference, None] = Field(
         None,
         alias='molecularFragment',
@@ -74,7 +68,6 @@ class StructuralModification(GinasCommonSubData):
         description='Molecular Fragment',
         element_property=True,
     )
-
     molecularFragmentRole: Union[str, None] = Field(
         None,
         alias='molecularFragmentRole',
@@ -82,7 +75,6 @@ class StructuralModification(GinasCommonSubData):
         description='Molecular Fragment Role',
         element_property=True,
     )
-
     modificationGroup: Union[str, None] = Field(
         None,
         alias='modificationGroup',
@@ -90,3 +82,22 @@ class StructuralModification(GinasCommonSubData):
         description='Modification Group',
         element_property=True,
     )
+
+    def to_embedding_chunks(self) -> list[dict[str, object]]:
+        subject = self._embedding_root_name()
+        document_id = self._embedding_document_id()
+
+        return [
+            {
+                'chunk_id': f'root_modifications_structuralModifications_uuid:{document_id}',
+                'document_id': document_id,
+                'source': self._embedding_source_name(),
+                'section': 'structuralModifications',
+                'content': f'{subject} structural modification type {self._clean_text(self.structuralModificationType)}.',
+                'metadata': {
+                    **self._embedding_root_metadata(),
+                    **self._hierarchy_metadata('root', 'modifications', 'structuralModifications'),
+                    'modification_kind': 'structural',
+                },
+            }
+        ]
