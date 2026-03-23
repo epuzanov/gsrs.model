@@ -10,11 +10,10 @@ class PolymerSubstance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     polymer: Union[Polymer, None] = Field(
-        None,
+        default=None,
         alias='polymer',
         title='Polymer',
         description='Polymer definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

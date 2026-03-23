@@ -10,11 +10,10 @@ class NucleicAcidSubstance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     nucleicAcid: Union[NucleicAcid, None] = Field(
-        None,
+        default=None,
         alias='nucleicAcid',
         title='Nucleic Acid',
         description='Nucleic Acid definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

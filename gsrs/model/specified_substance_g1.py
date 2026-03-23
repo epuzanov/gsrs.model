@@ -10,9 +10,8 @@ class SpecifiedSubstanceG1(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     constituents: List[SpecifiedSubstanceComponent] = Field(
-        ...,
+        default=...,
         alias='constituents',
         title='constituents',
         description='constituents',
-        element_property=True,
     )

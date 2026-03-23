@@ -10,25 +10,22 @@ class GinasChemicalStructure(Structure):
     model_config = ConfigDict(extra='forbid')
 
     access: Union[List[str], None] = Field(
-        None,
+        default=None,
         alias='access',
         title='Access',
         description='Access',
-        element_property=True,
     )
 
     lastEditedBy: Union[str, None] = Field(
-        None,
+        default=None,
         alias='lastEditedBy',
         title='Last Modified By',
         description='Last Modified By',
-        element_property=True,
     )
 
     createdBy: Union[str, None] = Field(
-        None,
+        default=None,
         alias='createdBy',
         title='Created By',
         description='Created By',
-        element_property=True,
     )

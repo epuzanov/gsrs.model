@@ -9,11 +9,10 @@ class Note(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     note: Union[str, None] = Field(
-        ...,
+        default=...,
         alias='note',
         title='Note',
         description='Note',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

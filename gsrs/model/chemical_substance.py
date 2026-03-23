@@ -15,21 +15,18 @@ class ChemicalSubstance(Substance):
         alias='substanceClass',
         title='Substance Type',
         description='Substance Type',
-        element_property=True,
     )
     structure: GinasChemicalStructure = Field(
-        ...,
+        default=...,
         alias='structure',
         title='Chemical Structure',
         description='Chemical Structure definition for this substance.',
-        element_property=True,
     )
     moieties: List[Moiety] = Field(
-        ...,
+        default=...,
         alias='moieties',
         title='Chemical Moieties',
         description='Chemical Moieties',
-        element_property=True,
         min_length=1,
     )
 

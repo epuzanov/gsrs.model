@@ -10,26 +10,23 @@ class PhysicalModification(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     physicalModificationRole: str = Field(
-        ...,
+        default=...,
         alias='physicalModificationRole',
         title='Role of Modification',
         description='Role of Modification',
-        element_property=True,
     )
     parameters: List[PhysicalParameter] = Field(
-        ...,
+        default=...,
         alias='parameters',
         title='Physical Parameters',
         description='Physical Parameters',
-        element_property=True,
         min_length=1,
     )
     modificationGroup: Union[str, None] = Field(
-        None,
+        default=None,
         alias='modificationGroup',
         title='Modification Group',
         description='Modification Group',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

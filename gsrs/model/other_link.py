@@ -10,18 +10,16 @@ class OtherLink(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     sites: Union[List[Site], None] = Field(
-        None,
+        default=None,
         alias='sites',
         title='Linkage sites',
         description='Linkage sites',
-        element_property=True,
         min_length=2,
     )
 
     linkageType: str = Field(
-        ...,
+        default=...,
         alias='linkageType',
         title='Linkage type',
         description='Linkage type',
-        element_property=True,
     )

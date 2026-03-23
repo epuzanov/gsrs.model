@@ -13,41 +13,36 @@ class Polymer(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     classification: Union[PolymerClassification, None] = Field(
-        None,
+        default=None,
         alias='classification',
         title='Classification',
         description='Classification of the polymer, including high-level polymer category or subtype.',
-        element_property=True,
     )
 
     displayStructure: Union[GinasChemicalStructure, None] = Field(
-        None,
+        default=None,
         alias='displayStructure',
         title='Display Structure',
         description='Representative displayed structure for the polymer.',
-        element_property=True,
     )
 
     idealizedStructure: Union[GinasChemicalStructure, None] = Field(
-        None,
+        default=None,
         alias='idealizedStructure',
         title='Idealized Structure',
         description='Idealized structural representation of the polymer.',
-        element_property=True,
     )
 
     monomers: Union[List[Material], None] = Field(
-        None,
+        default=None,
         alias='monomers',
         title='Starting Materials',
         description='Starting materials or monomers used in synthesis of the polymer.',
-        element_property=True,
     )
 
     structuralUnits: Union[List[Unit], None] = Field(
-        None,
+        default=None,
         alias='structuralUnits',
         title='Structural Units',
         description='Structural repeat units that define the polymer and their configuration.',
-        element_property=True,
     )

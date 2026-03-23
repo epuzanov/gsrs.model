@@ -10,17 +10,15 @@ class NameOrg(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     nameOrg: str = Field(
-        ...,
+        default=...,
         alias='nameOrg',
         title='Naming Organization',
         description='Naming Organization',
-        element_property=True,
     )
 
     deprecatedDate: Union[date, None] = Field(
-        None,
+        default=None,
         alias='deprecatedDate',
         title='Deprecated Date',
         description='Deprecated Date',
-        element_property=True,
     )

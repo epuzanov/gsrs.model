@@ -10,11 +10,10 @@ class DisulfideLink(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     sites: Union[List[Site], None] = Field(
-        None,
+        default=None,
         alias='sites',
         title='Disulfide Sites',
         description='Disulfide Sites',
-        element_property=True,
         max_items=2,
         min_length=2,
     )

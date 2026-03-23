@@ -10,11 +10,10 @@ class ProteinSubstance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     protein: Union[Protein, None] = Field(
-        None,
+        default=None,
         alias='protein',
         title='Protein',
         description='Protein definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

@@ -10,17 +10,15 @@ class SpecifiedSubstanceComponent(Component):
     model_config = ConfigDict(extra='forbid')
 
     role: Union[str, None] = Field(
-        None,
+        default=None,
         alias='role',
         title='Role',
         description='Role',
-        element_property=True,
     )
 
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )

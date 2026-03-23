@@ -20,67 +20,58 @@ class StructuralModification(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     structuralModificationType: str = Field(
-        ...,
+        default=...,
         alias='structuralModificationType',
         title='Modification Type',
         description='Modification Type',
-        element_property=True,
     )
     locationType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='locationType',
         title='Modification Location Type',
         description='Modification Location Type',
-        element_property=True,
     )
     residueModified: Union[str, None] = Field(
-        None,
+        default=None,
         alias='residueModified',
         title='Residue Modified',
         description='Residue Modified',
-        element_property=True,
     )
     sites: Union[List[Site], None] = Field(
-        None,
+        default=None,
         alias='sites',
         title='Modified Sites',
         description='Modified Sites',
-        element_property=True,
     )
     extent: Union[Extent, None] = Field(
-        None,
+        default=None,
         alias='extent',
         title='Extent',
         description='Extent',
-        element_property=True,
     )
     extentAmount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='extentAmount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )
     molecularFragment: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='molecularFragment',
         title='Molecular Fragment',
         description='Molecular Fragment',
-        element_property=True,
     )
     molecularFragmentRole: Union[str, None] = Field(
-        None,
+        default=None,
         alias='molecularFragmentRole',
         title='Molecular Fragment Role',
         description='Molecular Fragment Role',
-        element_property=True,
     )
     modificationGroup: Union[str, None] = Field(
-        None,
+        default=None,
         alias='modificationGroup',
         title='Modification Group',
         description='Modification Group',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

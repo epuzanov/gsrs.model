@@ -9,11 +9,10 @@ class StructurallyDiverseSubstance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     structurallyDiverse: StructurallyDiverse = Field(
-        ...,
+        default=...,
         alias='structurallyDiverse',
         title='Structurally Diverse',
         description='Structurally Diverse definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

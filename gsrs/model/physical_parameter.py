@@ -10,17 +10,15 @@ class PhysicalParameter(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     parameterName: str = Field(
-        ...,
+        default=...,
         alias='parameterName',
         title='Parameter Name',
         description='Parameter Name',
-        element_property=True,
     )
 
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )

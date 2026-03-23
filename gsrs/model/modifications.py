@@ -12,25 +12,22 @@ class Modifications(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     agentModifications: Union[List[AgentModification], None] = Field(
-        None,
+        default=None,
         alias='agentModifications',
         title='Agent Modifications',
         description='Agent Modifications',
-        element_property=True,
     )
     physicalModifications: Union[List[PhysicalModification], None] = Field(
-        None,
+        default=None,
         alias='physicalModifications',
         title='Physical Modifications',
         description='Physical Modifications',
-        element_property=True,
     )
     structuralModifications: Union[List[StructuralModification], None] = Field(
-        None,
+        default=None,
         alias='structuralModifications',
         title='Structural Modifications',
         description='Structural Modifications',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

@@ -11,17 +11,15 @@ class Moiety(GinasChemicalStructure):
     model_config = ConfigDict(extra='forbid')
 
     uuid: Union[UUID, None] = Field(
-        None,
+        default=None,
         alias='uuid',
         title='Uuid',
         description='Uuid',
-        element_property=True,
     )
 
     countAmount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='countAmount',
         title='Count',
         description='Count',
-        element_property=True,
     )

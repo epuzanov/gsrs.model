@@ -18,17 +18,15 @@ class Component(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     type: Union[Type, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Type',
         description='Type',
-        element_property=True,
     )
 
     substance: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='substance',
         title='Substance',
         description='Substance',
-        element_property=True,
     )

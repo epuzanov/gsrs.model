@@ -10,25 +10,22 @@ class Parameter(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     name: str = Field(
-        ...,
+        default=...,
         alias='name',
         title='Parameter Name',
         description='Parameter Name',
-        element_property=True,
     )
 
     type: Union[str, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Parameter Type',
         description='Parameter Type',
-        element_property=True,
     )
 
     value: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='value',
         title='Amount',
         description='Amount',
-        element_property=True,
     )

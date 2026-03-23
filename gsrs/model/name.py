@@ -10,67 +10,58 @@ class Name(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     name: str = Field(
-        ...,
+        default=...,
         alias='name',
         title='Name',
         description='Name',
-        element_property=True,
     )
     type: str = Field(
-        ...,
+        default=...,
         alias='type',
         title='Name Type',
         description='Name Type',
-        element_property=True,
     )
     domains: Union[List[str], None] = Field(
-        None,
+        default=None,
         alias='domains',
         title='Domains',
         description='Domains',
-        element_property=True,
     )
     stdName: Union[str, None] = Field(
-        None,
+        default=None,
         alias='stdName',
         title='Std Name',
         description='Std Name',
-        element_property=True,
     )
     languages: List[str] = Field(
-        ...,
+        default=...,
         alias='languages',
         title='Languages',
         description='Languages',
-        element_property=True,
     )
     nameJurisdiction: Union[List[str], None] = Field(
-        None,
+        default=None,
         alias='nameJurisdiction',
         title='Naming Jurisdictions',
         description='Naming Jurisdictions',
-        element_property=True,
     )
     nameOrgs: Union[List[NameOrg], None] = Field(
-        None,
+        default=None,
         alias='nameOrgs',
         title='Naming Organizations',
         description='Naming Organizations',
-        element_property=True,
     )
     preferred: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='preferred',
         title='Preferred Term',
         description='Preferred Term',
-        element_property=True,
     )
     displayName: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='displayName',
         title='Display Name',
         description='Display Name',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

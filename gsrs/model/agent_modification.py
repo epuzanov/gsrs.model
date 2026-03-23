@@ -11,46 +11,40 @@ class AgentModification(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     agentModificationProcess: Union[str, None] = Field(
-        None,
+        default=None,
         alias='agentModificationProcess',
         title='Process',
         description='Process',
-        element_property=True,
     )
     agentModificationRole: Union[str, None] = Field(
-        None,
+        default=None,
         alias='agentModificationRole',
         title='Role',
         description='Role',
-        element_property=True,
     )
     agentModificationType: str = Field(
-        ...,
+        default=...,
         alias='agentModificationType',
         title='Type',
         description='Type',
-        element_property=True,
     )
     agentSubstance: SubstanceReference = Field(
-        ...,
+        default=...,
         alias='agentSubstance',
         title='Substance',
         description='Substance',
-        element_property=True,
     )
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )
     modificationGroup: Union[str, None] = Field(
-        None,
+        default=None,
         alias='modificationGroup',
         title='Modification Group',
         description='Modification Group',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

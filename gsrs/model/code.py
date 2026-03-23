@@ -9,53 +9,46 @@ class Code(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     codeText: Union[str, None] = Field(
-        None,
+        default=None,
         alias='codeText',
         title='Code Text',
         description='Code Text',
-        element_property=True,
     )
     codeSystem: Union[str, None] = Field(
-        None,
+        default=None,
         alias='codeSystem',
         title='Code system',
         description='Code system',
-        element_property=True,
     )
     code: str = Field(
-        ...,
+        default=...,
         alias='code',
         title='Code',
         description='Code',
-        element_property=True,
     )
     comments: Union[str, None] = Field(
-        None,
+        default=None,
         alias='comments',
         title='Code Comments',
         description='Code Comments',
-        element_property=True,
     )
     type: Union[str, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Code Type',
         description='Code Type',
-        element_property=True,
     )
     url: Union[str, None] = Field(
-        None,
+        default=None,
         alias='url',
         title='Code URL',
         description='Code URL',
-        element_property=True,
     )
     isClassification: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='_isClassification',
         title='Classification Flag',
         description='System flag indicating whether the code is treated as a classification.',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

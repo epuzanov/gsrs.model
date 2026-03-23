@@ -52,169 +52,148 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         alias='substanceClass',
         title='Substance Type',
         description='High-level categorization of the substance, such as polymer, nucleic acid, protein, or chemical.',
-        element_property=True,
     )
 
     definitionType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='definitionType',
         title='Definition Type',
         description='Definition Type',
-        element_property=True,
     )
 
     definitionLevel: Union[str, None] = Field(
-        None,
+        default=None,
         alias='definitionLevel',
         title='Definition Level',
         description='Definition Level',
-        element_property=True,
     )
 
     names: List[Name] = Field(
-        ...,
+        default=...,
         alias='names',
         title='Names',
         description='Names',
-        element_property=True,
         min_length=1,
     )
 
     codes: Union[List[Code], None] = Field(
-        None,
+        default=None,
         alias='codes',
         title='Codes',
         description='Codes',
-        element_property=True,
     )
 
     modifications: Union[Modifications, None] = Field(
-        None,
+        default=None,
         alias='modifications',
         title='Modifications',
         description='Modifications',
-        element_property=True,
     )
 
     notes: Union[List[Note], None] = Field(
-        None,
+        default=None,
         alias='notes',
         title='Notes',
         description='Notes',
-        element_property=True,
     )
 
     properties: Union[List[Property], None] = Field(
-        None,
+        default=None,
         alias='properties',
         title='Properties',
         description='Properties',
-        element_property=True,
     )
 
     relationships: Union[List[Relationship], None] = Field(
-        None,
+        default=None,
         alias='relationships',
         title='Relationships',
         description='Relationships',
-        element_property=True,
     )
 
     references: List[Reference] = Field(
-        ...,
+        default=...,
         alias='references',
         title='References',
         description='References',
-        element_property=True,
         min_length=1,
     )
 
     approvalID: Union[str, None] = Field(
-        None,
+        default=None,
         alias='approvalID',
         title='Approval ID',
         description='Approval ID',
-        element_property=True,
     )
 
     version: str = Field(
-        ...,
+        default=...,
         alias='version',
         title='Substance Version',
         description='Substance Version',
-        element_property=True,
     )
 
     tags: Union[List[str], None] = Field(
-        None,
+        default=None,
         alias='tags',
         title='Tags',
         description='Tags',
-        element_property=True,
     )
 
     status: Union[str, None] = Field(
-        None,
+        default=None,
         alias='status',
         title='Status',
         description='Lifecycle status of the substance record in the catalogue or registry.',
-        element_property=True,
     )
 
     approved: Union[float, None] = Field(
-        None,
+        default=None,
         alias='approved',
         title='Approval Date',
         description='Approval Date',
-        element_property=True,
     )
 
     approvedBy: Union[str, None] = Field(
-        None,
+        default=None,
         alias='approvedBy',
         title='Approved By',
         description='Approved By',
-        element_property=True,
     )
 
     schemaVersion: Union[str, None] = Field(
-        None,
+        default=None,
         alias='schemaVersion',
         title='Schema Version',
         description='Schema Version',
-        element_property=True,
     )
 
     changeReason: Union[str, None] = Field(
-        None,
+        default=None,
         alias='changeReason',
         title='Change Reason',
         description='Reason for the change',
-        element_property=True,
     )
 
     systemName: Union[str, None] = Field(
-        None,
+        default=None,
         alias='_name',
         title='System Name',
         description='System-generated preferred display name for the substance record.',
-        element_property=True,
     )
 
     approvalIDDisplay: Union[str, None] = Field(
-        None,
+        default=None,
         alias='_approvalIDDisplay',
         title='Approval ID Display',
         description='System-generated approval identifier formatted for display.',
-        element_property=True,
     )
 
     selfLink: Union[str, None] = Field(
-        None,
+        default=None,
         alias='_self',
         title='Self Link',
         description='Canonical API URL for the full substance record.',
-        element_property=True,
     )
 
 

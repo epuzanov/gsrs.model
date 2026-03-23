@@ -9,26 +9,23 @@ class Subunit(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     sequence: str = Field(
-        ...,
+        default=...,
         alias='sequence',
         title='Sequence',
         description='Primary sequence recorded in the appropriate biological direction for the subunit.',
-        element_property=True,
     )
 
     subunitIndex: Union[float, None] = Field(
-        None,
+        default=None,
         alias='subunitIndex',
         title='Subunit Index',
         description='Ordinal index of the subunit within the full macromolecule.',
-        element_property=True,
     )
 
 
     length: Union[float, None] = Field(
-        None,
+        default=None,
         alias='length',
         title='Length',
         description='Recorded residue length of the subunit sequence.',
-        element_property=True,
     )

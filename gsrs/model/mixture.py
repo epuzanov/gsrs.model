@@ -9,17 +9,15 @@ class Mixture(GinasCommonSubData):
     """Mixture model."""
 
     components: List[Component] = Field(
-        ...,
+        default=...,
         alias='components',
         title='Components',
         description='Components',
-        element_property=True,
     )
 
     parentSubstance: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='parentSubstance',
         title='Parent Substance',
         description='Parent Substance',
-        element_property=True,
     )

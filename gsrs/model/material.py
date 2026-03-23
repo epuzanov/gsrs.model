@@ -11,33 +11,29 @@ class Material(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Relative amount of the starting material, often expressed as a percentage or ratio.',
-        element_property=True,
     )
 
     monomerSubstance: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='monomerSubstance',
         title='Monomer Substance',
         description='Referenced substance used as a monomer or starting material.',
-        element_property=True,
     )
 
     type: Union[str, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Material Role',
         description='Type or role of the starting material within the polymer description.',
-        element_property=True,
     )
 
     defining: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='defining',
         title='Defining',
         description='Whether this starting material is a defining element for uniquely identifying the polymer.',
-        element_property=True,
     )

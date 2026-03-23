@@ -28,196 +28,172 @@ class Structure(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
     id: Union[UUID, None] = Field(
-        None,
+        default=None,
         alias='id',
         title='Id',
         description='Id',
-        element_property=True,
         deprecated=True,
     )
 
     deprecated: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='deprecated',
         title='Deprecated',
         description='Deprecated',
-        element_property=True,
     )
 
     lastEdited: Union[float, None] = Field(
-        None,
+        default=None,
         alias='lastEdited',
         title='Last Modified Date',
         description='Last Modified Date',
-        element_property=True,
     )
 
     created: Union[float, None] = Field(
-        None,
+        default=None,
         alias='created',
         title='Creation Date',
         description='Creation Date',
-        element_property=True,
     )
 
     references: Union[List[UUID], None] = Field(
-        None,
+        default=None,
         alias='references',
         title='References',
         description='References',
-        element_property=True,
     )
 
     molfile: Union[str, None] = Field(
-        None,
+        default=None,
         alias='molfile',
         title='Molfile',
         description='Molfile',
-        element_property=True,
     )
 
     digest: Union[str, None] = Field(
-        None,
+        default=None,
         alias='digest',
         title='Digest',
         description='Digest',
-        element_property=True,
     )
 
     smiles: Union[str, None] = Field(
-        None,
+        default=None,
         alias='smiles',
         title='Smiles',
         description='Smiles',
-        element_property=True,
     )
 
     stereochemistry: str = Field(
-        ...,
+        default=...,
         alias='stereochemistry',
         title='Stereochemical Type',
         description='Stereochemical Type',
-        element_property=True,
     )
 
     opticalActivity: OpticalActivity = Field(
-        ...,
+        default=...,
         alias='opticalActivity',
         title='Optical Activity',
         description='Optical Activity',
-        element_property=True,
     )
 
     atropisomerism: Atropisomerism = Field(
-        ...,
+        default=...,
         alias='atropisomerism',
         title='Additional Stereochemistry',
         description='Additional Stereochemistry',
-        element_property=True,
     )
 
     stereoComments: Union[str, None] = Field(
-        None,
+        default=None,
         alias='stereoComments',
         title='Stereochemistry Details',
         description='Stereochemistry Details',
-        element_property=True,
     )
 
     mwt: Union[float, None] = Field(
-        None,
+        default=None,
         alias='mwt',
         title='Molecular Weight',
         description='Molecular Weight',
-        element_property=True,
     )
 
     count: Union[float, None] = Field(
-        None,
+        default=None,
         alias='count',
         title='Count',
         description='Count',
-        element_property=True,
     )
 
     formula: Union[str, None] = Field(
-        None,
+        default=None,
         alias='formula',
         title='Chemical Formula',
         description='Chemical Formula',
-        element_property=True,
     )
 
     charge: Union[float, None] = Field(
-        None,
+        default=None,
         alias='charge',
         title='Charge',
         description='Charge',
-        element_property=True,
     )
 
     stereoCenters: Union[float, None] = Field(
-        None,
+        default=None,
         alias='stereoCenters',
         title='Total Stereocenter Count',
         description='Total Stereocenter Count',
-        element_property=True,
     )
 
     definedStereo: Union[float, None] = Field(
-        None,
+        default=None,
         alias='definedStereo',
         title='Defined Stereocenter Count',
         description='Defined Stereocenter Count',
-        element_property=True,
     )
 
     ezCenters: Union[float, None] = Field(
-        None,
+        default=None,
         alias='ezCenters',
         title='E/Z Center Count',
         description='E/Z Center Count',
-        element_property=True,
     )
 
     hash: Union[str, None] = Field(
-        None,
+        default=None,
         alias='hash',
         title='Structure Hash',
         description='Structure Hash',
-        element_property=True,
     )
 
     properties: Union[List[Value], None] = Field(
-        None,
+        default=None,
         alias='properties',
         title='Properties',
         description='Properties',
-        element_property=True,
     )
 
     links: Union[List[XRef], None] = Field(
-        None,
+        default=None,
         alias='links',
         title='Links',
         description='Links',
-        element_property=True,
     )
 
     inchiKey: Union[str, None] = Field(
-        None,
+        default=None,
         alias='_inchiKey',
         title='InChI Key',
         description='Standardized InChIKey generated for the structure.',
-        element_property=True,
     )
 
     inchi: Union[str, None] = Field(
-        None,
+        default=None,
         alias='_inchi',
         title='InChI',
         description='Standardized InChI generated for the structure.',
-        element_property=True,
     )
 
 

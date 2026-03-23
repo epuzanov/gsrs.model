@@ -9,11 +9,10 @@ class MixtureSubstance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     mixture: Mixture = Field(
-        ...,
+        default=...,
         alias='mixture',
         title='Mixture',
         description='Mixture definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

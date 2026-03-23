@@ -12,19 +12,17 @@ class GinasCommonSubData(GinasCommonData):
     _parentName: str | None = PrivateAttr(default=None)
 
     references: Union[List[UUID], None] = Field(
-        None,
+        default=None,
         alias='references',
         title='References',
         description='References',
-        element_property=True,
     )
 
     sitesShorthand: Union[str, None] = Field(
-        None,
+        default=None,
         alias='sitesShorthand',
         title='Sites Shorthand',
         description='Compact system-generated shorthand for the referenced sites.',
-        element_property=True,
     )
 
     def _set_parent_context(

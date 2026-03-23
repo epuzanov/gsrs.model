@@ -14,73 +14,64 @@ class Protein(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     proteinType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='proteinType',
         title='Protein Type',
         description='Classification of the protein substance.',
-        element_property=True,
     )
 
     proteinSubType: Union[List[str], str, None] = Field(
-        None,
+        default=None,
         alias='proteinSubType',
         title='Protein Subtypes',
         description='Subtype classification for the protein, when multiple subtype labels apply.',
-        element_property=True,
     )
 
     sequenceOrigin: Union[str, None] = Field(
-        None,
+        default=None,
         alias='sequenceOrigin',
         title='Sequence Origin',
         description='Origin of the protein sequence, such as natural, recombinant, or synthetic.',
-        element_property=True,
     )
 
     sequenceType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='sequenceType',
         title='Sequence Type',
         description='Sequence basis used to describe the protein when a complete or partial amino acid sequence is available.',
-        element_property=True,
     )
 
     disulfideLinks: Union[List[DisulfideLink], None] = Field(
-        None,
+        default=None,
         alias='disulfideLinks',
         title='Disulfide Links',
         description='Disulfide bonds linking cysteine residues within or across protein subunits.',
-        element_property=True,
     )
 
     glycosylation: Glycosylation = Field(
-        ...,
+        default=...,
         alias='glycosylation',
         title='Glycosylation',
         description='Glycosylation pattern associated with the protein substance.',
-        element_property=True,
     )
 
     modifications: Union[Modifications, None] = Field(
-        None,
+        default=None,
         alias='modifications',
         title='Modifications',
         description='Modifications',
-        element_property=True,
     )
 
     subunits: Union[List[Subunit], None] = Field(
-        None,
+        default=None,
         alias='subunits',
         title='Subunits',
         description='Protein subunits listed for multi-sequence proteins, ordered consistently for identification.',
-        element_property=True,
     )
 
     otherLinks: Union[List[OtherLink], None] = Field(
-        None,
+        default=None,
         alias='otherLinks',
         title='Other Linkage',
         description='Additional non-disulfide linkages present in the protein.',
-        element_property=True,
     )

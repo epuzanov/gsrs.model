@@ -12,53 +12,46 @@ class Property(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     name: str = Field(
-        ...,
+        default=...,
         alias='name',
         title='Property Name',
         description='Property Name',
-        element_property=True,
     )
     type: Union[str, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Value Type',
         description='Value Type',
-        element_property=True,
     )
     propertyType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='propertyType',
         title='Property Type',
         description='Property Type',
-        element_property=True,
     )
     value: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='value',
         title='Amount',
         description='Amount',
-        element_property=True,
     )
     referencedSubstance: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='referencedSubstance',
         title='Referenced Substance',
         description='Referenced Substance',
-        element_property=True,
     )
     defining: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='defining',
         title='Defining',
         description='Defining',
-        element_property=True,
     )
     parameters: Union[List[Parameter], None] = Field(
-        None,
+        default=None,
         alias='parameters',
         title='Parameters',
         description='Parameters',
-        element_property=True,
     )
 
     def _render_property_value(self) -> str:

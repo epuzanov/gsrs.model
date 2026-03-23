@@ -9,11 +9,10 @@ class SpecifiedSubstanceG1Substance(Substance):
     model_config = ConfigDict(extra='forbid')
 
     specifiedSubstance: SpecifiedSubstanceG1 = Field(
-        ...,
+        default=...,
         alias='specifiedSubstance',
         title='specifiedSubstance',
         description='Specified Substance definition for this substance.',
-        element_property=True,
     )
 
     def _class_summary_chunks(self) -> list[dict[str, object]]:

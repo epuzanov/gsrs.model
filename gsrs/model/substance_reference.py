@@ -16,49 +16,43 @@ class SubstanceReference(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     refPname: Union[str, None] = Field(
-        None,
+        default=None,
         alias='refPname',
         title='Referenced Substance Name',
         description='Referenced Substance Name',
-        element_property=True,
     )
 
     name: Union[str, None] = Field(
-        None,
+        default=None,
         alias='name',
         title='Name',
         description='Name',
-        element_property=True,
     )
 
     linkingID: Union[str, None] = Field(
-        None,
+        default=None,
         alias='linkingID',
         title='Linking ID',
         description='Linking ID',
-        element_property=True,
     )
 
     refuuid: str = Field(
-        None,
+        default=None,
         alias='refuuid',
         title='Refuuid',
         description='Refuuid',
-        element_property=True,
     )
 
     substanceClass: Union[SubstanceClass, None] = Field(
-        None,
+        default=None,
         alias='substanceClass',
         title='Substance Class',
         description='Substance Class',
-        element_property=True,
     )
 
     approvalID: Union[str, None] = Field(
-        None,
+        default=None,
         alias='approvalID',
         title='Approval ID',
         description='Approval ID',
-        element_property=True,
     )

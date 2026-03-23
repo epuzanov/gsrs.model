@@ -9,60 +9,52 @@ class Reference(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     citation: Union[str, None] = Field(
-        None,
+        default=None,
         alias='citation',
         title='Citation Text',
         description='Citation Text',
-        element_property=True,
     )
     docType: str = Field(
-        ...,
+        default=...,
         alias='docType',
         title='Reference Type',
         description='Reference Type',
-        element_property=True,
     )
     documentDate: Union[float, None] = Field(
-        None,
+        default=None,
         alias='documentDate',
         title='Date Accessed',
         description='Date Accessed',
-        element_property=True,
     )
     publicDomain: Union[bool, None] = Field(
-        None,
+        default=None,
         alias='publicDomain',
         title='Public Domain Reference',
         description='Public Domain Reference',
-        element_property=True,
     )
     tags: Union[List[str], None] = Field(
-        None,
+        default=None,
         alias='tags',
         title='Tags',
         description='Tags',
-        element_property=True,
     )
     uploadedFile: Union[str, None] = Field(
-        None,
+        default=None,
         alias='uploadedFile',
         title='Uploaded Document',
         description='Uploaded Document',
-        element_property=True,
     )
     id: Union[str, None] = Field(
-        None,
+        default=None,
         alias='id',
         title='Ref_ID',
         description='Ref_ID',
-        element_property=True,
     )
     url: Union[str, None] = Field(
-        None,
+        default=None,
         alias='url',
         title='Reference URL',
         description='Reference URL',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

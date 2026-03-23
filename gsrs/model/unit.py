@@ -10,27 +10,24 @@ class Unit(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     amap: Union[List[float], None] = Field(
-        None,
+        default=None,
         alias='amap',
         title='Amap',
         description='Amap',
-        element_property=True,
     )
 
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )
 
     attachmentCount: Union[float, None] = Field(
-        None,
+        default=None,
         alias='attachmentCount',
         title='Attachment Count',
         description='Attachment Count',
-        element_property=True,
     )
 
     attachmentMap: Union[
@@ -41,33 +38,29 @@ class Unit(GinasCommonSubData):
         ],
         None
     ] = Field(
-        None,
+        default=None,
         alias='attachmentMap',
         title='Attachment Map',
         description='Attachment Map',
-        element_property=True,
     )
 
     label: Union[str, None] = Field(
-        None,
+        default=None,
         alias='label',
         title='Label',
         description='Label',
-        element_property=True,
     )
 
     structure: Union[str, None] = Field(
-        None,
+        default=None,
         alias='structure',
         title='Structure',
         description='Structure',
-        element_property=True,
     )
 
     type: Union[str, None] = Field(
-        None,
+        default=None,
         alias='type',
         title='Type',
         description='Type',
-        element_property=True,
     )

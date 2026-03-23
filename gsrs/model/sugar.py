@@ -10,17 +10,15 @@ class Sugar(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     sites: Union[List[Site], None] = Field(
-        None,
+        default=None,
         alias='sites',
         title='Sites',
         description='Residue sites in the sequence that contain the specified sugar component.',
-        element_property=True,
     )
 
     sugar: str = Field(
-        ...,
+        default=...,
         alias='sugar',
         title='Sugar',
         description='Name or identifier of the sugar or sugar-like component in the nucleotide.',
-        element_property=True,
     )

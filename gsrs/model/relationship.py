@@ -11,60 +11,52 @@ class Relationship(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     amount: Union[Amount, None] = Field(
-        None,
+        default=None,
         alias='amount',
         title='Amount',
         description='Amount',
-        element_property=True,
     )
     comments: Union[str, None] = Field(
-        None,
+        default=None,
         alias='comments',
         title='Comments',
         description='Comments',
-        element_property=True,
     )
     interactionType: Union[str, None] = Field(
-        None,
+        default=None,
         alias='interactionType',
         title='Interaction Type',
         description='Interaction Type',
-        element_property=True,
     )
     originatorUuid: Union[str, None] = Field(
-        None,
+        default=None,
         alias='originatorUuid',
         title='Originator UUID',
         description='Originator UUID',
-        element_property=True,
     )
     qualification: Union[str, None] = Field(
-        None,
+        default=None,
         alias='qualification',
         title='Qualification',
         description='Qualification',
-        element_property=True,
     )
     relatedSubstance: SubstanceReference = Field(
-        None,
+        default=None,
         alias='relatedSubstance',
         title='Related Substance',
         description='Related Substance',
-        element_property=True,
     )
     type: Union[str, None] = Field(
-        ...,
+        default=...,
         alias='type',
         title='Relationship Type',
         description='Relationship Type',
-        element_property=True,
     )
     mediatorSubstance: Union[SubstanceReference, None] = Field(
-        None,
+        default=None,
         alias='mediatorSubstance',
         title='Mediator Substance',
         description='Mediator Substance',
-        element_property=True,
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:
