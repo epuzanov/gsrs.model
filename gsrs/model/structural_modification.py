@@ -80,7 +80,7 @@ class StructuralModification(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_modifications_structuralModifications_uuid:{document_id}',
+                'chunk_id': f'root_modifications_structuralModifications_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'structuralModifications',

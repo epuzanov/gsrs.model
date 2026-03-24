@@ -68,7 +68,7 @@ class PolymerClassification(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_polymer_classification_uuid:{document_id}',
+                'chunk_id': f'root_polymer_classification_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'polymer_classification',

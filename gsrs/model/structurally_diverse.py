@@ -167,7 +167,7 @@ class StructurallyDiverse(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_structurally_diverse_uuid:{document_id}',
+                'chunk_id': f'root_structurally_diverse_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'structurally_diverse',

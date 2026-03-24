@@ -46,7 +46,7 @@ class SpecifiedSubstanceComponent(Component):
 
         return [
             {
-                'chunk_id': f'root_constituents_uuid:{document_id}',
+                'chunk_id': f'root_constituents_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'constituents',

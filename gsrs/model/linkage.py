@@ -34,7 +34,7 @@ class Linkage(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_linkages_uuid:{document_id}',
+                'chunk_id': f'root_linkages_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'linkages',

@@ -42,7 +42,7 @@ class Parameter(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_parameters_uuid:{document_id}',
+                'chunk_id': f'root_parameters_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'parameters',

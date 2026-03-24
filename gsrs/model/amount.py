@@ -104,7 +104,7 @@ class Amount(GinasCommonSubData):
 
         return [
             {
-                'chunk_id': f'root_amount_uuid:{document_id}',
+                'chunk_id': f'root_amount_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'amount',

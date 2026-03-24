@@ -61,7 +61,7 @@ class Code(GinasCommonSubData):
         document_id = self._embedding_document_id()
         rows = [
             {
-                'chunk_id': f'root_codes_uuid:{document_id}',
+                'chunk_id': f'root_codes_uuid:{self.uuid}',
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'codes',
@@ -81,7 +81,7 @@ class Code(GinasCommonSubData):
             if class_parts:
                 rows.append(
                     {
-                        'chunk_id': f'root_classifications_uuid:{document_id}',
+                        'chunk_id': f'root_classifications_uuid:{self.uuid}',
                         'document_id': document_id,
                         'source_url': self._embedding_source_name(),
                         'section': 'classifications',
