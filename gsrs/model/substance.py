@@ -270,16 +270,45 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
             return self.substanceClass.value
         return self._clean_text(self.substanceClass) or 'unknown'
 
+    def _reference_text_lookup(self) -> dict[str, str]:
+        lookup: dict[str, str] = {}
+        for reference in self.references or []:
+            reference_text = reference.embedding_reference_text()
+            if not reference_text:
+                continue
+            for reference_id in (self._clean_text(reference.uuid), self._clean_text(reference.id)):
+                if reference_id and reference_id not in lookup:
+                    lookup[reference_id] = reference_text
+        return lookup
+
+    def _embedding_references(self, reference_ids: Any = None) -> list[str]:
+        return self._references_from_ids(reference_ids, self._reference_text_lookup())
+
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         document_id = self._clean_text(self.uuid)
         name = self._stable_name()
         substance_class = self._substance_class_value()
+        approval_id = self._clean_text(self.approvalID)
+        approval_id_display = self._clean_text(self.approvalIDDisplay or self.approvalID)
+        definition_type = self._clean_text(self.definitionType)
+        definition_level = self._clean_text(self.definitionLevel)
+        status = self._clean_text(self.status)
+        approved_by = self._clean_text(self.approvedBy)
+        tags = self._clean_list(self.tags)
         parts = [
             f'{name} is a GSRS substance record.',
             f'Substance class {substance_class}.',
         ]
-        if self.status:
-            parts.append(f'Status {self._clean_text(self.status)}.')
+        if approval_id_display:
+            parts.append(f'Approval ID {approval_id_display}.')
+        if status:
+            parts.append(f'Status {status}.')
+        if definition_type:
+            parts.append(f'Definition type {definition_type}.')
+        if definition_level:
+            parts.append(f'Definition level {definition_level}.')
+        if approved_by:
+            parts.append(f'Approved by {approved_by}.')
 
         rows = [
             {
@@ -291,12 +320,28 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 'metadata': {
                     **self._chunk_metadata(self),
                     **self._hierarchy_metadata('root'),
+                    'json_path': '$',
                     'canonical_name': name,
+                    'system_name': self._clean_text(self.systemName) or None,
                     'substance_class': substance_class,
+                    'approval_id': approval_id or None,
+                    'approval_id_display': approval_id_display or None,
+                    'status': status or None,
+                    'definition_type': definition_type or None,
+                    'definition_level': definition_level or None,
+                    'approved_by': approved_by or None,
+                    'version': self._clean_text(self.version) or None,
+                    'tags': tags or None,
+                    'name_count': len(self.names or []),
+                    'code_count': len(self.codes or []),
+                    'property_count': len(self.properties or []),
+                    'relationship_count': len(self.relationships or []),
+                    'note_count': len(self.notes or []),
+                    'reference_count': len(self.references or []),
                 },
             }
         ]
-        self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
+        self._assign_parent(self, self)
         rows.extend(self._class_summary_chunks())
 
         seen_names = set()
@@ -333,20 +378,17 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         super_post_init = getattr(super(), 'model_post_init', None)
         if callable(super_post_init):
             super_post_init(__context)
-        self._set_source_name(str(self.selfLink) if self.selfLink else None)
-        self._assign_parent_context(self, self.uuid, self._stable_name(), self._embedding_source_name())
+        self._assign_parent(self, self)
 
     @classmethod
-    def _assign_parent_context(cls, value: Any, parent_uuid, parent_name: str | None, source_name: str | None) -> None:
+    def _assign_parent(cls, value: Any, parent: 'Substance') -> None:
         if isinstance(value, GinasCommonSubData):
-            value._set_parent_context(parent_uuid, parent_name, source_name)
-        elif isinstance(value, GinasCommonData):
-            value._set_source_name(source_name)
+            value._set_parent(parent)
         if isinstance(value, BaseModel):
             for field_name in value.__class__.model_fields:
-                cls._assign_parent_context(getattr(value, field_name), parent_uuid, parent_name, source_name)
+                cls._assign_parent(getattr(value, field_name), parent)
             return
 
         if isinstance(value, (list, tuple, set)):
             for item in value:
-                cls._assign_parent_context(item, parent_uuid, parent_name, source_name)
+                cls._assign_parent(item, parent)

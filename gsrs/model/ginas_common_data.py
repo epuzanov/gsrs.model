@@ -4,13 +4,11 @@ from datetime import datetime, timezone
 from typing import Any, List, Union
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class GinasCommonData(BaseModel):
     """Base model for common GSRS data fields."""
-
-    _source_name: str | None = PrivateAttr(default=None)
 
     model_config = ConfigDict(
         extra='forbid',
@@ -82,11 +80,41 @@ class GinasCommonData(BaseModel):
         return re.sub(r'\s+', ' ', text).strip()
 
     @classmethod
+    def _clean_list(cls, values: Any) -> list[str]:
+        if values is None:
+            return []
+        if isinstance(values, (str, BaseModel)) or not isinstance(values, (list, tuple, set)):
+            values = [values]
+
+        cleaned_values: list[str] = []
+        for value in values:
+            cleaned = cls._clean_text(value)
+            if cleaned and cleaned not in cleaned_values:
+                cleaned_values.append(cleaned)
+        return cleaned_values
+
+    @classmethod
     def _chunk_metadata(cls, root_substance: 'GinasCommonData') -> dict[str, Any]:
         return {
             'created': cls._clean_text(getattr(root_substance, 'created', None)) or None,
             'lastEdited': cls._clean_text(getattr(root_substance, 'lastEdited', None)) or None,
         }
+
+    @classmethod
+    def _references_from_ids(
+        cls,
+        reference_ids: Any,
+        reference_text_by_id: dict[str, str] | None,
+    ) -> list[str]:
+        if not reference_text_by_id:
+            return []
+
+        references: list[str] = []
+        for reference_id in cls._clean_list(reference_ids):
+            reference_text = cls._clean_text(reference_text_by_id.get(reference_id))
+            if reference_text and reference_text not in references:
+                references.append(reference_text)
+        return references
 
     @classmethod
     def _hierarchy_metadata(cls, *parts: Any) -> dict[str, Any]:
@@ -97,11 +125,14 @@ class GinasCommonData(BaseModel):
             'hierarchy_level': len(hierarchy),
         }
 
-    def _set_source_name(self, value: str | None) -> None:
-        self._source_name = self._clean_text(value) or None
-
     def _embedding_source_name(self) -> str | None:
-        return self._clean_text(self._source_name) or None
+        self_link = self._clean_text(getattr(self, 'selfLink', None))
+        if self_link:
+            return self_link
+        parent = getattr(self, '_parent', None)
+        if parent is not None:
+            return self._clean_text(parent._embedding_source_name()) or None
+        return None
 
     def model_dump(self, *args, **kwargs):
         kwargs.setdefault('exclude_none', True)

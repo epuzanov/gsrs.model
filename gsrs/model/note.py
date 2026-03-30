@@ -22,7 +22,6 @@ class Note(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-        
 
         return [
             {
@@ -34,6 +33,9 @@ class Note(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'notes'),
+                    'json_path': '$.notes[*]',
+                    'note_length': len(note),
+                    'references': self._embedding_references() or None,
                 },
             }
         ]

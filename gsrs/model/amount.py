@@ -92,28 +92,3 @@ class Amount(GinasCommonSubData):
         if amount_type:
             pieces.append(f'(amount type {amount_type})')
         return ' '.join(pieces).strip()
-
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        amount_text = self.as_string()
-        if not amount_text:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        amount_type = self._clean_text(self.type)
-
-        return [
-            {
-                'chunk_id': f'root_amount_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'amount',
-                'text': f"{subject} amount: {amount_text}.",
-                'metadata': {
-                    **self._embedding_root_metadata(),
-                    **self._hierarchy_metadata('root', 'amount'),
-                    'amount_type': amount_type or None,
-                    'units': self._clean_text(self.units) or None,
-                },
-            }
-        ]

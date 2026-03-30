@@ -81,11 +81,23 @@ class Property(GinasCommonSubData):
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         prop_name = self._clean_text(self.name)
         value_text = self._render_property_value()
+        property_type = self._clean_text(self.propertyType)
+        value_type = self._clean_text(self.type)
+        referenced_name = self.referencedSubstance.get_refPname() if self.referencedSubstance else ''
+        referenced_id = self.referencedSubstance.get_refuuid() if self.referencedSubstance else ''
+        parameter_names = self._clean_list([parameter.name for parameter in (self.parameters or []) if parameter.name])
         if not prop_name and not value_text:
             return []
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        parts = [f'{subject} property {prop_name}.']
+        if property_type:
+            parts.append(f'Property type {property_type}.')
+        if value_type:
+            parts.append(f'Value type {value_type}.')
+        if value_text:
+            parts.append(f'Value {value_text}.')
 
         return [
             {
@@ -93,13 +105,20 @@ class Property(GinasCommonSubData):
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'properties',
-                'text': f"{subject} property {prop_name}: {value_text}.".strip(),
+                'text': ' '.join(parts),
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'properties'),
+                    'json_path': '$.properties[*]',
                     'property_name': prop_name or None,
-                    'property_type': self._clean_text(self.propertyType) or None,
+                    'property_type': property_type or None,
+                    'value_type': value_type or None,
+                    'value_text': value_text or None,
                     'defining': bool(self.defining),
+                    'referenced_name': referenced_name or None,
+                    'referenced_id': referenced_id or None,
+                    'parameter_names': parameter_names or None,
+                    'references': self._embedding_references() or None,
                 },
             }
         ]

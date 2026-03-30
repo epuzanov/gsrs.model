@@ -3,6 +3,7 @@ from typing import List, Union
 
 from .ginas_common_sub_data import GinasCommonSubData
 
+
 class Reference(GinasCommonSubData):
     """Reference model."""
 
@@ -57,9 +58,21 @@ class Reference(GinasCommonSubData):
         description='Reference URL',
     )
 
+    def embedding_reference_text(self) -> str:
+        doc_type = self._clean_text(self.docType)
+        citation = self._clean_text(self.citation)
+        if doc_type and citation:
+            return f'{doc_type}: {citation}'
+        return doc_type or citation
+
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         citation = self._clean_text(self.citation)
         doc_type = self._clean_text(self.docType)
+        tags = self._clean_list(self.tags)
+        reference_url = self._clean_text(self.url)
+        uploaded_file = self._clean_text(self.uploadedFile)
+        reference_id = self._clean_text(self.id or self.uuid)
+        reference_text = self.embedding_reference_text()
         if not citation and not doc_type:
             return []
 
@@ -69,6 +82,8 @@ class Reference(GinasCommonSubData):
             parts.append(f'Document type {doc_type}.')
         if citation:
             parts.append(f'Citation: {citation}.')
+        if reference_url:
+            parts.append(f'URL: {reference_url}.')
 
         document_id = self._embedding_document_id()
 
@@ -82,8 +97,15 @@ class Reference(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'references'),
+                    'json_path': '$.references[*]',
+                    'references': [reference_text] if reference_text else None,
                     'doc_type': doc_type or None,
                     'citation': citation or None,
+                    'reference_url': reference_url or None,
+                    'reference_id': reference_id or None,
+                    'uploaded_file': uploaded_file or None,
+                    'public_domain': bool(self.publicDomain),
+                    'tags': tags or None,
                 },
             }
         ]

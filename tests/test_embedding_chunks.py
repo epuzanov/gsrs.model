@@ -12,14 +12,14 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'approvalID': 'APP-1',
                 'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
                 'references': [{'docType': 'SYSTEM'}],
-                '_self': 'gsrs',
+                '_self': 'https://example.test/gsrs',
                 'version': '1',
             }
         )
-        substance._assign_parent_context(substance, substance.uuid, substance._stable_name(), substance.selfLink)
+        substance._assign_parent(substance, substance)
         chunk = substance.names[0].to_embedding_chunks()[0]
         self.assertEqual(chunk['document_id'], '11111111-1111-1111-1111-111111111111')
-        self.assertEqual(chunk['chunk_id'], 'root_names_uuid:11111111-1111-1111-1111-111111111111')
+        self.assertEqual(chunk['chunk_id'], f'root_names_uuid:{substance.names[0].uuid}')
         self.assertEqual(chunk['section'], 'names')
         self.assertEqual(chunk['metadata']['hierarchy'], ['root', 'names'])
         self.assertEqual(chunk['metadata']['hierarchy_path'], 'root > names')
@@ -31,14 +31,39 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'substanceClass': 'concept',
                 'uuid': '11111111-1111-1111-1111-111111111111',
                 'approvalID': 'APP-1',
-                'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en'], 'preferred': True}],
-                'codes': [{'code': 'ABC-123', 'codeSystem': 'CAS'}],
+                'names': [
+                    {
+                        'name': 'Example Concept',
+                        'type': 'cn',
+                        'languages': ['en'],
+                        'preferred': True,
+                        'references': ['aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'],
+                    }
+                ],
+                'codes': [
+                    {
+                        'code': 'ABC-123',
+                        'codeSystem': 'CAS',
+                        'references': ['bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'],
+                    }
+                ],
                 'properties': [{'name': 'Molecular Weight'}],
-                'relationships': [{'type': 'ACTIVE MOIETY', 'relatedSubstance': {'name': 'Related'}}],
+                'relationships': [{'type': 'ACTIVE MOIETY', 'relatedSubstance': {'name': 'Related', 'refuuid': '33333333-3333-3333-3333-333333333333'}}],
                 'notes': [{'note': 'Important note'}],
-                'references': [{'docType': 'SYSTEM', 'citation': 'generated'}],
+                'references': [
+                    {
+                        'uuid': 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+                        'docType': 'SYSTEM',
+                        'citation': 'generated',
+                    },
+                    {
+                        'uuid': 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+                        'docType': 'MANUAL',
+                        'citation': 'registry import',
+                    },
+                ],
                 'modifications': {'agentModifications': [{'agentModificationType': 'CHEMICAL', 'agentSubstance': {'refuuid': '22222222-2222-2222-2222-222222222222'}}]},
-                '_self': 'gsrs',
+                '_self': 'https://example.test/gsrs',
                 'version': '1',
             }
         )
@@ -54,10 +79,17 @@ class EmbeddingChunkTests(unittest.TestCase):
         self.assertIn('agentModifications', sections)
         mod_chunk = next(chunk for chunk in chunks if chunk['section'] == 'agentModifications')
         self.assertEqual(mod_chunk['metadata']['hierarchy'], ['root', 'modifications', 'agentModifications'])
-        self.assertIn('raw_json', sections)
-        self.assertNotIn('approval_id', chunks[0]['metadata'])
-        self.assertEqual(chunks[0]['source'], 'gsrs')
+        self.assertEqual(chunks[0]['metadata']['approval_id'], 'APP-1')
+        self.assertEqual(chunks[0]['metadata']['name_count'], 1)
+        self.assertEqual(chunks[0]['source_url'], 'https://example.test/gsrs')
         self.assertEqual(chunks[0]['metadata']['hierarchy'], ['root'])
+        self.assertEqual(chunks[0]['metadata']['json_path'], '$')
+        name_chunk = next(chunk for chunk in chunks if chunk['section'] == 'names')
+        self.assertEqual(name_chunk['metadata']['references'], ['SYSTEM: generated'])
+        self.assertNotIn('reference_ids', name_chunk['metadata'])
+        code_chunk = next(chunk for chunk in chunks if chunk['section'] == 'codes')
+        self.assertEqual(code_chunk['metadata']['references'], ['MANUAL: registry import'])
+        self.assertNotIn('reference_ids', code_chunk['metadata'])
 
     def test_classification_code_adds_classification_chunk(self):
         substance = Substance.model_validate(
@@ -67,7 +99,7 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'approvalID': 'APP-1',
                 'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
                 'references': [{'docType': 'SYSTEM'}],
-                '_self': 'gsrs',
+                '_self': 'https://example.test/gsrs',
                 'version': '1',
             }
         )
@@ -79,16 +111,17 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'comments': 'Level 1|Level 2|Level 3',
             }
         )
-        code._set_parent_context(substance.uuid, substance._stable_name(), substance.selfLink)
+        code._set_parent(substance)
 
         chunks = code.to_embedding_chunks()
 
         self.assertEqual(len(chunks), 2)
-        class_chunk = next(chunk for chunk in chunks if chunk['section'] == 'classification')
-        self.assertEqual(class_chunk['chunk_id'], 'root_classification_uuid:11111111-1111-1111-1111-111111111111')
-        self.assertEqual(class_chunk['content'], 'Example Concept classification in ATC: Level 1 > Level 2 > Level 3.')
+        class_chunk = next(chunk for chunk in chunks if chunk['section'] == 'classifications')
+        self.assertEqual(class_chunk['chunk_id'], f'root_classifications_uuid:{code.uuid}')
+        self.assertEqual(class_chunk['text'], 'Example Concept classification in ATC: Level 1 > Level 2 > Level 3.')
         self.assertEqual(class_chunk['metadata']['classification_hierarchy'], ['Level 1', 'Level 2', 'Level 3'])
-        self.assertEqual(class_chunk['metadata']['hierarchy'], ['root', 'classification'])
+        self.assertEqual(class_chunk['metadata']['hierarchy'], ['root', 'classifications'])
+        self.assertEqual(class_chunk['metadata']['json_path'], '$.codes[*]')
 
     def test_code_chunk_matches_adapter_style(self):
         substance = Substance.model_validate(
@@ -98,25 +131,33 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'approvalID': 'APP-1',
                 'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
                 'references': [{'docType': 'SYSTEM'}],
-                '_self': 'gsrs',
+                '_self': 'https://example.test/gsrs',
                 'version': '1',
             }
         )
         code = Code.model_validate({'code': 'ABC-123', 'codeSystem': 'CAS'})
-        code._set_parent_context(substance.uuid, substance._stable_name(), substance.selfLink)
+        code._set_parent(substance)
         chunk = code.to_embedding_chunks()[0]
-        self.assertEqual(chunk['content'], 'Example Concept identifier in CAS: ABC-123.')
+        self.assertEqual(chunk['text'], 'Example Concept identifier in CAS: ABC-123.')
         self.assertEqual(chunk['document_id'], '11111111-1111-1111-1111-111111111111')
-        self.assertEqual(chunk['chunk_id'], 'root_codes_uuid:11111111-1111-1111-1111-111111111111')
-        self.assertEqual(chunk['source'], 'gsrs')
+        self.assertEqual(chunk['chunk_id'], f'root_codes_uuid:{code.uuid}')
+        self.assertEqual(chunk['source_url'], 'https://example.test/gsrs')
         self.assertEqual(chunk['metadata']['hierarchy'], ['root', 'codes'])
+        self.assertEqual(chunk['metadata']['json_path'], '$.codes[*]')
 
 
     def test_embedding_root_name_falls_back_to_substance_uuid(self):
         code = Code.model_validate({'code': 'ABC-123', 'codeSystem': 'CAS'})
-        code._set_parent_context('11111111-1111-1111-1111-111111111111', None)
+        parent = Substance.model_construct(
+            substanceClass='concept',
+            uuid='11111111-1111-1111-1111-111111111111',
+            names=[],
+            references=[],
+            version='1',
+        )
+        code._set_parent(parent)
         chunk = code.to_embedding_chunks()[0]
-        self.assertEqual(chunk['content'], 'Substance 11111111-1111-1111-1111-111111111111 identifier in CAS: ABC-123.')
+        self.assertEqual(chunk['text'], 'Substance 11111111-1111-1111-1111-111111111111 identifier in CAS: ABC-123.')
 
     def test_chemical_substance_adds_class_summary_chunk(self):
         substance = ChemicalSubstance.model_validate(
@@ -124,17 +165,32 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'substanceClass': 'chemical',
                 'uuid': '11111111-1111-1111-1111-111111111111',
                 'names': [{'name': 'Example Chemical', 'type': 'cn', 'languages': ['en']}],
-                'references': [{'docType': 'SYSTEM'}],
-                '_self': 'gsrs',
+                'references': [
+                    {
+                        'uuid': 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+                        'docType': 'SYSTEM',
+                        'citation': 'structure source',
+                    }
+                ],
+                '_self': 'https://example.test/gsrs',
                 'version': '1',
-                'structure': {'stereochemistry': 'ACHIRAL', 'opticalActivity': 'NONE', 'atropisomerism': 'No', 'formula': 'H2O'},
+                'structure': {
+                    'stereochemistry': 'ACHIRAL',
+                    'opticalActivity': 'NONE',
+                    'atropisomerism': 'No',
+                    'formula': 'H2O',
+                    'references': ['cccccccc-cccc-cccc-cccc-cccccccccccc'],
+                },
                 'moieties': [{'stereochemistry': 'ACHIRAL', 'opticalActivity': 'NONE', 'atropisomerism': 'No'}],
             }
         )
         class_chunks = [chunk for chunk in substance.to_embedding_chunks() if chunk['section'] == 'structure']
         self.assertEqual(len(class_chunks), 1)
-        self.assertIn('Formula H2O.', class_chunks[0]['content'])
+        self.assertIn('Formula H2O.', class_chunks[0]['text'])
         self.assertEqual(class_chunks[0]['metadata']['hierarchy'], ['root', 'structure'])
+        self.assertEqual(class_chunks[0]['metadata']['json_path'], '$.structure')
+        self.assertEqual(class_chunks[0]['metadata']['references'], ['SYSTEM: structure source'])
+        self.assertNotIn('reference_ids', class_chunks[0]['metadata'])
 
 
 if __name__ == '__main__':

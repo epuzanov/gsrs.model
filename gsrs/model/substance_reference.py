@@ -68,6 +68,7 @@ class SubstanceReference(GinasCommonSubData):
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         ref_name = self.get_refPname()
         approval_id = self._clean_text(self.approvalID)
+        linking_id = self._clean_text(self.linkingID)
         if not ref_name and not approval_id:
             return []
 
@@ -90,9 +91,12 @@ class SubstanceReference(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'substance_references'),
+                    'json_path': '$.substanceReferences[*]',
                     'referenced_name': ref_name or None,
                     'referenced_id': self.get_refuuid() or None,
                     'approval_id': approval_id or None,
+                    'linking_id': linking_id or None,
+                    'references': self._embedding_references() or None,
                 },
             }
         ]

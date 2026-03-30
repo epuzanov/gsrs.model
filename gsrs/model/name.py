@@ -67,16 +67,25 @@ class Name(GinasCommonSubData):
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         raw_name = self._clean_text(self.name)
         name_type = self._clean_text(self.type)
+        std_name = self._clean_text(self.stdName)
         if not raw_name:
             return []
 
         subject = self._embedding_root_name()
+        domains = self._clean_list(self.domains)
+        languages = self._clean_list(self.languages)
+        name_jurisdiction = self._clean_list(self.nameJurisdiction)
+        name_orgs = self._clean_list([item.nameOrg for item in (self.nameOrgs or []) if item.nameOrg])
         parts = [f'{subject} name']
         if name_type:
             parts.append(f'type {name_type}')
         parts.append(f': {raw_name}.')
+        if std_name and std_name != raw_name:
+            parts.append(f'Standardized name {std_name}.')
         if self.preferred:
             parts.append('Preferred name.')
+        if self.displayName:
+            parts.append('Display name.')
 
         document_id = self._embedding_document_id()
 
@@ -90,9 +99,17 @@ class Name(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'names'),
+                    'json_path': '$.names[*]',
                     'name_value': raw_name,
                     'name_type': name_type or None,
+                    'std_name': std_name or None,
                     'preferred': bool(self.preferred),
+                    'display_name': bool(self.displayName),
+                    'domains': domains or None,
+                    'languages': languages or None,
+                    'name_jurisdiction': name_jurisdiction or None,
+                    'name_orgs': name_orgs or None,
+                    'references': self._embedding_references() or None,
                 },
             }
         ]
