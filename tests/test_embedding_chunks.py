@@ -1,6 +1,8 @@
+import json
 import unittest
+from pathlib import Path
 
-from gsrs.model import ChemicalSubstance, Code, Substance
+from gsrs.model import ChemicalSubstance, Code, MixtureSubstance, Substance
 
 
 class EmbeddingChunkTests(unittest.TestCase):
@@ -93,6 +95,65 @@ class EmbeddingChunkTests(unittest.TestCase):
         self.assertEqual(code_chunk['metadata']['json_path'], '$.codes[0]')
         self.assertEqual(code_chunk['metadata']['references'], ['MANUAL: registry import'])
         self.assertNotIn('reference_ids', code_chunk['metadata'])
+        root_chunk = next(chunk for chunk in chunks if chunk['section'] == 'root')
+        self.assertIn('Content covers properties, relationships, modifications, references, and notes.', root_chunk['text'])
+
+
+    def test_name_chunk_uses_friendly_name_type_labels(self):
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'approvalID': 'APP-1',
+                'names': [{'name': 'Example Brand', 'type': 'bn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+            }
+        )
+        substance._assign_parent(substance, substance)
+        chunk = substance.names[0].to_embedding_chunks()[0]
+        self.assertIn('type Brand Name', chunk['text'])
+        self.assertEqual(chunk['metadata']['name_type'], 'bn')
+        self.assertEqual(chunk['metadata']['name_type_label'], 'Brand Name')
+
+    def test_root_summary_names_include_languages_for_display_preferred_and_official(self):
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'approvalID': 'APP-1',
+                'names': [
+                    {
+                        'name': 'Display Name',
+                        'type': 'cn',
+                        'displayName': True,
+                        'languages': ['en'],
+                    },
+                    {
+                        'name': 'Preferred Name',
+                        'type': 'cn',
+                        'preferred': True,
+                        'languages': ['de'],
+                    },
+                    {
+                        'name': 'Official Name',
+                        'type': 'of',
+                        'languages': ['fr'],
+                    },
+                ],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+            }
+        )
+
+        root_chunk = next(chunk for chunk in substance.to_embedding_chunks() if chunk['section'] == 'root')
+        text = root_chunk['text']
+
+        self.assertIn('Display Name [en] as the display name', text)
+        self.assertIn('Preferred Name [de] as a preferred name', text)
+        self.assertIn('Official Name [fr] as the official name', text)
 
     def test_classification_code_adds_classification_chunk(self):
         substance = Substance.model_validate(
@@ -164,7 +225,7 @@ class EmbeddingChunkTests(unittest.TestCase):
         self.assertTrue(chunk['text'].startswith('Substance 11111111-1111-1111-1111-111111111111'))
         self.assertIn('Identifier in CAS: ABC-123.', chunk['text'])
 
-    def test_chemical_substance_adds_class_summary_chunk(self):
+    def test_chemical_substance_root_metadata_includes_structure_attributes(self):
         substance = ChemicalSubstance.model_validate(
             {
                 'substanceClass': 'chemical',
@@ -189,13 +250,100 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'moieties': [{'stereochemistry': 'ACHIRAL', 'opticalActivity': 'NONE', 'atropisomerism': 'No'}],
             }
         )
-        class_chunks = [chunk for chunk in substance.to_embedding_chunks() if chunk['section'] == 'structure']
-        self.assertEqual(len(class_chunks), 1)
-        self.assertIn('Formula H2O.', class_chunks[0]['text'])
-        self.assertEqual(class_chunks[0]['metadata']['hierarchy'], ['root', 'structure'])
-        self.assertEqual(class_chunks[0]['metadata']['json_path'], '$.structure')
-        self.assertEqual(class_chunks[0]['metadata']['references'], ['SYSTEM: structure source'])
-        self.assertNotIn('reference_ids', class_chunks[0]['metadata'])
+        chunks = substance.to_embedding_chunks()
+        self.assertNotIn('structure', [chunk['section'] for chunk in chunks])
+        root_chunk = next(chunk for chunk in chunks if chunk['section'] == 'root')
+        self.assertIn('Molecular formula H2O', root_chunk['text'])
+        self.assertEqual(root_chunk['metadata']['formula'], 'H2O')
+        self.assertEqual(root_chunk['metadata']['stereochemistry'], 'ACHIRAL')
+        self.assertEqual(root_chunk['metadata']['optical_activity'], 'NONE')
+        self.assertEqual(root_chunk['metadata']['atropisomerism'], 'No')
+        self.assertEqual(root_chunk['metadata']['structure_references'], ['SYSTEM: structure source'])
+        self.assertEqual(root_chunk['metadata']['moiety_count'], 1)
+
+
+    def test_chemical_substance_uses_enum_values_in_root_metadata(self):
+        substance = ChemicalSubstance.model_validate(
+            {
+                'substanceClass': 'chemical',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Enum Chemical', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+                'structure': {
+                    'stereochemistry': 'ACHIRAL',
+                    'opticalActivity': '( + / - )',
+                    'atropisomerism': 'No',
+                    'formula': 'C2H6O',
+                },
+                'moieties': [{'stereochemistry': 'ACHIRAL', 'opticalActivity': 'NONE', 'atropisomerism': 'No'}],
+            }
+        )
+        root_chunk = next(chunk for chunk in substance.to_embedding_chunks() if chunk['section'] == 'root')
+        self.assertEqual(root_chunk['metadata']['optical_activity'], '( + / - )')
+        self.assertEqual(root_chunk['metadata']['atropisomerism'], 'No')
+
+    def test_mixture_substance_root_metadata_includes_mixture_attributes(self):
+        substance = MixtureSubstance.model_validate(
+            {
+                'substanceClass': 'mixture',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Example Mixture', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+                'mixture': {
+                    'components': [
+                        {
+                            'substance': {
+                                'refuuid': '22222222-2222-2222-2222-222222222222',
+                                'refPname': 'Water',
+                            }
+                        }
+                    ],
+                    'parentSubstance': {
+                        'refuuid': '33333333-3333-3333-3333-333333333333',
+                        'refPname': 'Parent Mix',
+                        'approvalID': 'PARENT-1',
+                    },
+                },
+            }
+        )
+        chunks = substance.to_embedding_chunks()
+        self.assertNotIn('mixture', [chunk['section'] for chunk in chunks])
+        root_chunk = next(chunk for chunk in chunks if chunk['section'] == 'root')
+        self.assertIn('Mixture with 1 component', root_chunk['text'])
+        self.assertIn('parent substance Parent Mix', root_chunk['text'])
+        self.assertEqual(root_chunk['metadata']['mixture_component_count'], 1)
+        self.assertEqual(root_chunk['metadata']['mixture_parent_substance'], 'Parent Mix')
+        self.assertEqual(root_chunk['metadata']['mixture_parent_substance_id'], 'PARENT-1')
+
+
+    def test_sample_substance_root_summary_is_rich(self):
+        sample_path = Path(__file__).resolve().parents[1] / '0103a288-6eb6-4ced-b13a-849cd7edf028.json'
+        payload = json.loads(sample_path.read_text(encoding='utf-8'))
+        substance = Substance.model_validate(payload)
+        root_chunk = next(chunk for chunk in substance.to_embedding_chunks() if chunk['section'] == 'root')
+        text = root_chunk['text']
+        self.assertTrue(text.startswith('Ibuprofen.'))
+        self.assertIn('Pending chemical substance.', text)
+        self.assertIn('Definition type PRIMARY and definition level COMPLETE.', text)
+        self.assertIn('Molecular formula C13H18O2, molecular weight 206.2813, racemic, with SMILES CC(C)Cc1ccc(cc1)C(C)C(=O)O and InChIKey HEFNNWSXXWATRW-UHFFFAOYSA-N.', text)
+        self.assertIn('including IBUPROFEN [en] as the display name', text)
+        self.assertIn('IBUPROFEN [en] as the official name as well', text)
+        self.assertNotIn('brand names such as', text)
+        self.assertIn('FDA UNII WK2XYI10QM', text)
+        self.assertIn('SMS_ID 100000090365', text)
+        self.assertIn('EVMPD SUB08098MIG', text)
+        self.assertIn('CAS 15687-27-1', text)
+        self.assertIn('DRUG BANK DB01050', text)
+        self.assertIn('RXCUI 5640', text)
+        self.assertIn('ChEMBL CHEMBL521', text)
+        self.assertIn('PUBCHEM 3672', text)
+        for classification in ['WHO-ATC', 'WHO-VATC', 'NCI_THESAURUS', 'EMA ASSESSMENT REPORTS', 'WHO-ESSENTIAL MEDICINES LIST', 'NDF-RT', 'LIVERTOX', 'FDA ORPHAN DRUG', 'EU-Orphan Drug']:
+            self.assertIn(classification, text)
+        self.assertIn('Content covers properties, relationships, references, and notes.', text)
 
 
 if __name__ == '__main__':

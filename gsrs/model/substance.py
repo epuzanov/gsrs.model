@@ -262,8 +262,11 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 return self._clean_text(item.name)
         return self._clean_text(self.approvalID or self.uuid or 'Unknown substance')
 
-    def _class_summary_chunks(self) -> list[dict[str, object]]:
-        return []
+    def _substance_class_metadata(self) -> dict[str, object]:
+        return {}
+
+    def _summary_definitional_sentence(self) -> str:
+        return ''
 
     def _substance_class_value(self) -> str:
         if isinstance(self.substanceClass, SubstanceClass):
@@ -284,31 +287,207 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
     def _embedding_references(self, reference_ids: Any = None) -> list[str]:
         return self._references_from_ids(reference_ids, self._reference_text_lookup())
 
+    @staticmethod
+    def _oxford_join(values: list[str]) -> str:
+        cleaned = [value for value in values if value]
+        if not cleaned:
+            return ''
+        if len(cleaned) == 1:
+            return cleaned[0]
+        if len(cleaned) == 2:
+            return f'{cleaned[0]} and {cleaned[1]}'
+        return f"{', '.join(cleaned[:-1])}, and {cleaned[-1]}"
+
+    def _summary_title_name(self) -> str:
+        name = self._clean_text(self._stable_name())
+        letters = ''.join(character for character in name if character.isalpha())
+        if letters and letters == letters.upper():
+            return name.title()
+        return name
+
+    @staticmethod
+    def _summary_name_with_languages(item: Name) -> str:
+        name = item.name.strip()
+        languages = [language.strip() for language in (item.languages or []) if str(language).strip()]
+        if not languages:
+            return name
+        return f"{name} [{'|'.join(languages)}]"
+
+    def _summary_names_sentence(self) -> str:
+        unique_names: list[str] = []
+        display_name = ''
+        preferred_name = ''
+        official_name = ''
+        for item in self.names or []:
+            name = self._clean_text(item.name)
+            if not name or name in unique_names:
+                continue
+            unique_names.append(name)
+            formatted_name = self._summary_name_with_languages(item)
+            if item.displayName and not display_name:
+                display_name = formatted_name
+            if item.preferred and not preferred_name:
+                preferred_name = formatted_name
+            if self._clean_text(item.type) == 'of' and not official_name:
+                official_name = formatted_name
+
+        details: list[str] = []
+        if display_name:
+            details.append(f'{display_name} as the display name')
+        if preferred_name and preferred_name != display_name:
+            details.append(f'{preferred_name} as a preferred name')
+        if official_name:
+            role = 'as the official name' if official_name != display_name else 'as the official name as well'
+            details.append(f'{official_name} {role}')
+        if not details:
+            return ''
+        return f'The record includes official and alternative names, including {self._oxford_join(details)}.'
+
+    def _summary_primary_identifiers_sentence(self) -> str:
+        preferred_order = [
+            'FDA UNII',
+            'SMS_ID',
+            'SMSID',
+            'ASK',
+            'ASKP',
+            'SVGID',
+            'EVMPD',
+            'xEVMPD',
+            'CAS',
+            'DRUG BANK',
+            'RXCUI',
+            'CHEMBL',
+            'PUBCHEM',
+        ]
+        primary_identifiers: list[tuple[tuple[int, int], str]] = []
+        seen: set[tuple[str, str]] = set()
+        for index, item in enumerate(self.codes or []):
+            if self._clean_text(item.type) != 'PRIMARY' or item.isClassification:
+                continue
+            system = self._clean_text(item.codeSystem)
+            code = self._clean_text(item.code)
+            if not system or not code:
+                continue
+            key = (system.upper(), code)
+            if key in seen:
+                continue
+            seen.add(key)
+            try:
+                order = preferred_order.index(system.upper())
+            except ValueError:
+                order = len(preferred_order) + index
+            primary_identifiers.append(((order, index), f"{system} {code}"))
+
+        if not primary_identifiers:
+            return ''
+        labels = [label for _, label in sorted(primary_identifiers)[:8]]
+        return f'It also includes primary identifiers such as {self._oxford_join(labels)}.'
+
+    def _summary_classifications_sentence(self) -> str:
+        preferred_order = [
+            'WHO-ATC',
+            'WHO-VATC',
+            'NCI_THESAURUS',
+            'EMA ASSESSMENT REPORTS',
+            'WHO-ESSENTIAL MEDICINES LIST',
+            'NDF-RT',
+            'LIVERTOX',
+            'FDA ORPHAN DRUG',
+            'EU-ORPHAN DRUG',
+        ]
+        classifications: list[tuple[tuple[int, int], str]] = []
+        seen: set[str] = set()
+        for index, item in enumerate(self.codes or []):
+            if self._clean_text(item.type) != 'PRIMARY':
+                continue
+            system = self._clean_text(item.codeSystem)
+            if not system or system.upper() in seen:
+                continue
+            if not item.isClassification and system.upper() not in preferred_order:
+                continue
+            seen.add(system.upper())
+            try:
+                order = preferred_order.index(system.upper())
+            except ValueError:
+                order = len(preferred_order) + index
+            classifications.append(((order, index), system))
+        if not classifications:
+            return ''
+        labels = [label for _, label in sorted(classifications)[:9]]
+        return f'And classifications such as {self._oxford_join(labels)}.'
+
+    def _summary_content_topics(self) -> list[str]:
+        topics: list[str] = []
+        if any(self._clean_text(item.name) for item in (self.properties or [])):
+            topics.append('properties')
+        if any(self._clean_text(item.type) for item in (self.relationships or [])):
+            topics.append('relationships')
+        modifications = self.modifications
+        if modifications and any([
+            modifications.agentModifications,
+            modifications.physicalModifications,
+            modifications.structuralModifications,
+        ]):
+            topics.append('modifications')
+        if self.references:
+            topics.append('references')
+        if self.notes:
+            topics.append('notes')
+        return topics
+
+    def _summary_content_sentence(self) -> str:
+        topics = self._summary_content_topics()
+        if not topics:
+            return ''
+        return f'Content covers {self._oxford_join(topics)}.'
+
+    def _summary_text(self) -> str:
+        document_name = self._summary_title_name()
+        substance_class = self._substance_class_value()
+        approval_id_display = self._clean_text(self.approvalIDDisplay or self.approvalID)
+        definition_type = self._clean_text(self.definitionType)
+        definition_level = self._clean_text(self.definitionLevel)
+        status = self._clean_text(self.status)
+        descriptor_words = []
+        if status:
+            descriptor_words.append(status.capitalize())
+        if self.deprecated:
+            descriptor_words.append('deprecated')
+        descriptor_words.append(f'{substance_class} substance')
+
+        parts = [f'{document_name}.']
+        descriptor_sentence = ' '.join(descriptor_words)
+        if approval_id_display:
+            descriptor_sentence += f' with approval ID {approval_id_display}'
+        parts.append(descriptor_sentence + '.')
+        if definition_type or definition_level:
+            definition_sentence = 'Definition'
+            if definition_type:
+                definition_sentence += f' type {definition_type}'
+            if definition_level:
+                definition_sentence += f' and definition level {definition_level}' if definition_type else f' level {definition_level}'
+            parts.append(definition_sentence + '.')
+        for sentence in [
+            self._summary_definitional_sentence(),
+            self._summary_names_sentence(),
+            self._summary_primary_identifiers_sentence(),
+            self._summary_classifications_sentence(),
+            self._summary_content_sentence(),
+        ]:
+            if sentence:
+                parts.append(sentence)
+        return ' '.join(parts)
+
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         document_id = self._clean_text(self.uuid)
         name = self._stable_name()
         substance_class = self._substance_class_value()
         approval_id = self._clean_text(self.approvalID)
-        approval_id_display = self._clean_text(self.approvalIDDisplay or self.approvalID)
         definition_type = self._clean_text(self.definitionType)
         definition_level = self._clean_text(self.definitionLevel)
         status = self._clean_text(self.status)
-        approved_by = self._clean_text(self.approvedBy)
         tags = self._clean_list(self.tags)
-        parts = [
-            f'{name} is a GSRS substance record.',
-            f'Substance class {substance_class}.',
-        ]
-        if approval_id_display:
-            parts.append(f'Approval ID {approval_id_display}.')
-        if status:
-            parts.append(f'Status {status}.')
-        if definition_type:
-            parts.append(f'Definition type {definition_type}.')
-        if definition_level:
-            parts.append(f'Definition level {definition_level}.')
-        if approved_by:
-            parts.append(f'Approved by {approved_by}.')
+        parts = [self._summary_text()]
 
         rows = [
             {
@@ -325,11 +504,9 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                     'system_name': self._clean_text(self.systemName) or None,
                     'substance_class': substance_class,
                     'approval_id': approval_id or None,
-                    'approval_id_display': approval_id_display or None,
                     'status': status or None,
                     'definition_type': definition_type or None,
                     'definition_level': definition_level or None,
-                    'approved_by': approved_by or None,
                     'version': self._clean_text(self.version) or None,
                     'tags': tags or None,
                     'name_count': len(self.names or []),
@@ -338,11 +515,11 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                     'relationship_count': len(self.relationships or []),
                     'note_count': len(self.notes or []),
                     'reference_count': len(self.references or []),
+                    **self._substance_class_metadata(),
                 },
             }
         ]
         self._assign_parent(self, self)
-        rows.extend(self._class_summary_chunks())
 
         seen_names = set()
         for item in self.names or []:

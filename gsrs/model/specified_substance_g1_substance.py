@@ -3,6 +3,7 @@ from pydantic import Field, ConfigDict
 from .specified_substance_g1 import SpecifiedSubstanceG1
 from .substance import Substance
 
+
 class SpecifiedSubstanceG1Substance(Substance):
     """Specified Substance model."""
 
@@ -15,22 +16,18 @@ class SpecifiedSubstanceG1Substance(Substance):
         description='Specified Substance definition for this substance.',
     )
 
-    def _class_summary_chunks(self) -> list[dict[str, object]]:
-        document_id = self._clean_text(self.uuid)
-        count = len(self.specifiedSubstance.constituents or []) if self.specifiedSubstance else 0
+    def _summary_definitional_sentence(self) -> str:
+        if self.specifiedSubstance is None:
+            return ''
+        constituent_count = len(self.specifiedSubstance.constituents or [])
+        if not constituent_count:
+            return ''
+        label = 'constituent' if constituent_count == 1 else 'constituents'
+        return f'Specified substance with {constituent_count} {label}.'
 
-        return [
-            {
-                'chunk_id': f'root_specifiedSubstance_uuid:{document_id}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'specifiedSubstance',
-                'text': f'{self._stable_name()} belongs to substance class specifiedSubstanceG1. It has {count} constituents.',
-                'metadata': {
-                    **self._chunk_metadata(self),
-                    **self._hierarchy_metadata('root', 'specifiedSubstance'),
-                    'substance_class': 'specifiedSubstanceG1',
-                    'specified_substance_constituent_count': count,
-                },
-            }
-        ]
+    def _substance_class_metadata(self) -> dict[str, object]:
+        return {
+            'specified_substance_constituent_count': len(
+                self.specifiedSubstance.constituents or []
+            ) if self.specifiedSubstance else 0,
+        }

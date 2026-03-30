@@ -1,5 +1,5 @@
 from pydantic import Field, ConfigDict
-from typing import List, Union
+from typing import ClassVar, List, Union
 
 from .ginas_common_sub_data import GinasCommonSubData
 from .name_org import NameOrg
@@ -8,6 +8,15 @@ class Name(GinasCommonSubData):
     """Name model."""
 
     model_config = ConfigDict(extra='forbid')
+    _NAME_TYPE_LABELS: ClassVar[dict[str, str]] = {
+        'bn': 'Brand Name',
+        'cd': 'Code',
+        'cn': 'Common Name',
+        'of': 'Official Name',
+        'sci': 'Scientific Name',
+        'sys': 'Systematic Name',
+        'syn': 'Synonym',
+    }
 
     name: str = Field(
         default=...,
@@ -64,9 +73,17 @@ class Name(GinasCommonSubData):
         description='Display Name',
     )
 
+    @classmethod
+    def _name_type_label(cls, value: str) -> str:
+        cleaned = cls._clean_text(value)
+        if not cleaned:
+            return ''
+        return cls._NAME_TYPE_LABELS.get(cleaned.lower(), cleaned)
+
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         raw_name = self._clean_text(self.name)
         name_type = self._clean_text(self.type)
+        name_type_label = self._name_type_label(name_type)
         std_name = self._clean_text(self.stdName)
         if not raw_name:
             return []
@@ -77,8 +94,8 @@ class Name(GinasCommonSubData):
         name_jurisdiction = self._clean_list(self.nameJurisdiction)
         name_orgs = self._clean_list([item.nameOrg for item in (self.nameOrgs or []) if item.nameOrg])
         parts = [f'{subject} name']
-        if name_type:
-            parts.append(f'type {name_type}')
+        if name_type_label:
+            parts.append(f'type {name_type_label}')
         parts.append(f': {raw_name}.')
         if std_name and std_name != raw_name:
             parts.append(f'Standardized name {std_name}.')
@@ -102,6 +119,7 @@ class Name(GinasCommonSubData):
                     'json_path': self._embedding_json_path('$.names[*]'),
                     'name_value': raw_name,
                     'name_type': name_type or None,
+                    'name_type_label': name_type_label or None,
                     'std_name': std_name or None,
                     'preferred': bool(self.preferred),
                     'display_name': bool(self.displayName),

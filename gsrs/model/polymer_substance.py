@@ -4,6 +4,7 @@ from typing import Union
 from .polymer import Polymer
 from .substance import Substance
 
+
 class PolymerSubstance(Substance):
     """Polymer Substance model."""
 
@@ -16,22 +17,48 @@ class PolymerSubstance(Substance):
         description='Polymer definition for this substance.',
     )
 
-    def _class_summary_chunks(self) -> list[dict[str, object]]:
-        document_id = self._clean_text(self.uuid)
-        count = len(self.polymer.monomers or []) if self.polymer else 0
+    def _summary_definitional_sentence(self) -> str:
+        details = self.polymer
+        if details is None:
+            return ''
 
-        return [
-            {
-                'chunk_id': f'root_polymer_uuid:{document_id}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'polymer',
-                'text': f'{self._stable_name()} belongs to substance class polymer. Polymer has {count} monomers.',
-                'metadata': {
-                    **self._chunk_metadata(self),
-                    **self._hierarchy_metadata('root', 'polymer'),
-                    'substance_class': 'polymer',
-                    'polymer_monomer_count': count,
-                },
-            }
-        ]
+        classification = details.classification
+        parts: list[str] = []
+
+        polymer_class = self._clean_text(classification.polymerClass if classification else None)
+        if polymer_class:
+            parts.append(f'Polymer class {polymer_class}')
+
+        monomer_count = len(details.monomers or [])
+        if monomer_count:
+            label = 'monomer' if monomer_count == 1 else 'monomers'
+            parts.append(f'{monomer_count} {label}')
+
+        structural_unit_count = len(details.structuralUnits or [])
+        if structural_unit_count:
+            label = 'structural unit' if structural_unit_count == 1 else 'structural units'
+            parts.append(f'{structural_unit_count} {label}')
+
+        polymer_geometry = self._clean_text(classification.polymerGeometry if classification else None)
+        if polymer_geometry:
+            parts.append(f'geometry {polymer_geometry}')
+        if not parts:
+            return ''
+        return f"{', '.join(parts)}."
+
+    def _substance_class_metadata(self) -> dict[str, object]:
+        details = self.polymer
+        classification = details.classification if details else None
+        parent = classification.parentSubstance if classification else None
+        return {
+            'polymer_monomer_count': len(details.monomers or []) if details else 0,
+            'polymer_structural_unit_count': len(details.structuralUnits or []) if details else 0,
+            'polymer_class': self._clean_text(classification.polymerClass if classification else None) or None,
+            'polymer_geometry': self._clean_text(classification.polymerGeometry if classification else None) or None,
+            'polymer_subclass': self._clean_list(classification.polymerSubclass if classification else None) or None,
+            'polymer_source_type': self._clean_text(classification.sourceType if classification else None) or None,
+            'polymer_parent_substance': parent.get_refPname() if parent else None,
+            'polymer_parent_substance_id': parent.get_refuuid() if parent else None,
+            'has_display_structure': bool(details.displayStructure) if details else False,
+            'has_idealized_structure': bool(details.idealizedStructure) if details else False,
+        }
