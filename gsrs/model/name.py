@@ -99,7 +99,7 @@ class Name(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'names'),
-                    'json_path': '$.names[*]',
+                    'json_path': self._embedding_json_path('$.names[*]'),
                     'name_value': raw_name,
                     'name_type': name_type or None,
                     'std_name': std_name or None,

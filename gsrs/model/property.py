@@ -109,7 +109,7 @@ class Property(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'properties'),
-                    'json_path': '$.properties[*]',
+                    'json_path': self._embedding_json_path('$.properties[*]'),
                     'property_name': prop_name or None,
                     'property_type': property_type or None,
                     'value_type': value_type or None,

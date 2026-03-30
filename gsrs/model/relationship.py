@@ -96,7 +96,7 @@ class Relationship(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'relationships'),
-                    'json_path': '$.relationships[*]',
+                    'json_path': self._embedding_json_path('$.relationships[*]'),
                     'relationship_type': rel_type or None,
                     'related_name': related_name or None,
                     'related_id': related_id or None,

@@ -33,7 +33,7 @@ class Note(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'notes'),
-                    'json_path': '$.notes[*]',
+                    'json_path': self._embedding_json_path('$.notes[*]'),
                     'note_length': len(note),
                     'references': self._embedding_references() or None,
                 },

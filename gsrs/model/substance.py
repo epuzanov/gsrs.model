@@ -381,14 +381,16 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         self._assign_parent(self, self)
 
     @classmethod
-    def _assign_parent(cls, value: Any, parent: 'Substance') -> None:
+    def _assign_parent(cls, value: Any, parent: 'Substance', json_path: str = '$') -> None:
         if isinstance(value, GinasCommonSubData):
-            value._set_parent(parent)
+            value._set_parent(parent, json_path)
         if isinstance(value, BaseModel):
-            for field_name in value.__class__.model_fields:
-                cls._assign_parent(getattr(value, field_name), parent)
+            for field_name, field in value.__class__.model_fields.items():
+                alias = cls._clean_text(field.alias or field_name)
+                child_path = f'{json_path}.{alias}' if alias else json_path
+                cls._assign_parent(getattr(value, field_name), parent, child_path)
             return
 
         if isinstance(value, (list, tuple, set)):
-            for item in value:
-                cls._assign_parent(item, parent)
+            for index, item in enumerate(value):
+                cls._assign_parent(item, parent, f'{json_path}[{index}]')

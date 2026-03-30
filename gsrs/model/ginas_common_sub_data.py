@@ -13,6 +13,7 @@ class GinasCommonSubData(GinasCommonData):
 
     model_config = ConfigDict(extra='forbid')
     _parent: 'Substance | None' = PrivateAttr(default=None)
+    _json_path: str | None = PrivateAttr(default=None)
 
     references: Union[List[UUID], None] = Field(
         default=None,
@@ -28,8 +29,9 @@ class GinasCommonSubData(GinasCommonData):
         description='Compact system-generated shorthand for the referenced sites.',
     )
 
-    def _set_parent(self, parent: 'Substance | None') -> None:
+    def _set_parent(self, parent: 'Substance | None', json_path: str | None = None) -> None:
         self._parent = parent
+        self._json_path = self._clean_text(json_path) or None
 
     def _embedding_document_id(self) -> str:
         return self._clean_text(self._parent.uuid if self._parent else self.uuid)
@@ -51,6 +53,9 @@ class GinasCommonSubData(GinasCommonData):
             'created': self._clean_text(self.created) or None,
             'lastEdited': self._clean_text(self.lastEdited) or None,
         }
+
+    def _embedding_json_path(self, fallback: str) -> str:
+        return self._clean_text(self._json_path) or fallback
 
     def _embedding_references(self, references: Any = None) -> list[str]:
         if self._parent is None:

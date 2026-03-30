@@ -97,7 +97,7 @@ class Reference(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'references'),
-                    'json_path': '$.references[*]',
+                    'json_path': self._embedding_json_path('$.references[*]'),
                     'references': [reference_text] if reference_text else None,
                     'doc_type': doc_type or None,
                     'citation': citation or None,

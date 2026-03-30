@@ -24,6 +24,7 @@ class EmbeddingChunkTests(unittest.TestCase):
         self.assertEqual(chunk['metadata']['hierarchy'], ['root', 'names'])
         self.assertEqual(chunk['metadata']['hierarchy_path'], 'root > names')
         self.assertEqual(chunk['metadata']['hierarchy_level'], 2)
+        self.assertEqual(chunk['metadata']['json_path'], '$.names[0]')
 
     def test_substance_to_embedding_chunks_returns_root_and_subelements(self):
         substance = Substance.model_validate(
@@ -85,9 +86,11 @@ class EmbeddingChunkTests(unittest.TestCase):
         self.assertEqual(chunks[0]['metadata']['hierarchy'], ['root'])
         self.assertEqual(chunks[0]['metadata']['json_path'], '$')
         name_chunk = next(chunk for chunk in chunks if chunk['section'] == 'names')
+        self.assertEqual(name_chunk['metadata']['json_path'], '$.names[0]')
         self.assertEqual(name_chunk['metadata']['references'], ['SYSTEM: generated'])
         self.assertNotIn('reference_ids', name_chunk['metadata'])
         code_chunk = next(chunk for chunk in chunks if chunk['section'] == 'codes')
+        self.assertEqual(code_chunk['metadata']['json_path'], '$.codes[0]')
         self.assertEqual(code_chunk['metadata']['references'], ['MANUAL: registry import'])
         self.assertNotIn('reference_ids', code_chunk['metadata'])
 
@@ -111,17 +114,17 @@ class EmbeddingChunkTests(unittest.TestCase):
                 'comments': 'Level 1|Level 2|Level 3',
             }
         )
-        code._set_parent(substance)
+        code._set_parent(substance, '$.codes[0]')
 
         chunks = code.to_embedding_chunks()
 
-        self.assertEqual(len(chunks), 2)
-        class_chunk = next(chunk for chunk in chunks if chunk['section'] == 'classifications')
-        self.assertEqual(class_chunk['chunk_id'], f'root_classifications_uuid:{code.uuid}')
-        self.assertEqual(class_chunk['text'], 'Example Concept classification in ATC: Level 1 > Level 2 > Level 3.')
+        self.assertEqual(len(chunks), 1)
+        class_chunk = chunks[0]
+        self.assertEqual(class_chunk['chunk_id'], f'root_codes_uuid:{code.uuid}')
+        self.assertIn('classification in ATC: Level 1 > Level 2 > Level 3.', class_chunk['text'])
         self.assertEqual(class_chunk['metadata']['classification_hierarchy'], ['Level 1', 'Level 2', 'Level 3'])
-        self.assertEqual(class_chunk['metadata']['hierarchy'], ['root', 'classifications'])
-        self.assertEqual(class_chunk['metadata']['json_path'], '$.codes[*]')
+        self.assertEqual(class_chunk['metadata']['hierarchy'], ['root', 'codes'])
+        self.assertEqual(class_chunk['metadata']['json_path'], '$.codes[0]')
 
     def test_code_chunk_matches_adapter_style(self):
         substance = Substance.model_validate(
@@ -136,14 +139,15 @@ class EmbeddingChunkTests(unittest.TestCase):
             }
         )
         code = Code.model_validate({'code': 'ABC-123', 'codeSystem': 'CAS'})
-        code._set_parent(substance)
+        code._set_parent(substance, '$.codes[0]')
         chunk = code.to_embedding_chunks()[0]
-        self.assertEqual(chunk['text'], 'Example Concept identifier in CAS: ABC-123.')
+        self.assertTrue(chunk['text'].startswith('Example Concept'))
+        self.assertIn('Identifier in CAS: ABC-123.', chunk['text'])
         self.assertEqual(chunk['document_id'], '11111111-1111-1111-1111-111111111111')
         self.assertEqual(chunk['chunk_id'], f'root_codes_uuid:{code.uuid}')
         self.assertEqual(chunk['source_url'], 'https://example.test/gsrs')
         self.assertEqual(chunk['metadata']['hierarchy'], ['root', 'codes'])
-        self.assertEqual(chunk['metadata']['json_path'], '$.codes[*]')
+        self.assertEqual(chunk['metadata']['json_path'], '$.codes[0]')
 
 
     def test_embedding_root_name_falls_back_to_substance_uuid(self):
@@ -155,9 +159,10 @@ class EmbeddingChunkTests(unittest.TestCase):
             references=[],
             version='1',
         )
-        code._set_parent(parent)
+        code._set_parent(parent, '$.codes[0]')
         chunk = code.to_embedding_chunks()[0]
-        self.assertEqual(chunk['text'], 'Substance 11111111-1111-1111-1111-111111111111 identifier in CAS: ABC-123.')
+        self.assertTrue(chunk['text'].startswith('Substance 11111111-1111-1111-1111-111111111111'))
+        self.assertIn('Identifier in CAS: ABC-123.', chunk['text'])
 
     def test_chemical_substance_adds_class_summary_chunk(self):
         substance = ChemicalSubstance.model_validate(

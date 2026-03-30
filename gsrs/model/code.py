@@ -93,7 +93,7 @@ class Code(GinasCommonSubData):
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'codes'),
                     **class_metadata,
-                    'json_path': '$.codes[*]',
+                    'json_path': self._embedding_json_path('$.codes[*]'),
                     'code_system': code_system or None,
                     'code': code,
                     'code_type': code_type or None,

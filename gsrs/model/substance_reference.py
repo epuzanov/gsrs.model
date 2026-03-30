@@ -91,7 +91,7 @@ class SubstanceReference(GinasCommonSubData):
                 'metadata': {
                     **self._embedding_root_metadata(),
                     **self._hierarchy_metadata('root', 'substance_references'),
-                    'json_path': '$.substanceReferences[*]',
+                    'json_path': self._embedding_json_path('$.substanceReferences[*]'),
                     'referenced_name': ref_name or None,
                     'referenced_id': self.get_refuuid() or None,
                     'approval_id': approval_id or None,
