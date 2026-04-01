@@ -67,28 +67,20 @@ class Amount(GinasCommonSubData):
     def as_string(self) -> str:
         """Render the amount value as a human-readable string."""
         pieces: list[str] = []
-        non_numeric = self._clean_text(self.nonNumericValue)
-        avg = self.average
-        low = self.low
-        high = self.high
-        low_limit = self.lowLimit
-        high_limit = self.highLimit
-        units = self._clean_text(self.units)
-        amount_type = self._clean_text(self.type)
-        if non_numeric:
-            pieces.append(non_numeric)
-        elif avg is not None:
-            pieces.append(str(avg))
-        elif low is not None and high is not None:
-            pieces.append(f'{low} to {high}')
-        elif low_limit is not None and high_limit is not None:
-            pieces.append(f'{low_limit} to {high_limit}')
-        elif low is not None:
-            pieces.append(str(low))
-        elif high is not None:
-            pieces.append(str(high))
-        if units:
-            pieces.append(units)
-        if amount_type:
-            pieces.append(f'(amount type {amount_type})')
+        if self.nonNumericValue:
+            pieces.append(str(self.nonNumericValue))
+        elif self.average is not None:
+            pieces.append(str(self.average))
+        elif self.low is not None and self.high is not None:
+            pieces.append(f'{self.low} to {self.high}')
+        elif self.lowLimit is not None and self.highLimit is not None:
+            pieces.append(f'{self.lowLimit} to {self.highLimit}')
+        elif self.low is not None:
+            pieces.append(str(self.low))
+        elif self.high is not None:
+            pieces.append(str(self.high))
+        if self.units:
+            pieces.append(str(self.units))
+        if self.type:
+            pieces.append(f'(amount type {self.type})')
         return ' '.join(pieces).strip()

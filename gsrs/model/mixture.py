@@ -21,11 +21,3 @@ class Mixture(GinasCommonSubData):
         title='Parent Substance',
         description='Parent Substance',
     )
-
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        rows: list[dict[str, object]] = []
-
-        for item in self.components or []:
-            rows.extend(item.to_embedding_chunks())
-
-        return rows

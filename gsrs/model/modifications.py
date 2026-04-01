@@ -29,15 +29,3 @@ class Modifications(GinasCommonSubData):
         title='Structural Modifications',
         description='Structural Modifications',
     )
-
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        rows: list[dict[str, object]] = []
-
-        for item in self.agentModifications or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.physicalModifications or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.structuralModifications or []:
-            rows.extend(item.to_embedding_chunks())
-
-        return rows
