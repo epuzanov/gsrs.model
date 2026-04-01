@@ -448,25 +448,23 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         definition_type = self._clean_text(self.definitionType)
         definition_level = self._clean_text(self.definitionLevel)
         status = self._clean_text(self.status)
-        descriptor_words = ['Protected' if self.access else 'Public']
+        parts = [f'{document_name} is a']
+        parts.append('protected' if self.access else 'public')
         if status:
-            descriptor_words.append(status)
+            parts.append(status)
         if self.deprecated:
-            descriptor_words.append('deprecated')
-        descriptor_words.append(f'{substance_class} substance')
-
-        parts = [f'{document_name}.']
-        descriptor_sentence = ' '.join(descriptor_words)
+            parts.append('deprecated')
+        parts.append(substance_class)
         if approval_id_display:
-            descriptor_sentence += f' with approval ID {approval_id_display}'
-        parts.append(descriptor_sentence + '.')
+            parts.append(f'with approval ID {approval_id_display}.')
+        else:
+            parts.append('substance.')
         if definition_type or definition_level:
-            definition_sentence = 'Definition'
+            parts.append('Definition')
             if definition_type:
-                definition_sentence += f' type {definition_type}'
+                parts.append(f' type {definition_type}{"" if definition_level else "."}')
             if definition_level:
-                definition_sentence += f' and definition level {definition_level}' if definition_type else f' level {definition_level}'
-            parts.append(definition_sentence + '.')
+                parts.append(f' and definition level {definition_level}.' if definition_type else f' level {definition_level}.')
         for sentence in [
             self._summary_definitional_sentence(),
             self._summary_names_sentence(),
