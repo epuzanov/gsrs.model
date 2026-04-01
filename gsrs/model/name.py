@@ -77,8 +77,8 @@ class Name(GinasCommonSubData):
     def _name_type_label(cls, value: str) -> str:
         cleaned = cls._clean_text(value)
         if not cleaned:
-            return ''
-        return cls._NAME_TYPE_LABELS.get(cleaned.lower(), cleaned)
+            return 'synonym'
+        return cls._NAME_TYPE_LABELS.get(cleaned.lower(), '%s type name'%cleaned)
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         raw_name = self._clean_text(self.name)
@@ -93,16 +93,12 @@ class Name(GinasCommonSubData):
         languages = self._clean_list(self.languages)
         name_jurisdiction = self._clean_list(self.nameJurisdiction)
         name_orgs = self._clean_list([item.nameOrg for item in (self.nameOrgs or []) if item.nameOrg])
-        parts = [f'{subject} name']
-        if name_type_label:
-            parts.append(f'type {name_type_label}')
-        parts.append(f': {raw_name}.')
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+        parts = [f'{raw_name} is a {access} {name_type_label} for {subject}.']
         if std_name and std_name != raw_name:
             parts.append(f'Standardized name {std_name}.')
-        if self.preferred:
-            parts.append('Preferred name.')
-        if self.displayName:
-            parts.append('Display name.')
+        if self.preferred or self.displayName:
+            parts.append(f"It used as a {'display and preferred' if self.preferred and self.displayName else 'preferred' if self.preferred else 'display'} name.")
 
         document_id = self._embedding_document_id()
 

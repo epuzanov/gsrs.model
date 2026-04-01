@@ -448,9 +448,9 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         definition_type = self._clean_text(self.definitionType)
         definition_level = self._clean_text(self.definitionLevel)
         status = self._clean_text(self.status)
-        descriptor_words = []
+        descriptor_words = ['Protected' if self.access else 'Public']
         if status:
-            descriptor_words.append(status.capitalize())
+            descriptor_words.append(status)
         if self.deprecated:
             descriptor_words.append('deprecated')
         descriptor_words.append(f'{substance_class} substance')

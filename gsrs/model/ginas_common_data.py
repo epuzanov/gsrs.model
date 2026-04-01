@@ -96,6 +96,7 @@ class GinasCommonData(BaseModel):
     @classmethod
     def _chunk_metadata(cls, root_substance: 'GinasCommonData') -> dict[str, Any]:
         return {
+            'access': 'Protected' if getattr(root_substance, 'access', None) else 'Public',
             'created': cls._clean_text(getattr(root_substance, 'created', None)) or None,
             'lastEdited': cls._clean_text(getattr(root_substance, 'lastEdited', None)) or None,
         }

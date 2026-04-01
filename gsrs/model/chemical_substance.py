@@ -41,6 +41,7 @@ class ChemicalSubstance(Substance):
         stereochemistry = self._clean_text(structure.stereochemistry).lower()
         smiles = self._clean_text(structure.smiles)
         inchi_key = self._clean_text(structure.inchiKey)
+        moieties = self._clean_list([getattr(m, 'formula', None) for m in self.moieties or []])
 
         descriptors: list[str] = []
         if formula:
@@ -55,6 +56,8 @@ class ChemicalSubstance(Substance):
             descriptors.append(f'with SMILES {smiles}')
         elif inchi_key:
             descriptors.append(f'with InChIKey {inchi_key}')
+        if moieties:
+            descriptors.append(f'and moieties {", ".join(moieties)}')
         if not descriptors:
             return ''
         return f"{', '.join(descriptors)}."
@@ -80,5 +83,5 @@ class ChemicalSubstance(Substance):
                 structure.references if structure else None
             ) or None,
             'has_molfile': bool(structure.molfile) if structure else False,
-            'moiety_count': len(self.moieties or []),
+            'moieties': self._clean_list([getattr(m, 'formula', None) for m in self.moieties or []]) or [],
         }

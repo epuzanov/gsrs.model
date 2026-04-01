@@ -58,16 +58,17 @@ class Code(GinasCommonSubData):
         code_text = self._clean_text(self.codeText)
         comments = self._clean_text(self.comments)
         url = self._clean_text(self.url)
+        access = 'protected' if getattr(self, 'access', None) else 'public'
         if not code:
             return []
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-        text_parts = [f"{subject} {code_type}"]
+        text_parts = [f"{subject} {access} {code_type.lower()}"]
         class_parts = []
         class_metadata = {}
         if self.isClassification:
-            text_parts.append(f"classification in {code_system or 'unknown system'}:")
+            text_parts.append(f"classification in {code_system or 'unknown'} code system:")
             class_parts = [self._clean_text(part) for part in (self.comments or '').split('|')]
             class_parts = [part for part in class_parts if part]
             if class_parts:
@@ -79,7 +80,7 @@ class Code(GinasCommonSubData):
             else:
                 text_parts.append(f"{code}.")
         else:
-            text_parts.append(f"Identifier in {code_system or 'unknown system'}: {code}.")
+            text_parts.append(f"Identifier in {code_system or 'unknown'} code system: {code}.")
         if code_text and code_text != code:
             text_parts.append(f'Code text {code_text}.')
         rows = [
