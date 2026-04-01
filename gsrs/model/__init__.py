@@ -27,6 +27,21 @@ from .polymer import Polymer
 from .polymer_classification import PolymerClassification
 from .polymer_substance import PolymerSubstance
 from .property import Property
+from .product import (
+    Product,
+    ProductCode,
+    ProductCompany,
+    ProductCompanyCode,
+    ProductDocumentation,
+    ProductIndication,
+    ProductIngredient,
+    ProductLot,
+    ProductManufactureItem,
+    ProductManufacturer,
+    ProductName,
+    ProductProvenance,
+    ProductTermAndPart,
+)
 from .protein import Protein
 from .protein_substance import ProteinSubstance
 from .reference import Reference
@@ -77,6 +92,19 @@ __all__ = [
     'PolymerClassification',
     'PolymerSubstance',
     'Property',
+    'Product',
+    'ProductCode',
+    'ProductCompany',
+    'ProductCompanyCode',
+    'ProductDocumentation',
+    'ProductIndication',
+    'ProductIngredient',
+    'ProductLot',
+    'ProductManufactureItem',
+    'ProductManufacturer',
+    'ProductName',
+    'ProductProvenance',
+    'ProductTermAndPart',
     'Protein',
     'ProteinSubstance',
     'Reference',

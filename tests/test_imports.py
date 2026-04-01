@@ -1,12 +1,13 @@
 import unittest
 
-from gsrs.model import ChemicalSubstance, Substance
+from gsrs.model import ChemicalSubstance, Product, Substance
 
 
 class ImportTests(unittest.TestCase):
     def test_imports_exposed(self):
         self.assertIsNotNone(ChemicalSubstance)
         self.assertIsNotNone(Substance)
+        self.assertIsNotNone(Product)
 
 
 if __name__ == "__main__":
