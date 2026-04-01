@@ -74,7 +74,8 @@ class Relationship(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-        parts = [f'{subject} has relationship {rel_type} with {related_name}.']
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+        parts = [f'{subject} has {access} relationship {rel_type} with {related_name}.']
         if qualification:
             parts.append(f'Qualification {qualification}.')
         if interaction_type:
@@ -94,7 +95,7 @@ class Relationship(GinasCommonSubData):
                 'section': 'relationships',
                 'text': ' '.join(parts).strip(),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'relationships'),
                     'json_path': self._embedding_json_path('$.relationships[*]'),
                     'relationship_type': rel_type or None,

@@ -74,8 +74,9 @@ class SubstanceReference(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-
-        content_parts = [f"{subject} references substance"]
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+    
+        content_parts = [f"{subject} {access} substance reference"]
         if ref_name:
             content_parts.append(ref_name)
         if approval_id:
@@ -89,7 +90,7 @@ class SubstanceReference(GinasCommonSubData):
                 'section': 'substance_references',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'substance_references'),
                     'json_path': self._embedding_json_path('$.substanceReferences[*]'),
                     'referenced_name': ref_name or None,

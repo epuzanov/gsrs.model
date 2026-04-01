@@ -49,8 +49,9 @@ class Glycosylation(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        content_parts = [f"{subject} glycosylation"]
+        content_parts = [f"{subject} {access} glycosylation"]
         if glyco_type:
             content_parts.append(f"type {glyco_type}")
         site_info = []
@@ -71,7 +72,7 @@ class Glycosylation(GinasCommonSubData):
                 'section': 'glycosylation',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'glycosylation'),
                     'glycosylation_type': glyco_type or None,
                     'c_sites_count': len(self.CGlycosylationSites) if self.CGlycosylationSites else None,

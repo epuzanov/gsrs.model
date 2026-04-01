@@ -22,6 +22,7 @@ class Note(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
         return [
             {
@@ -29,9 +30,9 @@ class Note(GinasCommonSubData):
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'notes',
-                'text': f'{subject} note: {note}',
+                'text': f'{subject} {access} note: {note}',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'notes'),
                     'json_path': self._embedding_json_path('$.notes[*]'),
                     'note_length': len(note),

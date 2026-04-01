@@ -32,6 +32,7 @@ class PhysicalModification(GinasCommonSubData):
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
         return [
             {
@@ -39,9 +40,9 @@ class PhysicalModification(GinasCommonSubData):
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'physicalModifications',
-                'text': f'{subject} physical modification role {self._clean_text(self.physicalModificationRole)}.',
+                'text': f'{subject} {access} physical modification role {self._clean_text(self.physicalModificationRole)}.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'modifications', 'physicalModifications'),
                     'modification_kind': 'physical',
                 },

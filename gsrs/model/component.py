@@ -39,6 +39,7 @@ class Component(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
         return [
             {
@@ -46,9 +47,9 @@ class Component(GinasCommonSubData):
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'components',
-                'text': f"{subject} component {component_type or 'unspecified'}: {substance_name}.".strip(),
+                'text': f"{subject} {access} component {component_type or 'unspecified'}: {substance_name}.".strip(),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'components'),
                     'component_type': component_type or None,
                     'substance_name': substance_name or None,

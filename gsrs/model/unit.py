@@ -83,8 +83,9 @@ class Unit(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-
-        content_parts = [f"{subject} polymer unit"]
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+    
+        content_parts = [f"{subject} {access} polymer unit"]
         if unit_type:
             content_parts.append(f"type {unit_type}")
         if label:
@@ -100,7 +101,7 @@ class Unit(GinasCommonSubData):
                 'section': 'units',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'units'),
                     'unit_type': unit_type or None,
                     'label': label or None,

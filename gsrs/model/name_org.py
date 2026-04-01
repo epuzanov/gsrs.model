@@ -30,10 +30,11 @@ class NameOrg(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        content = f"{subject} naming organization: {org_name}."
+        content = f"{subject} {access} naming organization: {org_name}."
         if self.deprecatedDate:
-            content += f" Deprecated {self.deprecatedDate}."
+            content += f" Deprecated since {self.deprecatedDate}."
 
         return [
             {
@@ -43,7 +44,7 @@ class NameOrg(GinasCommonSubData):
                 'section': 'name_orgs',
                 'text': content,
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'name_orgs'),
                     'organization': org_name or None,
                     'deprecated_date': str(self.deprecatedDate) if self.deprecatedDate else None,

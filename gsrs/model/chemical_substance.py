@@ -42,10 +42,11 @@ class ChemicalSubstance(Substance):
         smiles = self._clean_text(structure.smiles)
         inchi_key = self._clean_text(structure.inchiKey)
         moieties = self._clean_list([getattr(m, 'formula', None) for m in self.moieties or []])
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        descriptors: list[str] = []
+        descriptors: list[str] = [f'Structure is a {access} chemical structure']
         if formula:
-            descriptors.append(f'Molecular formula {formula}')
+            descriptors.append(f'molecular formula {formula}')
         if molecular_weight is not None:
             descriptors.append(f'molecular weight {molecular_weight}')
         if stereochemistry:

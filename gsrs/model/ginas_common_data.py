@@ -94,14 +94,6 @@ class GinasCommonData(BaseModel):
         return cleaned_values
 
     @classmethod
-    def _chunk_metadata(cls, root_substance: 'GinasCommonData') -> dict[str, Any]:
-        return {
-            'access': 'Protected' if getattr(root_substance, 'access', None) else 'Public',
-            'created': cls._clean_text(getattr(root_substance, 'created', None)) or None,
-            'lastEdited': cls._clean_text(getattr(root_substance, 'lastEdited', None)) or None,
-        }
-
-    @classmethod
     def _references_from_ids(
         cls,
         reference_ids: Any,
@@ -124,6 +116,13 @@ class GinasCommonData(BaseModel):
             'hierarchy': hierarchy,
             'hierarchy_path': ' > '.join(hierarchy),
             'hierarchy_level': len(hierarchy),
+        }
+
+    def _chunk_metadata(self) -> dict[str, Any]:
+        return {
+            'access': 'protected' if getattr(self, 'access', None) else 'public',
+            'created': self._clean_text(getattr(self, 'created', None)) or None,
+            'lastEdited': self._clean_text(getattr(self, 'lastEdited', None)) or None,
         }
 
     def _embedding_source_name(self) -> str | None:

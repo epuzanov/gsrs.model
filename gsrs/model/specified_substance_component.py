@@ -33,8 +33,9 @@ class SpecifiedSubstanceComponent(Component):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        content_parts = [f"{subject} constituent"]
+        content_parts = [f"{subject} {access} constituent"]
         if component_type:
             content_parts.append(f"type {component_type}")
         if substance_name:
@@ -52,7 +53,7 @@ class SpecifiedSubstanceComponent(Component):
                 'section': 'constituents',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'constituents'),
                     'component_type': component_type or None,
                     'substance_name': substance_name or None,

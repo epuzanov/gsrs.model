@@ -47,8 +47,9 @@ class Material(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        content_parts = [f"{subject} polymer material"]
+        content_parts = [f"{subject} {access} polymer material"]
         if material_type:
             content_parts.append(f"role {material_type}")
         if monomer_name:
@@ -64,7 +65,7 @@ class Material(GinasCommonSubData):
                 'section': 'materials',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'materials'),
                     'material_type': material_type or None,
                     'monomer_name': monomer_name or None,

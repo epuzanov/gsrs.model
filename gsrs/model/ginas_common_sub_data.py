@@ -48,12 +48,6 @@ class GinasCommonSubData(GinasCommonData):
         document_id = self._embedding_document_id()
         return f'Substance {document_id}' if document_id else 'Substance'
 
-    def _embedding_root_metadata(self) -> dict[str, str | None]:
-        return {
-            'created': self._clean_text(self.created) or None,
-            'lastEdited': self._clean_text(self.lastEdited) or None,
-        }
-
     def _embedding_json_path(self, fallback: str) -> str:
         return self._clean_text(self._json_path) or fallback
 

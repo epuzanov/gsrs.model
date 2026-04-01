@@ -55,8 +55,9 @@ class PolymerClassification(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
-        content_parts = [f"{subject} polymer classification"]
+        content_parts = [f"{subject} {access} polymer classification"]
         if polymer_class:
             content_parts.append(f"class {polymer_class}")
         if polymer_geometry:
@@ -74,7 +75,7 @@ class PolymerClassification(GinasCommonSubData):
                 'section': 'polymer_classification',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'polymer_classification'),
                     'polymer_class': polymer_class or None,
                     'polymer_geometry': polymer_geometry or None,

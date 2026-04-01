@@ -91,7 +91,9 @@ class Property(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-        parts = [f'{subject} property {prop_name}.']
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+
+        parts = [f'{subject} {access} property {prop_name}.']
         if property_type:
             parts.append(f'Property type {property_type}.')
         if value_type:
@@ -107,7 +109,7 @@ class Property(GinasCommonSubData):
                 'section': 'properties',
                 'text': ' '.join(parts),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'properties'),
                     'json_path': self._embedding_json_path('$.properties[*]'),
                     'property_name': prop_name or None,

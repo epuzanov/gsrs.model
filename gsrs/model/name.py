@@ -120,7 +120,7 @@ class Name(GinasCommonSubData):
                 'section': 'names',
                 'text': ' '.join(parts),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'names'),
                     'json_path': self._embedding_json_path('$.names[*]'),
                     'name_value': raw_name,

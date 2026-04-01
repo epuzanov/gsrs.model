@@ -37,6 +37,7 @@ class Subunit(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
+        access = 'protected' if getattr(self, 'access', None) else 'public'
 
         return [
             {
@@ -44,9 +45,9 @@ class Subunit(GinasCommonSubData):
                 'document_id': document_id,
                 'source_url': self._embedding_source_name(),
                 'section': 'subunits',
-                'text': f"{subject} subunit {int(self.subunitIndex) if self.subunitIndex else 'unspecified'}: sequence length {self.length or len(sequence)} residues.",
+                'text': f"{subject} {access} subunit {int(self.subunitIndex) if self.subunitIndex else 'unspecified'}: sequence length {self.length or len(sequence)} residues.",
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'subunits'),
                     'subunit_index': self.subunitIndex or None,
                     'sequence_length': self.length or len(sequence) if sequence else None,

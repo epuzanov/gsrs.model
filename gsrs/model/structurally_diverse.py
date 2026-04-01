@@ -152,8 +152,9 @@ class StructurallyDiverse(GinasCommonSubData):
 
         subject = self._embedding_root_name()
         document_id = self._embedding_document_id()
-
-        content_parts = [f"{subject} structurally diverse substance"]
+        access = 'protected' if getattr(self, 'access', None) else 'public'
+    
+        content_parts = [f"{subject} {access} structurally diverse substance"]
         if organism_parts:
             content_parts.append("organism " + ', '.join(organism_parts))
         if source_parts:
@@ -173,7 +174,7 @@ class StructurallyDiverse(GinasCommonSubData):
                 'section': 'structurally_diverse',
                 'text': '. '.join(content_parts) + '.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'structurally_diverse'),
                     'organism_family': self._clean_text(self.organismFamily) or None,
                     'organism_genus': self._clean_text(self.organismGenus) or None,

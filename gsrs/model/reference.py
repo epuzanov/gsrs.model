@@ -73,11 +73,12 @@ class Reference(GinasCommonSubData):
         uploaded_file = self._clean_text(self.uploadedFile)
         reference_id = self._clean_text(self.id or self.uuid)
         reference_text = self.embedding_reference_text()
+        access = 'Protected' if getattr(self, 'access', None) else 'Public'
         if not citation and not doc_type:
             return []
 
         subject = self._embedding_root_name()
-        parts = [f'Reference for {subject}.']
+        parts = [f'{access} reference for {subject}.']
         if doc_type:
             parts.append(f'Document type {doc_type}.')
         if citation:
@@ -95,7 +96,7 @@ class Reference(GinasCommonSubData):
                 'section': 'references',
                 'text': ' '.join(parts),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'references'),
                     'json_path': self._embedding_json_path('$.references[*]'),
                     'references': [reference_text] if reference_text else None,

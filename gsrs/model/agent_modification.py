@@ -59,7 +59,7 @@ class AgentModification(GinasCommonSubData):
                 'section': 'agentModifications',
                 'text': f'{subject} agent modification type {self._clean_text(self.agentModificationType)}.',
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'modifications', 'agentModifications'),
                     'modification_kind': 'agent',
                 },

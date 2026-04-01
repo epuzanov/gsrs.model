@@ -91,7 +91,7 @@ class Code(GinasCommonSubData):
                 'section': 'codes',
                 'text': ' '.join(text_parts),
                 'metadata': {
-                    **self._embedding_root_metadata(),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'codes'),
                     **class_metadata,
                     'json_path': self._embedding_json_path('$.codes[*]'),

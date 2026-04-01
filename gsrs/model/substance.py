@@ -501,7 +501,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 'section': 'summary',
                 'text': ' '.join(parts),
                 'metadata': {
-                    **self._chunk_metadata(self),
+                    **self._chunk_metadata(),
                     **self._hierarchy_metadata('root'),
                     'json_path': '$',
                     'canonical_name': name,
