@@ -94,11 +94,21 @@ class Name(GinasCommonSubData):
         name_jurisdiction = self._clean_list(self.nameJurisdiction)
         name_orgs = self._clean_list([item.nameOrg for item in (self.nameOrgs or []) if item.nameOrg])
         access = 'protected' if getattr(self, 'access', None) else 'public'
-        parts = [f'{raw_name} is a {access} {name_type_label} for {subject}.']
+        parts = [f'{raw_name} is a {access} {name_type_label}']
+        if self.displayName or self.preferred:
+            parts.append('that is used as')
+            if self.displayName and self.preferred:
+                parts.append('both a display and preferred')
+            elif self.displayName:
+                parts.append('a display')
+            else:
+                parts.append('a preferred')
+            parts.append('name')
+        parts.append(f'for {subject}.')
+        if name_orgs:
+            parts.append(f'It is registered by {", ".join(name_orgs)} naming organizations as the official name.')
         if std_name and std_name != raw_name:
             parts.append(f'Standardized name {std_name}.')
-        if self.preferred or self.displayName:
-            parts.append(f"It used as a {'display and preferred' if self.preferred and self.displayName else 'preferred' if self.preferred else 'display'} name.")
 
         document_id = self._embedding_document_id()
 

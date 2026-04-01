@@ -316,8 +316,8 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
     def _summary_names_sentence(self) -> str:
         unique_names: list[str] = []
         display_name = ''
-        preferred_name = ''
-        official_name = ''
+        preferred_names = []
+        official_names = {}
         for item in self.names or []:
             name = self._clean_text(item.name)
             if not name or name in unique_names:
@@ -326,19 +326,25 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
             formatted_name = self._summary_name_with_languages(item)
             if item.displayName and not display_name:
                 display_name = formatted_name
-            if item.preferred and not preferred_name:
-                preferred_name = formatted_name
-            if self._clean_text(item.type) == 'of' and not official_name:
-                official_name = formatted_name
+            if item.preferred:
+                preferred_names.append(formatted_name)
+            if self._clean_text(item.type) == 'of' and item.nameOrgs:
+                official_names[formatted_name] = ', '.join([no.nameOrg for no in item.nameOrgs])
 
         details: list[str] = []
         if display_name:
-            details.append(f'{display_name} as the display name')
-        if preferred_name and preferred_name != display_name:
-            details.append(f'{preferred_name} as a preferred name')
-        if official_name:
-            role = 'as the official name' if official_name != display_name else 'as the official name as well'
-            details.append(f'{official_name} {role}')
+            details.append(f'{display_name} as the display name{" and as the preferred name as well" if display_name in preferred_names else ""}')
+            if display_name in official_names:
+                details[-1] = details[-1] + f' and is registered by {official_names[display_name]} naming organizations as the official name'
+        for preferred_name in preferred_names:
+            if preferred_name != display_name:
+                details.append(f'{preferred_name} as the preferred name')
+            if preferred_name in official_names:
+                details[-1] = details[-1] + f' and is registered by {official_names[preferred_name]} naming organizations as the official name'
+        for official_name, name_orgs in official_names.items():
+            if official_name != display_name and official_name not in preferred_names:
+                role = 'as the official name' if official_name != display_name else 'as the official name as well'
+                details.append(f'{official_name} is registered by {name_orgs} naming organizations as the official name')
         if not details:
             return ''
         return f'The record includes official and alternative names, including {self._oxford_join(details)}.'
@@ -376,7 +382,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
                 order = preferred_order.index(system.upper())
             except ValueError:
                 order = len(preferred_order) + index
-            primary_identifiers.append(((order, index), f"{system} {code}"))
+            primary_identifiers.append(((order, index), f"{system}: {code}"))
 
         if not primary_identifiers:
             return ''
@@ -447,24 +453,24 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         approval_id_display = self._clean_text(self.approvalIDDisplay or self.approvalID)
         definition_type = self._clean_text(self.definitionType)
         definition_level = self._clean_text(self.definitionLevel)
-        status = self._clean_text(self.status)
+        status = self._clean_text(self.status) or 'approved' if approval_id_display else None
         parts = [f'{document_name} is a']
-        parts.append('protected' if self.access else 'public')
-        if status:
-            parts.append(status)
+        parts.append('protected from access' if self.access else 'for publicly accessible')
         if self.deprecated:
             parts.append('deprecated')
-        parts.append(substance_class)
-        if approval_id_display:
-            parts.append(f'with approval ID {approval_id_display}.')
-        else:
-            parts.append('substance.')
+        parts.append(f'{substance_class} substance.')
+        if status:
+            parts.append(f'Current status is')
+            if approval_id_display:
+                parts.append(f'{status} with approval ID {approval_id_display}.')
+            else:
+                parts.append(f'{status}.')
         if definition_type or definition_level:
             parts.append('Definition')
             if definition_type:
-                parts.append(f' type {definition_type}{"" if definition_level else "."}')
+                parts.append(f'type {definition_type}{"" if definition_level else "."}')
             if definition_level:
-                parts.append(f' and definition level {definition_level}.' if definition_type else f' level {definition_level}.')
+                parts.append(f'and definition level {definition_level}.' if definition_type else f'level {definition_level}.')
         for sentence in [
             self._summary_definitional_sentence(),
             self._summary_names_sentence(),
