@@ -68,7 +68,7 @@ class Code(GinasCommonSubData):
         class_parts = []
         class_metadata = {}
         if self.isClassification:
-            text_parts.append(f"classification in {code_system or 'unknown'} code system:")
+            text_parts.append(f"classification code {code} in {code_system or 'unknown'} code system:")
             class_parts = [self._clean_text(part) for part in (self.comments or '').split('|')]
             class_parts = [part for part in class_parts if part]
             if class_parts:
@@ -77,12 +77,10 @@ class Code(GinasCommonSubData):
                     'classification_path': ' > '.join(class_parts),
                 }
                 text_parts.append(f"{class_metadata['classification_path']}.")
-            else:
-                text_parts.append(f"{code}.")
         else:
-            text_parts.append(f"Identifier in {code_system or 'unknown'} code system: {code}.")
+            text_parts.append(f"Identifier code {code} in {code_system or 'unknown'} code system: {code}.")
         if code_text and code_text != code:
-            text_parts.append(f'Code text {code_text}.')
+            text_parts.append(f'Code text: {code_text}.')
         rows = [
             {
                 'chunk_id': f'root_codes_uuid:{self.uuid}',
