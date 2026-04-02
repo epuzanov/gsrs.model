@@ -24,42 +24,49 @@ class StructuralModification(SiteContainer):
         title='Modification Type',
         description='Modification Type',
     )
+
     locationType: Union[str, None] = Field(
         default=None,
         alias='locationType',
         title='Modification Location Type',
         description='Modification Location Type',
     )
+
     residueModified: Union[str, None] = Field(
         default=None,
         alias='residueModified',
         title='Residue Modified',
         description='Residue Modified',
     )
+
     extent: Union[Extent, None] = Field(
         default=None,
         alias='extent',
         title='Extent',
         description='Extent',
     )
+
     extentAmount: Union[Amount, None] = Field(
         default=None,
         alias='extentAmount',
         title='Amount',
         description='Amount',
     )
+
     molecularFragment: Union[SubstanceReference, None] = Field(
         default=None,
         alias='molecularFragment',
         title='Molecular Fragment',
         description='Molecular Fragment',
     )
+
     molecularFragmentRole: Union[str, None] = Field(
         default=None,
         alias='molecularFragmentRole',
         title='Molecular Fragment Role',
         description='Molecular Fragment Role',
     )
+
     modificationGroup: Union[str, None] = Field(
         default=None,
         alias='modificationGroup',
@@ -67,22 +74,3 @@ class StructuralModification(SiteContainer):
         description='Modification Group',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-
-        return [
-            {
-                'chunk_id': f'root_modifications_structuralModifications_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'structuralModifications',
-                'text': f'{subject} {access} structural modification type {self._clean_text(self.structuralModificationType)}.',
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'modifications', 'structuralModifications'),
-                    'modification_kind': 'structural',
-                },
-            }
-        ]

@@ -23,27 +23,3 @@ class PhysicalParameter(GinasCommonSubData):
         description='Amount',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        param_name = self._clean_text(self.parameterName)
-        amount_text = self.amount.as_string() if self.amount else ''
-        if not param_name and not amount_text:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-
-        return [
-            {
-                'chunk_id': f'root_physical_parameters_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'physical_parameters',
-                'text': f"{subject} {access} physical parameter {param_name}: {amount_text}.".strip(),
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'physical_parameters'),
-                    'parameter_name': param_name or None,
-                },
-            }
-        ]

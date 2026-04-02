@@ -22,7 +22,6 @@ class Subunit(GinasCommonSubData):
         description='Ordinal index of the subunit within the full macromolecule.',
     )
 
-
     length: Union[int, None] = Field(
         default=None,
         alias='length',
@@ -30,28 +29,3 @@ class Subunit(GinasCommonSubData):
         description='Recorded residue length of the subunit sequence.',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        sequence = self._clean_text(self.sequence)
-        if not sequence:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-
-        return [
-            {
-                'chunk_id': f'root_subunits_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'subunits',
-                'text': f"{subject} {access} subunit {int(self.subunitIndex) if self.subunitIndex else 'unspecified'}: sequence length {self.length or len(sequence)} residues.",
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'subunits'),
-                    'subunit_index': self.subunitIndex or None,
-                    'sequence_length': self.length or len(sequence) if sequence else None,
-                    'sequence': sequence[:500] if len(sequence) > 500 else sequence,
-                },
-            }
-        ]

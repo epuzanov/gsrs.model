@@ -68,16 +68,3 @@ class NucleicAcid(GinasCommonSubData):
         description='Sugar or sugar-like components that make up the nucleotide residues.',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        rows: list[dict[str, object]] = []
-
-        for item in self.subunits or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.linkages or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.sugars or []:
-            rows.extend(item.to_embedding_chunks())
-        if self.modifications:
-            rows.extend(self.modifications.to_embedding_chunks())
-
-        return rows

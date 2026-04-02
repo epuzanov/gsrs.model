@@ -17,12 +17,14 @@ class Modifications(GinasCommonSubData):
         title='Agent Modifications',
         description='Agent Modifications',
     )
+
     physicalModifications: Union[List[PhysicalModification], None] = Field(
         default=None,
         alias='physicalModifications',
         title='Physical Modifications',
         description='Physical Modifications',
     )
+
     structuralModifications: Union[List[StructuralModification], None] = Field(
         default=None,
         alias='structuralModifications',
@@ -30,14 +32,3 @@ class Modifications(GinasCommonSubData):
         description='Structural Modifications',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        rows: list[dict[str, object]] = []
-
-        for item in self.agentModifications or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.physicalModifications or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.structuralModifications or []:
-            rows.extend(item.to_embedding_chunks())
-
-        return rows

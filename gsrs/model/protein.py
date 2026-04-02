@@ -75,19 +75,3 @@ class Protein(GinasCommonSubData):
         title='Other Linkage',
         description='Additional non-disulfide linkages present in the protein.',
     )
-
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        rows: list[dict[str, object]] = []
-
-        for item in self.subunits or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.disulfideLinks or []:
-            rows.extend(item.to_embedding_chunks())
-        for item in self.otherLinks or []:
-            rows.extend(item.to_embedding_chunks())
-        if self.glycosylation:
-            rows.extend(self.glycosylation.to_embedding_chunks())
-        if self.modifications:
-            rows.extend(self.modifications.to_embedding_chunks())
-
-        return rows

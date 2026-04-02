@@ -74,38 +74,3 @@ class Unit(GinasCommonSubData):
         description='Type',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        unit_type = self._clean_text(self.type)
-        label = self._clean_text(self.label)
-        amount_text = self.amount.as_string() if self.amount else ''
-        if not unit_type and not label and not amount_text:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-    
-        content_parts = [f"{subject} {access} polymer unit"]
-        if unit_type:
-            content_parts.append(f"type {unit_type}")
-        if label:
-            content_parts.append(f"label {label}")
-        if amount_text:
-            content_parts.append(f"amount {amount_text}")
-
-        return [
-            {
-                'chunk_id': f'root_units_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'units',
-                'text': '. '.join(content_parts) + '.',
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'units'),
-                    'unit_type': unit_type or None,
-                    'label': label or None,
-                    'attachment_count': self.attachmentCount or None,
-                },
-            }
-        ]

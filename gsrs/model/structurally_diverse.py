@@ -121,7 +121,6 @@ class StructurallyDiverse(GinasCommonSubData):
         description='Referenced maternal organism for a hybrid source organism.',
     )
 
-
     parentSubstance: Union[SubstanceReference, None] = Field(
         default=None,
         alias='parentSubstance',
@@ -129,59 +128,3 @@ class StructurallyDiverse(GinasCommonSubData):
         description='Referenced parent substance associated with the structurally diverse material.',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        organism_parts = []
-        if self.organismFamily:
-            organism_parts.append(f"family {self._clean_text(self.organismFamily)}")
-        if self.organismGenus:
-            organism_parts.append(f"genus {self._clean_text(self.organismGenus)}")
-        if self.organismSpecies:
-            organism_parts.append(f"species {self._clean_text(self.organismSpecies)}")
-        
-        source_parts = []
-        if self.sourceMaterialClass:
-            source_parts.append(f"class {self._clean_text(self.sourceMaterialClass)}")
-        if self.sourceMaterialType:
-            source_parts.append(f"type {self._clean_text(self.sourceMaterialType)}")
-        if self.sourceMaterialState:
-            source_parts.append(f"state {self._clean_text(self.sourceMaterialState)}")
-        
-        has_content = organism_parts or source_parts or self.part or self.fractionName
-        if not has_content:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-    
-        content_parts = [f"{subject} {access} structurally diverse substance"]
-        if organism_parts:
-            content_parts.append("organism " + ', '.join(organism_parts))
-        if source_parts:
-            content_parts.append("source material " + ', '.join(source_parts))
-        if self.part:
-            part_list = [self._clean_text(p) for p in self.part if self._clean_text(p)]
-            if part_list:
-                content_parts.append(f"parts {', '.join(part_list)}")
-        if self.fractionName:
-            content_parts.append(f"fraction {self._clean_text(self.fractionName)}")
-
-        return [
-            {
-                'chunk_id': f'root_structurally_diverse_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'structurally_diverse',
-                'text': '. '.join(content_parts) + '.',
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'structurally_diverse'),
-                    'organism_family': self._clean_text(self.organismFamily) or None,
-                    'organism_genus': self._clean_text(self.organismGenus) or None,
-                    'organism_species': self._clean_text(self.organismSpecies) or None,
-                    'source_material_class': self._clean_text(self.sourceMaterialClass) or None,
-                    'source_material_type': self._clean_text(self.sourceMaterialType) or None,
-                    'fraction_name': self._clean_text(self.fractionName) or None,
-                },
-            }
-        ]

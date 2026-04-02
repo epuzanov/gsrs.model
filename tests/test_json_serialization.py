@@ -1,7 +1,10 @@
 import json
 import unittest
 
+from pydantic import AnyUrl
+
 from gsrs.model import Amount, Substance
+from gsrs.model.substance import SubstanceClass
 
 
 class JsonSerializationTests(unittest.TestCase):
@@ -14,12 +17,12 @@ class JsonSerializationTests(unittest.TestCase):
 
     def test_substance_dump_json_excludes_nulls_by_default(self):
         substance = Substance.model_construct(
-            substanceClass="concept",
+            substanceClass=SubstanceClass.concept,
             names=[],
             references=[],
             version="1",
             approved=None,
-            selfLink="https://example.test/substances/1",
+            selfLink=AnyUrl("https://example.test/substances/1"),
         )
         data = json.loads(substance.model_dump_json())
 

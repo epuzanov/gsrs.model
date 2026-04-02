@@ -205,6 +205,10 @@ class Structure(BaseModel):
             return datetime.fromtimestamp(timestamp, tz=timezone.utc)
         return value
 
+    def is_deprecated(self) -> bool:
+        """Determine if the record is deprecated."""
+        return self.deprecated is True
+
     def model_dump(self, *args, **kwargs):
         kwargs.setdefault('exclude_none', True)
         kwargs.setdefault('by_alias', True)

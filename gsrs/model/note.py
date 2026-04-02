@@ -15,28 +15,3 @@ class Note(GinasCommonSubData):
         description='Note',
     )
 
-    def to_embedding_chunks(self) -> list[dict[str, object]]:
-        note = self._clean_text(self.note)
-        if not note:
-            return []
-
-        subject = self._embedding_root_name()
-        document_id = self._embedding_document_id()
-        access = 'protected' if getattr(self, 'access', None) else 'public'
-
-        return [
-            {
-                'chunk_id': f'root_notes_uuid:{self.uuid}',
-                'document_id': document_id,
-                'source_url': self._embedding_source_name(),
-                'section': 'notes',
-                'text': f'{subject} {access} note: {note}',
-                'metadata': {
-                    **self._chunk_metadata(),
-                    **self._hierarchy_metadata('root', 'notes'),
-                    'json_path': self._embedding_json_path('$.notes[*]'),
-                    'note_length': len(note),
-                    'references': self._embedding_references() or None,
-                },
-            }
-        ]

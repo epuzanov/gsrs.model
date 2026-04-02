@@ -29,3 +29,7 @@ class GinasChemicalStructure(Structure):
         title='Created By',
         description='Created By',
     )
+
+    def is_public(self) -> bool:
+        """Determine if the record is public based on access permissions."""
+        return not self.access
