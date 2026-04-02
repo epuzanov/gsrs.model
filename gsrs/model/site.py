@@ -6,14 +6,14 @@ class Site(BaseModel):
 
     model_config = ConfigDict(extra='forbid')
 
-    subunitIndex: Union[float, None] = Field(
+    subunitIndex: Union[int, None] = Field(
         default=None,
         alias='subunitIndex',
         title='Subunit Index',
         description='Subunit Index',
     )
 
-    residueIndex: Union[float, None] = Field(
+    residueIndex: Union[int, None] = Field(
         default=None,
         alias='residueIndex',
         title='Residue Index',
