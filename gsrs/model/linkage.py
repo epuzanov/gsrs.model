@@ -1,10 +1,10 @@
 from pydantic import Field, ConfigDict
-from typing import List, Union
+from typing import Union
 
-from .ginas_common_sub_data import GinasCommonSubData
-from .site import Site
+from .site_container import SiteContainer
 
-class Linkage(GinasCommonSubData):
+
+class Linkage(SiteContainer):
     """Linkage model for the connector between sugar residues in a nucleic acid."""
 
     model_config = ConfigDict(extra='forbid')
@@ -14,13 +14,6 @@ class Linkage(GinasCommonSubData):
         alias='linkage',
         title='Linkage',
         description='Linking entity between sugar residues, such as phosphate or another linkage group.',
-    )
-
-    sites: Union[List[Site], None] = Field(
-        default=None,
-        alias='sites',
-        title='Sites',
-        description='Residue sites associated with the linkage within the sequence.',
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

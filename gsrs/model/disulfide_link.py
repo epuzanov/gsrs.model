@@ -1,10 +1,10 @@
-from pydantic import Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Union
 
-from .ginas_common_sub_data import GinasCommonSubData
 from .site import Site
 
-class DisulfideLink(GinasCommonSubData):
+
+class DisulfideLink(BaseModel):
     """Disulfide Link model."""
 
     model_config = ConfigDict(extra='forbid')
@@ -16,6 +16,13 @@ class DisulfideLink(GinasCommonSubData):
         description='Disulfide Sites',
         max_length=2,
         min_length=2,
+    )
+
+    sitesShorthand: Union[str, None] = Field(
+        default=None,
+        alias='sitesShorthand',
+        title='Sites Shorthand',
+        description='Compact system-generated shorthand for the referenced sites.',
     )
 
     def to_embedding_chunks(self) -> list[dict[str, object]]:

@@ -22,13 +22,6 @@ class GinasCommonSubData(GinasCommonData):
         description='References',
     )
 
-    sitesShorthand: Union[str, None] = Field(
-        default=None,
-        alias='sitesShorthand',
-        title='Sites Shorthand',
-        description='Compact system-generated shorthand for the referenced sites.',
-    )
-
     def _set_parent(self, parent: 'Substance | None', json_path: str | None = None) -> None:
         self._parent = parent
         self._json_path = self._clean_text(json_path) or None

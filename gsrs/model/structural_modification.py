@@ -1,10 +1,9 @@
 from pydantic import Field, ConfigDict
-from typing import List, Union
+from typing import Union
 from enum import Enum
 
 from .amount import Amount
-from .ginas_common_sub_data import GinasCommonSubData
-from .site import Site
+from .site_container import SiteContainer
 from .substance_reference import SubstanceReference
 
 class Extent(Enum):
@@ -14,7 +13,7 @@ class Extent(Enum):
     PARTIAL = 'PARTIAL'
     UNSPECIFIED = 'Unspecified'
 
-class StructuralModification(GinasCommonSubData):
+class StructuralModification(SiteContainer):
     """Structural Modification model."""
 
     model_config = ConfigDict(extra='forbid')
@@ -36,12 +35,6 @@ class StructuralModification(GinasCommonSubData):
         alias='residueModified',
         title='Residue Modified',
         description='Residue Modified',
-    )
-    sites: Union[List[Site], None] = Field(
-        default=None,
-        alias='sites',
-        title='Modified Sites',
-        description='Modified Sites',
     )
     extent: Union[Extent, None] = Field(
         default=None,

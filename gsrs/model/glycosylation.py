@@ -37,12 +37,17 @@ class Glycosylation(GinasCommonSubData):
         description='Glycosylation Type',
     )
 
+    sitesShorthand: Union[str, None] = Field(
+        default=None,
+        alias='sitesShorthand',
+        title='Sites Shorthand',
+        description='Compact system-generated shorthand for the referenced sites.',
+    )
+
     def to_embedding_chunks(self) -> list[dict[str, object]]:
         glyco_type = self._clean_text(self.glycosylationType)
-        c_sites = self._clean_text(getattr(self, 'sitesShorthand', None))
-        n_sites = self._clean_text(getattr(self, 'sitesShorthand', None))
-        o_sites = self._clean_text(getattr(self, 'sitesShorthand', None))
-        
+        sitesShorthand = self._clean_text(getattr(self, 'sitesShorthand', None))
+
         has_content = glyco_type or self.CGlycosylationSites or self.NGlycosylationSites or self.OGlycosylationSites
         if not has_content:
             return []
@@ -61,6 +66,8 @@ class Glycosylation(GinasCommonSubData):
             site_info.append(f"N-glycosylation at {len(self.NGlycosylationSites)} sites")
         if self.OGlycosylationSites:
             site_info.append(f"O-glycosylation at {len(self.OGlycosylationSites)} sites")
+        if sitesShorthand:
+            site_info.append(f"sites shorthand: {sitesShorthand}")
         if site_info:
             content_parts.append(', '.join(site_info))
 
@@ -75,6 +82,7 @@ class Glycosylation(GinasCommonSubData):
                     **self._chunk_metadata(),
                     **self._hierarchy_metadata('root', 'glycosylation'),
                     'glycosylation_type': glyco_type or None,
+                    'sites_shorthand': sitesShorthand or None,
                     'c_sites_count': len(self.CGlycosylationSites) if self.CGlycosylationSites else None,
                     'n_sites_count': len(self.NGlycosylationSites) if self.NGlycosylationSites else None,
                     'o_sites_count': len(self.OGlycosylationSites) if self.OGlycosylationSites else None,

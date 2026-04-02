@@ -46,6 +46,7 @@ from .protein import Protein
 from .protein_substance import ProteinSubstance
 from .reference import Reference
 from .relationship import Relationship
+from .site_container import SiteContainer
 from .site import Site
 from .specified_substance_component import SpecifiedSubstanceComponent
 from .specified_substance_g1 import SpecifiedSubstanceG1
@@ -110,6 +111,7 @@ __all__ = [
     'Reference',
     'Relationship',
     'Site',
+    'SiteContainer',
     'SpecifiedSubstanceComponent',
     'SpecifiedSubstanceG1',
     'SpecifiedSubstanceG1Substance',
