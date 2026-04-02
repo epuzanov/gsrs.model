@@ -1,7 +1,8 @@
-from pydantic import AnyUrl, BaseModel, ConfigDict, Field
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any, ClassVar, List, Union
 from importlib import import_module
+from datetime import datetime, timezone
 from enum import Enum
 
 from .code import Code
@@ -147,7 +148,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         description='Lifecycle status of the substance record in the catalogue or registry.',
     )
 
-    approved: Union[float, None] = Field(
+    approved: Union[datetime, None] = Field(
         default=None,
         alias='approved',
         title='Approval Date',
@@ -211,6 +212,14 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         'specifiedSubstanceG3': (__name__, 'Substance'),
         'specifiedSubstanceG4': (__name__, 'Substance'),
     }
+
+    @field_validator('approved', mode='before')
+    @classmethod
+    def _parse_unix_timestamp(cls, value):
+        if isinstance(value, (int, float)):
+            timestamp = value / 1000 if value > 10_000_000_000 else value
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        return value
 
     @classmethod
     def _extract_substance_class_value(cls, args, kwargs) -> Union[str, None]:
@@ -315,9 +324,9 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
 
     def _summary_names_sentence(self) -> str:
         unique_names: list[str] = []
-        display_name = ''
-        preferred_names = []
-        official_names = {}
+        display_name: str = ''
+        preferred_names: list[str] = []
+        official_names: dict[str, str] = {}
         for item in self.names or []:
             name = self._clean_text(item.name)
             if not name or name in unique_names:

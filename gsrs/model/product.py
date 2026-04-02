@@ -1,9 +1,9 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from datetime import datetime, timezone
 from typing import List, Union
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_serializer, field_validator
 
 
 class ProductBaseModel(BaseModel):
@@ -197,13 +197,13 @@ class ProductCompany(ProductBaseModel):
         title='Company Public Domain',
         description='Public-domain indicator for the company.',
     )
-    startMarketingDate: Union[str, None] = Field(
+    startMarketingDate: Union[datetime, None] = Field(
         default=None,
         alias='startMarketingDate',
         title='Start Marketing Date',
         description='Start marketing date.',
     )
-    endMarketingDate: Union[str, None] = Field(
+    endMarketingDate: Union[datetime, None] = Field(
         default=None,
         alias='endMarketingDate',
         title='End Marketing Date',
@@ -233,6 +233,24 @@ class ProductCompany(ProductBaseModel):
         title='Product Company Codes',
         description='Product company codes.',
     )
+
+    @field_validator('endMarketingDate', 'startMarketingDate', mode='before')
+    @classmethod
+    def _parse_date_string(cls, value):
+        if isinstance(value, str):
+            # Attempt to parse the date string
+            for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+                try:
+                    return datetime.strptime(value, fmt).astimezone(timezone.utc)
+                except ValueError:
+                    continue
+        return value
+
+    @field_serializer('endMarketingDate', 'startMarketingDate', when_used='always')
+    def _serialize_date_string(self, value: Union[datetime, None]):
+        if value is None:
+            return None
+        return value.strftime('%d/%m/%Y')
 
 
 class ProductDocumentation(ProductBaseModel):
@@ -571,13 +589,13 @@ class ProductLot(ProductBaseModel):
         title='Lot Type',
         description='Lot type.',
     )
-    expiryDate: Union[str, None] = Field(
+    expiryDate: Union[datetime, None] = Field(
         default=None,
         alias='expiryDate',
         title='Expiry Date',
         description='Expiry date.',
     )
-    manufactureDate: Union[str, None] = Field(
+    manufactureDate: Union[datetime, None] = Field(
         default=None,
         alias='manufactureDate',
         title='Manufacture Date',
@@ -589,6 +607,24 @@ class ProductLot(ProductBaseModel):
         title='Product Ingredients',
         description='Ingredients included in the lot.',
     )
+
+    @field_validator('expiryDate', 'manufactureDate', mode='before')
+    @classmethod
+    def _parse_date_string(cls, value):
+        if isinstance(value, str):
+            # Attempt to parse the date string
+            for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+                try:
+                    return datetime.strptime(value, fmt).astimezone(timezone.utc)
+                except ValueError:
+                    continue
+        return value
+
+    @field_serializer('expiryDate', 'manufactureDate', when_used='always')
+    def _serialize_date_string(self, value: Union[datetime, None]):
+        if value is None:
+            return None
+        return value.strftime('%d/%m/%Y')
 
 
 class ProductProvenance(ProductBaseModel):
@@ -779,7 +815,7 @@ class ProductManufactureItem(ProductBaseModel):
         title='Route Of Administration',
         description='Route of administration.',
     )
-    amount: Union[float, None] = Field(
+    amount: Union[int, None] = Field(
         default=None,
         alias='amount',
         title='Amount',
@@ -880,13 +916,13 @@ class Product(ProductBaseModel):
         title='Manufacturer Code Type',
         description='Root manufacturer code type.',
     )
-    effectiveDate: Union[str, None] = Field(
+    effectiveDate: Union[datetime, None] = Field(
         default=None,
         alias='effectiveDate',
         title='Effective Date',
         description='Effective date.',
     )
-    endDate: Union[str, None] = Field(
+    endDate: Union[datetime, None] = Field(
         default=None,
         alias='endDate',
         title='End Date',
@@ -910,3 +946,21 @@ class Product(ProductBaseModel):
         title='Self Link',
         description='Canonical API URL for the product record.',
     )
+
+    @field_validator('effectiveDate', 'endDate', mode='before')
+    @classmethod
+    def _parse_date_string(cls, value):
+        if isinstance(value, str):
+            # Attempt to parse the date string
+            for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+                try:
+                    return datetime.strptime(value, fmt).replace(tzinfo=timezone.utc)
+                except ValueError:
+                    continue
+        return value
+
+    @field_serializer('effectiveDate', 'endDate', when_used='always')
+    def _serialize_date_string(self, value: Union[datetime, None]):
+        if value is None:
+            return None
+        return value.strftime('%d/%m/%Y')

@@ -1,4 +1,4 @@
-﻿import json
+import json
 import unittest
 
 from gsrs.model import Product, ProductManufacturer
@@ -161,9 +161,14 @@ class ProductModelTests(unittest.TestCase):
         }
 
         product = Product.model_validate(payload)
+        dumped = product.model_dump()
         data = json.loads(product.model_dump_json())
 
         self.assertEqual(product.productProvenances[0].productNames[0].productTermAndParts[1].productTermPart, 'Flavor Part')
+        self.assertEqual(dumped['effectiveDate'], '01/01/2024')
+        self.assertEqual(dumped['endDate'], '01/01/2028')
+        self.assertEqual(data['effectiveDate'], '01/01/2024')
+        self.assertEqual(data['endDate'], '01/01/2028')
         self.assertEqual(product.productProvenances[0].productCodes[0].dailyMedUrl, 'https://example.test/dailymed/code-001')
         self.assertEqual(product.productManufactureItems[0].productLots[0].productIngredients[0].substanceKeyType, 'UUID')
         self.assertEqual(data['_self'], 'https://example.test/api/v1/products/9?view=full')

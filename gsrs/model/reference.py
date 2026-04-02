@@ -1,5 +1,6 @@
-from pydantic import Field, ConfigDict
+from pydantic import Field, ConfigDict, field_validator
 from typing import List, Union
+from datetime import datetime, timezone
 
 from .ginas_common_sub_data import GinasCommonSubData
 
@@ -21,7 +22,7 @@ class Reference(GinasCommonSubData):
         title='Reference Type',
         description='Reference Type',
     )
-    documentDate: Union[float, None] = Field(
+    documentDate: Union[datetime, None] = Field(
         default=None,
         alias='documentDate',
         title='Date Accessed',
@@ -57,6 +58,14 @@ class Reference(GinasCommonSubData):
         title='Reference URL',
         description='Reference URL',
     )
+
+    @field_validator('documentDate', mode='before')
+    @classmethod
+    def _parse_unix_timestamp(cls, value):
+        if isinstance(value, (int, float)):
+            timestamp = value / 1000 if value > 10_000_000_000 else value
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        return value
 
     def embedding_reference_text(self) -> str:
         doc_type = self._clean_text(self.docType)

@@ -15,7 +15,7 @@ class Subunit(GinasCommonSubData):
         description='Primary sequence recorded in the appropriate biological direction for the subunit.',
     )
 
-    subunitIndex: Union[float, None] = Field(
+    subunitIndex: Union[int, None] = Field(
         default=None,
         alias='subunitIndex',
         title='Subunit Index',
@@ -23,7 +23,7 @@ class Subunit(GinasCommonSubData):
     )
 
 
-    length: Union[float, None] = Field(
+    length: Union[int, None] = Field(
         default=None,
         alias='length',
         title='Length',

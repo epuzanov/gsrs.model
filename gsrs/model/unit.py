@@ -25,7 +25,7 @@ class Unit(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    amap: Union[List[float], None] = Field(
+    amap: Union[List[int], None] = Field(
         default=None,
         alias='amap',
         title='Amap',
@@ -39,7 +39,7 @@ class Unit(GinasCommonSubData):
         description='Amount',
     )
 
-    attachmentCount: Union[float, None] = Field(
+    attachmentCount: Union[int, None] = Field(
         default=None,
         alias='attachmentCount',
         title='Attachment Count',

@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Union
+from datetime import datetime, timezone
 from uuid import UUID
 from enum import Enum
 
@@ -42,14 +43,14 @@ class Structure(BaseModel):
         description='Deprecated',
     )
 
-    lastEdited: Union[float, None] = Field(
+    lastEdited: Union[datetime, None] = Field(
         default=None,
         alias='lastEdited',
         title='Last Modified Date',
         description='Last Modified Date',
     )
 
-    created: Union[float, None] = Field(
+    created: Union[datetime, None] = Field(
         default=None,
         alias='created',
         title='Creation Date',
@@ -119,7 +120,7 @@ class Structure(BaseModel):
         description='Molecular Weight',
     )
 
-    count: Union[float, None] = Field(
+    count: Union[int, None] = Field(
         default=None,
         alias='count',
         title='Count',
@@ -133,28 +134,28 @@ class Structure(BaseModel):
         description='Chemical Formula',
     )
 
-    charge: Union[float, None] = Field(
+    charge: Union[int, None] = Field(
         default=None,
         alias='charge',
         title='Charge',
         description='Charge',
     )
 
-    stereoCenters: Union[float, None] = Field(
+    stereoCenters: Union[int, None] = Field(
         default=None,
         alias='stereoCenters',
         title='Total Stereocenter Count',
         description='Total Stereocenter Count',
     )
 
-    definedStereo: Union[float, None] = Field(
+    definedStereo: Union[int, None] = Field(
         default=None,
         alias='definedStereo',
         title='Defined Stereocenter Count',
         description='Defined Stereocenter Count',
     )
 
-    ezCenters: Union[float, None] = Field(
+    ezCenters: Union[int, None] = Field(
         default=None,
         alias='ezCenters',
         title='E/Z Center Count',
@@ -196,6 +197,13 @@ class Structure(BaseModel):
         description='Standardized InChI generated for the structure.',
     )
 
+    @field_validator('created', 'lastEdited', mode='before')
+    @classmethod
+    def _parse_unix_timestamp(cls, value):
+        if isinstance(value, (int, float)):
+            timestamp = value / 1000 if value > 10_000_000_000 else value
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        return value
 
     def model_dump(self, *args, **kwargs):
         kwargs.setdefault('exclude_none', True)
