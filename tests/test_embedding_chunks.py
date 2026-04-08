@@ -8,6 +8,79 @@ class EmbeddingChunkTests(unittest.TestCase):
     def chunk(self, value):
         return SubstanceChunker().chunk(value)
 
+    def test_chunk_casts_to_configured_class(self):
+        class ChunkEnvelope(dict):
+            pass
+
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+            }
+        )
+        chunks = SubstanceChunker(**{'class': ChunkEnvelope}).chunk(substance)
+        self.assertTrue(chunks)
+        self.assertTrue(all(isinstance(chunk, ChunkEnvelope) for chunk in chunks))
+
+    def test_chunk_defaults_to_dict_when_class_not_provided(self):
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+            }
+        )
+        chunks = self.chunk(substance)
+        self.assertTrue(chunks)
+        self.assertIs(type(chunks[0]), dict)
+
+    def test_primary_identifier_preferred_order_is_configurable_from_constructor(self):
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+                'codes': [
+                    {'code': 'WK2XYI10QM', 'codeSystem': 'FDA UNII', 'type': 'PRIMARY'},
+                    {'code': '15687-27-1', 'codeSystem': 'CAS', 'type': 'PRIMARY'},
+                ],
+            }
+        )
+        sentence = SubstanceChunker(identifiers_order=['CAS', 'FDA UNII'])._summary_primary_identifiers_sentence(substance)
+        self.assertIn('CAS: 15687-27-1', sentence)
+        self.assertIn('FDA UNII: WK2XYI10QM', sentence)
+        self.assertLess(sentence.index('CAS: 15687-27-1'), sentence.index('FDA UNII: WK2XYI10QM'))
+
+    def test_classification_preferred_order_is_configurable_from_constructor(self):
+        substance = Substance.model_validate(
+            {
+                'substanceClass': 'concept',
+                'uuid': '11111111-1111-1111-1111-111111111111',
+                'names': [{'name': 'Example Concept', 'type': 'cn', 'languages': ['en']}],
+                'references': [{'docType': 'SYSTEM'}],
+                '_self': 'https://example.test/gsrs',
+                'version': '1',
+                'codes': [
+                    {'code': 'A', 'codeSystem': 'WHO-ATC', 'type': 'PRIMARY', '_isClassification': True},
+                    {'code': 'V', 'codeSystem': 'WHO-VATC', 'type': 'PRIMARY', '_isClassification': True},
+                ],
+            }
+        )
+        sentence = SubstanceChunker(classifications_order=['WHO-VATC', 'WHO-ATC'])._summary_classifications_sentence(substance)
+        self.assertIn('WHO-VATC', sentence)
+        self.assertIn('WHO-ATC', sentence)
+        self.assertLess(sentence.index('WHO-VATC'), sentence.index('WHO-ATC'))
+
     def test_subelement_document_id_uses_parent_uuid(self):
         substance = Substance.model_validate(
             {

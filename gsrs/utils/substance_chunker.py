@@ -31,11 +31,61 @@ from ..model import (
 class SubstanceChunker:
     """Build embedding chunks for GSRS model objects."""
 
-    def __init__(self) -> None:
+    _DEFAULT_IDENTIFIERS_ORDER = (
+        'FDA UNII',
+        'UNII',
+        'SMS_ID',
+        'SMSID',
+        'ASK',
+        'ASKP',
+        'SVGID',
+        'EVMPD',
+        'xEVMPD',
+        'CAS',
+        'DRUG BANK',
+        'RXCUI',
+        'CHEMBL',
+        'PUBCHEM',
+    )
+    _DEFAULT_CLASSIFICATIONS_ORDER = (
+        'WHO-ATC',
+        'WHO-VATC',
+        'NCI_THESAURUS',
+        'EMA ASSESSMENT REPORTS',
+        'WHO-ESSENTIAL MEDICINES LIST',
+        'NDF-RT',
+        'LIVERTOX',
+        'FDA ORPHAN DRUG',
+        'EU-ORPHAN DRUG',
+    )
+
+    def __init__(
+        self,
+        class_: type[Any] | None = None,
+        identifiers_order: list[str] | tuple[str, ...] | None = None,
+        classifications_order: list[str] | tuple[str, ...] | None = None,
+        **kwargs: Any,
+    ) -> None:
+        chunk_class = kwargs.pop('class', class_)
+        if kwargs:
+            unexpected = ', '.join(sorted(kwargs))
+            raise TypeError(f'Unexpected constructor argument(s): {unexpected}')
+
+        self._chunk_class: type[Any] = chunk_class or dict
+        self._identifiers_order = self._normalize_order(
+            identifiers_order
+            if identifiers_order is not None
+            else self._DEFAULT_IDENTIFIERS_ORDER
+        )
+        self._classifications_order = self._normalize_order(
+            classifications_order
+            if classifications_order is not None
+            else self._DEFAULT_CLASSIFICATIONS_ORDER
+        )
         self._root_substance: Substance | None = None
         self._json_paths: dict[int, str] = {}
 
-    def chunk(self, value: Any) -> list[dict[str, object]]:
+    def chunk(self, value: Any) -> list[Any]:
         if value is None:
             return []
         self._root_substance = value if isinstance(value, Substance) else getattr(value, '_parent', None)
@@ -44,7 +94,15 @@ class SubstanceChunker:
         self._json_paths = {}
         start_path = self._clean_text(getattr(value, '_json_path', None)) or '$'
         self._annotate(value, self._root_substance, start_path)
-        return self._chunk_tree(value)
+        return [self._cast_chunk(chunk) for chunk in self._chunk_tree(value)]
+
+    def _cast_chunk(self, chunk: dict[str, object]) -> Any:
+        if self._chunk_class is dict:
+            return chunk
+        try:
+            return self._chunk_class(**chunk)
+        except TypeError:
+            return self._chunk_class(chunk)
 
     def _annotate(self, value: Any, parent: Substance | None, json_path: str) -> None:
         current_parent = value if isinstance(value, Substance) else parent
@@ -911,21 +969,7 @@ class SubstanceChunker:
         return f'The record includes official and alternative names, including {self._oxford_join(details)}.'
 
     def _summary_primary_identifiers_sentence(self, substance: Substance) -> str:
-        preferred_order = [
-            'FDA UNII',
-            'SMS_ID',
-            'SMSID',
-            'ASK',
-            'ASKP',
-            'SVGID',
-            'EVMPD',
-            'xEVMPD',
-            'CAS',
-            'DRUG BANK',
-            'RXCUI',
-            'CHEMBL',
-            'PUBCHEM',
-        ]
+        order_lookup = {system: order for order, system in enumerate(self._identifiers_order)}
         primary_identifiers: list[tuple[tuple[int, int], str]] = []
         seen: set[tuple[str, str]] = set()
         for index, item in enumerate(substance.codes or []):
@@ -935,48 +979,35 @@ class SubstanceChunker:
             code = self._clean_text(item.code)
             if not system or not code:
                 continue
-            key = (system.upper(), code)
+            system_upper = system.upper()
+            key = (system_upper, code)
             if key in seen:
                 continue
             seen.add(key)
-            try:
-                order = preferred_order.index(system.upper())
-            except ValueError:
-                order = len(preferred_order) + index
+            order = order_lookup.get(system_upper, len(self._identifiers_order) + index)
             primary_identifiers.append(((order, index), f"{system}: {code}"))
-
         if not primary_identifiers:
             return ''
         labels = [label for _, label in sorted(primary_identifiers)[:8]]
         return f'It also includes primary identifiers such as {self._oxford_join(labels)}.'
 
     def _summary_classifications_sentence(self, substance: Substance) -> str:
-        preferred_order = [
-            'WHO-ATC',
-            'WHO-VATC',
-            'NCI_THESAURUS',
-            'EMA ASSESSMENT REPORTS',
-            'WHO-ESSENTIAL MEDICINES LIST',
-            'NDF-RT',
-            'LIVERTOX',
-            'FDA ORPHAN DRUG',
-            'EU-ORPHAN DRUG',
-        ]
+        order_lookup = {system: order for order, system in enumerate(self._classifications_order)}
         classifications: list[tuple[tuple[int, int], str]] = []
         seen: set[str] = set()
         for index, item in enumerate(substance.codes or []):
             if self._clean_text(item.type) != 'PRIMARY':
                 continue
             system = self._clean_text(item.codeSystem)
-            if not system or system.upper() in seen:
+            if not system:
                 continue
-            if not item.isClassification and system.upper() not in preferred_order:
+            system_upper = system.upper()
+            if system_upper in seen:
                 continue
-            seen.add(system.upper())
-            try:
-                order = preferred_order.index(system.upper())
-            except ValueError:
-                order = len(preferred_order) + index
+            if not item.isClassification and system_upper not in order_lookup:
+                continue
+            seen.add(system_upper)
+            order = order_lookup.get(system_upper, len(self._classifications_order) + index)
             classifications.append(((order, index), system))
         if not classifications:
             return ''
@@ -1015,6 +1046,15 @@ class SubstanceChunker:
         if not topics:
             return ''
         return f'Content covers {self._oxford_join(topics)}.'
+
+    @staticmethod
+    def _normalize_order(values: list[str] | tuple[str, ...]) -> list[str]:
+        normalized: list[str] = []
+        for value in values:
+            cleaned = str(value).strip().upper()
+            if cleaned and cleaned not in normalized:
+                normalized.append(cleaned)
+        return normalized
 
     @staticmethod
     def _snake_case(value: str) -> str:
