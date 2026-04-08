@@ -1,7 +1,6 @@
-import unittest
+﻿import unittest
 
 from gsrs.model import ChemicalSubstance, Product, Substance
-from gsrs.utils.substance_chunker import SubstanceChunker
 
 
 class ImportTests(unittest.TestCase):
@@ -9,7 +8,6 @@ class ImportTests(unittest.TestCase):
         self.assertIsNotNone(ChemicalSubstance)
         self.assertIsNotNone(Substance)
         self.assertIsNotNone(Product)
-        self.assertIsNotNone(SubstanceChunker)
 
 
 if __name__ == "__main__":

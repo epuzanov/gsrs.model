@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gsrs-model"
-version = "0.2.0"
+version = "0.3.0"
 description = "Pydantic v2 models for the GSRS schema and live GSRS substance payloads."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,7 +12,7 @@ license = { text = "MIT" }
 authors = [
     { name = "Egor Puzanov", email = "epuzanov@users.noreply.github.com" },
 ]
-keywords = ["gsrs", "pydantic", "schema", "substance", "fhir"]
+keywords = ["gsrs", "pydantic", "schema", "substance"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
