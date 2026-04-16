@@ -9,7 +9,7 @@ class Mixture(GinasCommonSubData):
     """Mixture model."""
 
     components: List[Component] = Field(
-        default=...,
+        default_factory=list,
         alias='components',
         title='Components',
         description='Components',

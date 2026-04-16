@@ -1,6 +1,6 @@
 from pydantic import Field, ConfigDict
 from typing import Union
-from datetime import date
+from datetime import datetime
 
 from .ginas_common_sub_data import GinasCommonSubData
 
@@ -9,14 +9,14 @@ class NameOrg(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    nameOrg: str = Field(
-        default=...,
+    nameOrg: Union[str, None] = Field(
+        default=None,
         alias='nameOrg',
         title='Naming Organization',
         description='Naming Organization',
     )
 
-    deprecatedDate: Union[date, None] = Field(
+    deprecatedDate: Union[datetime, None] = Field(
         default=None,
         alias='deprecatedDate',
         title='Deprecated Date',

@@ -26,7 +26,7 @@ class ChemicalSubstance(Substance):
     )
 
     moieties: List[Moiety] = Field(
-        default=...,
+        default_factory=list,
         alias='moieties',
         title='Chemical Moieties',
         description='Chemical Moieties',

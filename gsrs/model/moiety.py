@@ -1,6 +1,6 @@
 from pydantic import Field, ConfigDict
 from typing import Union
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from .amount import Amount
 from .ginas_chemical_structure import GinasChemicalStructure
@@ -10,8 +10,8 @@ class Moiety(GinasChemicalStructure):
 
     model_config = ConfigDict(extra='forbid')
 
-    uuid: Union[UUID, None] = Field(
-        default=None,
+    uuid: UUID = Field(
+        default_factory=uuid4,
         alias='uuid',
         title='Uuid',
         description='Uuid',

@@ -24,15 +24,15 @@ class AgentModification(GinasCommonSubData):
         description='Role',
     )
 
-    agentModificationType: str = Field(
-        default=...,
+    agentModificationType: Union[str, None] = Field(
+        default=None,
         alias='agentModificationType',
         title='Type',
         description='Type',
     )
 
-    agentSubstance: SubstanceReference = Field(
-        default=...,
+    agentSubstance: Union[SubstanceReference, None] = Field(
+        default=None,
         alias='agentSubstance',
         title='Substance',
         description='Substance',

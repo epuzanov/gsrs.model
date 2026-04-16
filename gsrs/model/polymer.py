@@ -33,15 +33,15 @@ class Polymer(GinasCommonSubData):
         description='Idealized structural representation of the polymer.',
     )
 
-    monomers: Union[List[Material], None] = Field(
-        default=None,
+    monomers: List[Material] = Field(
+        default_factory=list,
         alias='monomers',
         title='Starting Materials',
         description='Starting materials or monomers used in synthesis of the polymer.',
     )
 
-    structuralUnits: Union[List[Unit], None] = Field(
-        default=None,
+    structuralUnits: List[Unit] = Field(
+        default_factory=list,
         alias='structuralUnits',
         title='Structural Units',
         description='Structural repeat units that define the polymer and their configuration.',

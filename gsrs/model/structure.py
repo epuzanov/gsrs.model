@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_serializer, field_validator
 from typing import List, Union
 from datetime import datetime, timezone
-from uuid import UUID
+from uuid import UUID, uuid4
 from enum import Enum
+
 
 from ._serialization import dump_json, exclude_non_public_elements
 from .value import Value
@@ -29,16 +30,16 @@ class Structure(BaseModel):
 
     model_config = ConfigDict(extra='forbid')
 
-    id: Union[UUID, None] = Field(
-        default=None,
+    id: UUID = Field(
+        default_factory=uuid4,
         alias='id',
         title='Id',
         description='Id',
         deprecated=True,
     )
 
-    deprecated: Union[bool, None] = Field(
-        default=None,
+    deprecated: bool = Field(
+        default=False,
         alias='deprecated',
         title='Deprecated',
         description='Deprecated',
@@ -58,8 +59,8 @@ class Structure(BaseModel):
         description='Creation Date',
     )
 
-    references: Union[List[UUID], None] = Field(
-        default=None,
+    references: List[Union[UUID, str]] = Field(
+        default_factory=list,
         alias='references',
         title='References',
         description='References',
@@ -86,22 +87,22 @@ class Structure(BaseModel):
         description='Smiles',
     )
 
-    stereochemistry: str = Field(
-        default=...,
+    stereochemistry: Union[str, None] = Field(
+        default=None,
         alias='stereochemistry',
         title='Stereochemical Type',
         description='Stereochemical Type',
     )
 
-    opticalActivity: OpticalActivity = Field(
-        default=...,
+    opticalActivity: Union[OpticalActivity, None] = Field(
+        default=None,
         alias='opticalActivity',
         title='Optical Activity',
         description='Optical Activity',
     )
 
-    atropisomerism: Atropisomerism = Field(
-        default=...,
+    atropisomerism: Union[Atropisomerism, None] = Field(
+        default=None,
         alias='atropisomerism',
         title='Additional Stereochemistry',
         description='Additional Stereochemistry',
@@ -230,3 +231,13 @@ class Structure(BaseModel):
             data = self.model_dump(*args, mode='json', exclude_non_public=True, **kwargs)
             return dump_json(data, indent=indent, ensure_ascii=ensure_ascii)
         return super().model_dump_json(*args, **kwargs)
+
+    @field_serializer('references', when_used='always')
+    def _serialize_references(self, value: List[Union[UUID, str]]):
+        new_values = []
+        for item in value:
+            if isinstance(item, UUID):
+                new_values.append(str(item))
+            elif isinstance(item, str):
+                new_values.append(item)
+        return new_values

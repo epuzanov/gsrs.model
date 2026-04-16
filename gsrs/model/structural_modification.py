@@ -6,20 +6,13 @@ from .amount import Amount
 from .site_container import SiteContainer
 from .substance_reference import SubstanceReference
 
-class Extent(Enum):
-    """Extent model."""
-
-    COMPLETE = 'COMPLETE'
-    PARTIAL = 'PARTIAL'
-    UNSPECIFIED = 'Unspecified'
-
 class StructuralModification(SiteContainer):
     """Structural Modification model."""
 
     model_config = ConfigDict(extra='forbid')
 
-    structuralModificationType: str = Field(
-        default=...,
+    structuralModificationType: Union[str, None] = Field(
+        default=None,
         alias='structuralModificationType',
         title='Modification Type',
         description='Modification Type',
@@ -39,7 +32,7 @@ class StructuralModification(SiteContainer):
         description='Residue Modified',
     )
 
-    extent: Union[Extent, None] = Field(
+    extent: Union[str, None] = Field(
         default=None,
         alias='extent',
         title='Extent',

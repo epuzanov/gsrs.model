@@ -41,15 +41,15 @@ class Protein(GinasCommonSubData):
         description='Sequence basis used to describe the protein when a complete or partial amino acid sequence is available.',
     )
 
-    disulfideLinks: Union[List[DisulfideLink], None] = Field(
-        default=None,
+    disulfideLinks: List[DisulfideLink] = Field(
+        default_factory=list,
         alias='disulfideLinks',
         title='Disulfide Links',
         description='Disulfide bonds linking cysteine residues within or across protein subunits.',
     )
 
-    glycosylation: Glycosylation = Field(
-        default=...,
+    glycosylation: Union[Glycosylation, None] = Field(
+        default=None,
         alias='glycosylation',
         title='Glycosylation',
         description='Glycosylation pattern associated with the protein substance.',
@@ -62,15 +62,15 @@ class Protein(GinasCommonSubData):
         description='Modifications',
     )
 
-    subunits: Union[List[Subunit], None] = Field(
-        default=None,
+    subunits: List[Subunit] = Field(
+        default_factory=list,
         alias='subunits',
         title='Subunits',
         description='Protein subunits listed for multi-sequence proteins, ordered consistently for identification.',
     )
 
-    otherLinks: Union[List[OtherLink], None] = Field(
-        default=None,
+    otherLinks: List[OtherLink] = Field(
+        default_factory=list,
         alias='otherLinks',
         title='Other Linkage',
         description='Additional non-disulfide linkages present in the protein.',

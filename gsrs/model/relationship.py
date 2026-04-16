@@ -45,15 +45,15 @@ class Relationship(GinasCommonSubData):
         description='Qualification',
     )
 
-    relatedSubstance: SubstanceReference = Field(
-        default=...,
+    relatedSubstance: Union[SubstanceReference, None] = Field(
+        default=None,
         alias='relatedSubstance',
         title='Related Substance',
         description='Related Substance',
     )
 
     type: Union[str, None] = Field(
-        default=...,
+        default=None,
         alias='type',
         title='Relationship Type',
         description='Relationship Type',

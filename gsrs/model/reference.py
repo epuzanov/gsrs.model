@@ -17,7 +17,7 @@ class Reference(GinasCommonSubData):
         description='Citation Text',
     )
 
-    docType: str = Field(
+    docType: Union[str, None] = Field(
         default=None,
         alias='docType',
         title='Reference Type',

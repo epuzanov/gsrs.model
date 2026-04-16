@@ -12,8 +12,8 @@ class NucleicAcid(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    linkages: Union[List[Linkage], None] = Field(
-        default=None,
+    linkages: List[Linkage] = Field(
+        default_factory=list,
         alias='linkages',
         title='Linkages',
         description='Linkages connecting sugar residues within the nucleic acid sequence.',
@@ -54,15 +54,15 @@ class NucleicAcid(GinasCommonSubData):
         description='Type of sequence being described for the nucleic acid.',
     )
 
-    subunits: Union[List[Subunit], None] = Field(
-        default=None,
+    subunits: List[Subunit] = Field(
+        default_factory=list,
         alias='subunits',
         title='Subunits',
         description='Ordered nucleic acid strands or closely associated sequences that make up the substance.',
     )
 
     sugars: List[Sugar] = Field(
-        default=...,
+        default_factory=list,
         alias='sugars',
         title='Sugars',
         description='Sugar or sugar-like components that make up the nucleotide residues.',

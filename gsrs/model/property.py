@@ -53,8 +53,8 @@ class Property(GinasCommonSubData):
         description='Defining',
     )
 
-    parameters: Union[List[Parameter], None] = Field(
-        default=None,
+    parameters: List[Parameter] = Field(
+        default_factory=list,
         alias='parameters',
         title='Parameters',
         description='Parameters',

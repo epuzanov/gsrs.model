@@ -9,19 +9,19 @@ class PhysicalModification(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    physicalModificationRole: str = Field(
-        default=...,
+    physicalModificationRole: Union[str, None] = Field(
+        default=None,
         alias='physicalModificationRole',
         title='Role of Modification',
         description='Role of Modification',
     )
 
-    parameters: List[PhysicalParameter] = Field(
-        default=...,
+    parameters: Union[List[PhysicalParameter], None] = Field(
+        default=None,
         alias='parameters',
         title='Physical Parameters',
         description='Physical Parameters',
-        min_length=1,
+        min_length=0,
     )
 
     modificationGroup: Union[str, None] = Field(

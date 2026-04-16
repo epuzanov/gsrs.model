@@ -9,8 +9,8 @@ class SiteContainer(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    sites: Union[List[Site], None] = Field(
-        default=None,
+    sites: List[Site] = Field(
+        default_factory=list,
         alias='sites',
         title='Sites',
         description='Sites',

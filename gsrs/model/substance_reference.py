@@ -8,7 +8,9 @@ from .ginas_common_sub_data import GinasCommonSubData
 class SubstanceClass(Enum):
     """Enumeration of GSRS substance classes."""
 
+    mention = 'mention'
     reference = 'reference'
+    structurallyDiverse = 'structurallyDiverse'
 
 class SubstanceReference(GinasCommonSubData):
     """Hybrid Species Paternal Organism model."""
@@ -36,8 +38,8 @@ class SubstanceReference(GinasCommonSubData):
         description='Linking ID',
     )
 
-    refuuid: str = Field(
-        default=...,
+    refuuid: Union[str, None] = Field(
+        default=None,
         alias='refuuid',
         title='Refuuid',
         description='Refuuid',

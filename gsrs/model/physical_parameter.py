@@ -9,8 +9,8 @@ class PhysicalParameter(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    parameterName: str = Field(
-        default=...,
+    parameterName: Union[str, None] = Field(
+        default=None,
         alias='parameterName',
         title='Parameter Name',
         description='Parameter Name',

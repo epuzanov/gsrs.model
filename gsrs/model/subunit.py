@@ -8,8 +8,8 @@ class Subunit(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    sequence: str = Field(
-        default=...,
+    sequence: Union[str, None] = Field(
+        default=None,
         alias='sequence',
         title='Sequence',
         description='Primary sequence recorded in the appropriate biological direction for the subunit.',

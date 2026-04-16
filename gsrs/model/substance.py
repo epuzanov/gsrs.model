@@ -70,15 +70,15 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
     )
 
     names: List[Name] = Field(
-        default=...,
+        default_factory=list,
         alias='names',
         title='Names',
         description='Names',
-        min_length=1,
+        min_length=0,
     )
 
-    codes: Union[List[Code], None] = Field(
-        default=None,
+    codes: List[Code] = Field(
+        default_factory=list,
         alias='codes',
         title='Codes',
         description='Codes',
@@ -91,33 +91,33 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         description='Modifications',
     )
 
-    notes: Union[List[Note], None] = Field(
-        default=None,
+    notes: List[Note] = Field(
+        default_factory=list,
         alias='notes',
         title='Notes',
         description='Notes',
     )
 
-    properties: Union[List[Property], None] = Field(
-        default=None,
+    properties: List[Property] = Field(
+        default_factory=list,
         alias='properties',
         title='Properties',
         description='Properties',
     )
 
-    relationships: Union[List[Relationship], None] = Field(
-        default=None,
+    relationships: List[Relationship] = Field(
+        default_factory=list,
         alias='relationships',
         title='Relationships',
         description='Relationships',
     )
 
     references: List[Reference] = Field(
-        default=...,
+        default_factory=list,
         alias='references',
         title='References',
         description='References',
-        min_length=1,
+        min_length=0,
     )
 
     approvalID: Union[str, None] = Field(
@@ -127,15 +127,15 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
         description='Approval ID',
     )
 
-    version: str = Field(
-        default=...,
+    version: Union[str, None] = Field(
+        default=None,
         alias='version',
         title='Substance Version',
         description='Substance Version',
     )
 
-    tags: Union[List[str], None] = Field(
-        default=None,
+    tags: List[str] = Field(
+        default_factory=list,
         alias='tags',
         title='Tags',
         description='Tags',

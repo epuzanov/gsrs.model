@@ -9,7 +9,7 @@ class Note(GinasCommonSubData):
     model_config = ConfigDict(extra='forbid')
 
     note: Union[str, None] = Field(
-        default=...,
+        default=None,
         alias='note',
         title='Note',
         description='Note',

@@ -47,7 +47,7 @@ class Name(GinasCommonSubData):
     )
 
     languages: List[str] = Field(
-        default=...,
+        default_factory=list,
         alias='languages',
         title='Languages',
         description='Languages',

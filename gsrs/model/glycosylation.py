@@ -9,22 +9,22 @@ class Glycosylation(GinasCommonSubData):
 
     model_config = ConfigDict(extra='forbid')
 
-    CGlycosylationSites: Union[List[Site], None] = Field(
-        default=None,
+    CGlycosylationSites: List[Site] = Field(
+        default_factory=list,
         alias='CGlycosylationSites',
         title='C-Glycosylation',
         description='C-Glycosylation',
     )
 
-    NGlycosylationSites: Union[List[Site], None] = Field(
-        default=None,
+    NGlycosylationSites: List[Site] = Field(
+        default_factory=list,
         alias='NGlycosylationSites',
         title='N-Glycosylation',
         description='N-Glycosylation',
     )
 
-    OGlycosylationSites: Union[List[Site], None] = Field(
-        default=None,
+    OGlycosylationSites: List[Site] = Field(
+        default_factory=list,
         alias='OGlycosylationSites',
         title='O-Glycosylation',
         description='O-Glycosylation',

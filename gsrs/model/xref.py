@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Union
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from .value import Value
 
@@ -11,7 +11,7 @@ class XRef(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
     refid: Union[UUID, None] = Field(
-        default=...,
+        default_factory=uuid4,
         alias='refid',
         title='Reference ID',
         description='Reference ID for the external resource.',

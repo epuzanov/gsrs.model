@@ -86,8 +86,8 @@ class StructurallyDiverse(GinasCommonSubData):
         description='Detailed anatomical location from which the source material part is taken.',
     )
 
-    part: Union[List[str], None] = Field(
-        default=None,
+    part: List[str] = Field(
+        default_factory=list,
         alias='part',
         title='Parts',
         description='Anatomical parts of the organism used as source material.',

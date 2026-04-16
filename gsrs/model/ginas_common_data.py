@@ -22,15 +22,15 @@ class GinasCommonData(BaseModel):
         description='Uuid',
     )
 
-    access: Union[List[str], None] = Field(
-        default=None,
+    access: List[str] = Field(
+        default_factory=list,
         alias='access',
         title='Access',
         description='Access',
     )
 
-    deprecated: Union[bool, None] = Field(
-        default=None,
+    deprecated: bool = Field(
+        default=False,
         alias='deprecated',
         title='Deprecated',
         description='Deprecated',
