@@ -265,7 +265,7 @@ class Substance(GinasCommonData, metaclass=SubstanceMetaclass):
 
     @classmethod
     def _assign_parent(cls, value: Any, parent: 'Substance', json_path: str = '$') -> None:
-        if isinstance(value, GinasCommonSubData):
+        if isinstance(value, (GinasCommonSubData, Reference)):
             value._set_parent(parent, json_path)
         if isinstance(value, BaseModel):
             for field_name, field in value.__class__.model_fields.items():

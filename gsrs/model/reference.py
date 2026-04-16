@@ -1,14 +1,22 @@
-from pydantic import Field, ConfigDict, field_validator
-from typing import List, Union
+from pydantic import ConfigDict, Field, PrivateAttr, field_validator
+from typing import TYPE_CHECKING, List, Union
 from datetime import datetime, timezone
 
-from .ginas_common_sub_data import GinasCommonSubData
+from .ginas_common_sub_data import GinasCommonData
+
+if TYPE_CHECKING:
+    from .substance import Substance
 
 
-class Reference(GinasCommonSubData):
+class Reference(GinasCommonData):
     """Reference model."""
 
-    model_config = ConfigDict(extra='forbid')
+    model_config = ConfigDict(
+        extra='forbid',
+        json_encoders={datetime: lambda value: int(value.timestamp() * 1000)},
+    )
+    _parent: 'Substance | None' = PrivateAttr(default=None)
+    _json_path: str | None = PrivateAttr(default=None)
 
     citation: Union[str, None] = Field(
         default=None,
@@ -65,3 +73,15 @@ class Reference(GinasCommonSubData):
         title='Reference URL',
         description='Reference URL',
     )
+
+    def _set_parent(self, parent: 'Substance | None', json_path: str | None = None) -> None:
+        self._parent = parent
+        self._json_path = json_path
+
+    @field_validator('documentDate', mode='before')
+    @classmethod
+    def _parse_unix_timestamp(cls, value):
+        if isinstance(value, (int, float)):
+            timestamp = value / 1000 if value > 10_000_000_000 else value
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        return value
