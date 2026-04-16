@@ -82,6 +82,7 @@ class JsonSerializationTests(unittest.TestCase):
                     },
                     {
                         "note": "Hidden note",
+                        "access": ["protected"],
                     },
                 ],
                 "references": [
@@ -100,7 +101,7 @@ class JsonSerializationTests(unittest.TestCase):
         data = substance.model_dump(exclude_non_public=True)
 
         self.assertEqual([item["name"] for item in data["names"]], ["Public Name"])
-        self.assertEqual([item["code"] for item in data["codes"]], ["PUBLIC-CODE"])
+        self.assertEqual([item["code"] for item in data["codes"]], ["PUBLIC-CODE", "UNSET-CODE"])
         self.assertEqual([item["note"] for item in data["notes"]], ["Visible note"])
 
     def test_substance_dump_preserves_empty_lists_with_exclude_non_public(self):
